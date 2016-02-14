@@ -50,40 +50,28 @@ function onKeyPress(data) {
 		}	
 	});
 	if (data.key == 'shift') {
-		if (currentplayer.canHold) {
-			var temppiece = currentplayer.piece;
-			var holdpiece = holdslot.getPiece(temppiece);
-			if (holdpiece) {
-				currentplayer.piece = holdpiece;
-			}
-			else {
-				currentplayer.piece = conveyer.getPiece();
-			}
-		}
-		else {
-
-		}
+		currentplayer.update(game, 'hold', conveyer)
 	}
 	else if (data.key == 'left') {
-
+		currentplayer.update(game, 'left', conveyer)
 	}
 	else if (data.key == 'up') {
-		
+		currentplayer.update(game, 'cw', conveyer)
 	}
 
 	else if (data.key == 'right') {
-		
+		currentplayer.update(game, 'right', conveyer)
 	}
 
 	else if (data.key == 'down') {
-		
+		currentplayer.update(game, 'down', conveyer)
 	}
 
 	else if (data.key == 'z') {
-		
+		currentplayer.update(game, 'ccw', conveyer)
 	}
 	else if (data.key == 'x') {
-		
+		currentplayer.update(game, 'cw', conveyer)
 	}
 }
 
@@ -95,8 +83,10 @@ function onNewPlayer(data) {
 }
 
 function update() {
-
-	io.emit("getgame", {});
+	players.forEach(function(p) {
+		p.update(game, '', conveyer)
+	});
+	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
 }
 
 init();
