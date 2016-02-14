@@ -1,3 +1,7 @@
+/*
+Block class
+*/
+
 var Block = function(row, col, fill) {
 	this.landed = 0;
 	this.row = row;
@@ -62,4 +66,18 @@ Block.checkEmpty = function(grid, action, centerRow, centerCol) {
 Block.move = function() {
 	this.row = this.tempRow;
 	this.col = this.tempCol;
+}
+
+Block.getBottom = function(grid) {
+	var r = this.row;
+	var c = this.col;
+	while (r < grid.length && grid[r][c] == 0 || grid[r][c].landed == 0) {
+		r += 1;
+	}
+	return r - 1;
+}
+
+Block.hardDrop = function(grid, num) {
+	this.row += num;
+	this.landed = 1;
 }

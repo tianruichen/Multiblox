@@ -1,16 +1,29 @@
 /*
 Game Player Class
 */
-var Player = function(username) {
+
+var iNeedTheHeldPiece = 73;
+var iNeedTheQueuePiece = 20;
+
+var Player = function(username, id) {
 	this.username = username;
+	this.id = id;
 	this.piece = null;
 	this.canHold = true;
-	//this.dropDelay = 50;
-	//this.numResets = 10;
 }
 
-Player.update() = function(command) {
+Player.update = function(action) {
+	if (action == "hold") {
+		if (this.canHold) {
+			return iNeedTheHeldPiece
+		}
+	}
+	var result;
 
+	else {
+		result = this.piece.update(grid, action);
+		if (result) {
+			return iNeedTheQueuePiece;
+		}
+	}
 }
-
-Player.move()
