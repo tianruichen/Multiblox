@@ -51,7 +51,7 @@ function onKeyPress(data) {
 	});
 	if (data.key == 'shift') {
 		if (currentplayer.canHold) {
-			temppiece = currentplayer.piece;
+			var temppiece = currentplayer.piece;
 		}
 		
 	}
