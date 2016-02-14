@@ -35,7 +35,7 @@ function onKeyPress(data) {
 }
 
 function update() {
-
+	io.emit("getgame", {});
 }
 
 init();

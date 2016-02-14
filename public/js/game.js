@@ -16,6 +16,7 @@ function setEventHandlers() {
 	window.addEventListener("resize", onResize, false);
 	socket.on("connect", onSocketConnected);
 	socket.on("disconnect", onSocketDisconnect);
+	socket.on('getgame', updateGameState)
 };
 
 function onKeydown(e) {
@@ -43,6 +44,9 @@ function onSocketConnected() {
 
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
+}
+
+function updateGameState(){
 }
 
 
