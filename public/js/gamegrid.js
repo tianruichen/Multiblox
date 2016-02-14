@@ -15,8 +15,47 @@ var Game = function() {
 	}
 
 	for (var i = 0; i < this.grid.length; i++) {
-		for (var j = 0; i < this.grid[0].length; j++) {
+		for (var j = 0; j < this.grid[0].length; j++) {
 			this.grid[i][j] = 0;
+		}
+	}
+}
+
+Game.checkClear = function(start, stop) {
+	var filledRows = [];
+	var clear;
+	for (var i = start; i <= stop; i++) {
+		clear = true;
+		for (var j = 0; j <= numCols; j++) {
+			if (this.grid[i][j] == 0) {
+				clear = false;
+				break;
+			}
+		}
+		if (clear) {
+			filledRows.unshift(i);
+		}
+	}
+
+	if (filledRows.length > 0) {
+		var curFall = 0;
+		var curRow = stop;
+		while (curRow >= 5) {
+			if (filledRows.indexOf(curRow) != -1) {
+				for (var i = 0; i < numCols; i++) {
+					this.grid[r][i] = 0;
+				}
+				curFall += 1;
+			}
+			else {
+				if (curFall > 0) {
+					for (var i = 0; i < numCols; i++) {
+						this.grid[curRow + curFall][i] = this.grid[curRow][i];
+						this.grid[curRow][i] = 0;
+					}
+				}
+			}
+			curRow -= 1;
 		}
 	}
 }
