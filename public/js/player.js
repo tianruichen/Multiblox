@@ -15,12 +15,14 @@ var Player = function(username, id) {
 Player.update = function(grid, action) {
 	if (action == "hold") {
 		if (this.canHold) {
+			this.canHold = false;
 			return iNeedTheHeldPiece
 		}
 	}
 	else {
 		var result;
-		result = this.piece.update(grid, action);
+		this.canHold = true;
+		result = this.piece.update(grid, '');
 		if (result) {
 			return iNeedTheQueuePiece;
 		}

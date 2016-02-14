@@ -35,7 +35,7 @@ function onKeydown(e) {
 		case 88: d = 'x'; break;
 		case 90: d = 'z'; break;
 	}
-	if (d) socket.emit("keypress", {key: d});
+	if (d) socket.emit("keypress", {id: socket.io.engine.id, key: d});
 }
 
 function onResize() {

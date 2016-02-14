@@ -11,7 +11,7 @@ var express = require('express'),
 	queue = require("./public/js/queue"),
 	game,
 	conveyer,
-	players = [],
+	players = [0],
 	holdslot,
 	stats;
 
@@ -43,16 +43,29 @@ function onClientDisconnect() {
 };
 
 function onKeyPress(data) {
-	console.log(data.key);
+	var currentplayer;
+	players.forEach(function(p) {
+		if (p.id == data.id) {
+			currentplayer = p;
+		}	
+	});
+	if (data.key == 'shift') {
+		if (currentplayer.canHold) {
+			temppiece = currentplayer.piece;
+		}
+		
+	}
 }
 
 function onNewPlayer(data) {
-	var newPlayer = new Player(data.x, data.y);
+	var newPlayer = player();
 	newPlayer.id = this.id;
+	newPlayer.piece = game.getPiece();
 	players.push(newPlayer);
-};
+}
 
 function update() {
+
 	io.emit("getgame", {});
 }
 
