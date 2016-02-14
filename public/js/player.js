@@ -12,7 +12,7 @@ var Player = function(username, id) {
 	this.canHold = true;
 }
 
-Player.update = function(grid, action) {
+Player.update = function(grid, action, conveyor) {
 	if (action == "hold") {
 		if (this.canHold) {
 			this.canHold = false;
@@ -22,9 +22,9 @@ Player.update = function(grid, action) {
 	else {
 		var result;
 		this.canHold = true;
-		result = this.piece.update(grid, '');
+		result = this.piece.update(grid, action);
 		if (result) {
-			return iNeedTheQueuePiece;
+			this.piece = conveyor.getPiece();
 		}
 	}
 }
