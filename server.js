@@ -85,7 +85,7 @@ function update() {
 	players.forEach(function(p) {
 		p.update(game, '', conveyer)
 	});
-	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer, player, });
+	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
 }
 
 init();
