@@ -1,5 +1,5 @@
 var Hold = function() {
-	this.piece = null;
+	this.piece = false;
 }
 
 Hold.getPiece = function(newPiece) {

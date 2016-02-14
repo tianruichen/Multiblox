@@ -52,7 +52,37 @@ function onKeyPress(data) {
 	if (data.key == 'shift') {
 		if (currentplayer.canHold) {
 			var temppiece = currentplayer.piece;
+			var holdpiece = holdslot.getPiece(temppiece);
+			if (holdpiece) {
+				currentplayer.piece = holdpiece;
+			}
+			else {
+				currentplayer.piece = conveyer.getPiece();
+			}
 		}
+		else {
+
+		}
+	}
+	else if (data.key == 'left') {
+
+	}
+	else if (data.key == 'up') {
+		
+	}
+
+	else if (data.key == 'right') {
+		
+	}
+
+	else if (data.key == 'down') {
+		
+	}
+
+	else if (data.key == 'z') {
+		
+	}
+	else if (data.key == 'x') {
 		
 	}
 }
