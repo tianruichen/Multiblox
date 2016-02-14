@@ -31,6 +31,10 @@ Player.update = function(grid, action, conveyor, hold) {
 	}
 }
 
+Player.receivePiece = function(grid, piece) {
+	this.piece = new Piece(grid, piece, this.spawnRow, this.spawnCol);
+}
+
 Player.getSquares = function() {
 	return this.piece.getSquares();
 }
