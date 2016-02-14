@@ -167,4 +167,12 @@ Piece.putPiecesInGrid = function(grid) {
 	}
 }
 
+Piece.getSquares = function() {
+	var squares = [];
+	for (var i = 0; i < 4; i++) {
+		squares.push((this.blocks[i].row, this.blocks[i].col));
+	}
+	return squares;
+}
+
 if (typeof module !== "undefined") module.exports = Piece;

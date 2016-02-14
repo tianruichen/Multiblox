@@ -29,4 +29,8 @@ Player.update = function(grid, action) {
 	}
 }
 
+Player.getSquares = function() {
+	return this.piece.getSquares();
+}
+
 if (typeof module !== "undefined") module.exports = Player;
