@@ -26,6 +26,12 @@ function init() {
 
 function setEventHandlers() {
 	io.on('connection', function(client) {
+
+		var newPlayer = player();
+		newPlayer.id = this.id;
+		newPlayer.newPiece(game, conveyer.getPiece());
+		players.push(newPlayer);
+
 		console.log('Client connected: ' + client.id);
 		client.on('disconnect', onClientDisconnect);
 		client.on('keypress', onKeyPress)
@@ -75,18 +81,11 @@ function onKeyPress(data) {
 	}
 }
 
-function onNewPlayer(data) {
-	var newPlayer = player();
-	newPlayer.id = this.id;
-	newPlayer.piece = game.getPiece();
-	players.push(newPlayer);
-}
-
 function update() {
 	players.forEach(function(p) {
 		p.update(game, '', conveyer)
 	});
-	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
+	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer, player, });
 }
 
 init();

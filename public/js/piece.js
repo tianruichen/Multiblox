@@ -15,6 +15,7 @@ var colors = ["#FFFFFF",
 			  "#333333"];
 
 var Piece = function(grid, blockType, row, col) {
+	this.blockType = blockType
 	this.row = row;
 	this.col = col;
 	this.fallDelay = 20;
