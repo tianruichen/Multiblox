@@ -1,5 +1,6 @@
 var canvas,
-	ctx;
+	ctx,
+	player;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -18,12 +19,17 @@ function setEventHandlers() {
 };
 
 function onKeydown(e) {
+	var d = false;
 	switch (e.keyCode) {
-		case 37: console.log('left'); break;
-		case 38: console.log('up'); break;
-		case 39: console.log('right'); break;
-		case 40: console.log('down'); break;
+		case 16: d = 'shift'; break;
+		case 37: d = 'left'; break;
+		case 38: d = 'up'; break;
+		case 39: d = 'right'; break;
+		case 40: d = 'down'; break;
+		case 88: d = 'x'; break;
+		case 90: d = 'z'; break;
 	}
+	if (d) socket.emit("keypress", {key: d});
 }
 
 function onResize(e) {
