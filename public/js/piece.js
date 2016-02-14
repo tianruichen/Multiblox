@@ -166,3 +166,5 @@ Piece.putPiecesInGrid = function(grid) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
 }
+
+if (typeof module !== "undefined") module.exports = Piece;

@@ -7,3 +7,5 @@ Hold.getPiece = function(newPiece) {
 	this.piece = newPiece;
 	return rv;
 }
+
+if (typeof module !== "undefined") module.exports = Hold;

@@ -81,3 +81,5 @@ Block.hardDrop = function(grid, num) {
 	this.row += num;
 	this.landed = 1;
 }
+
+if (typeof module !== "undefined") module.exports = Block;

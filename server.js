@@ -4,10 +4,15 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	fps = 20,
 	intervalId,
-	gameState,
+	gamegrid = require("./public/js/gamegrid"),
+	hold = require("./public/js/hold"),
+	piece = require("./public/js/piece"),
+	player = require("./public/js/player"),
+	queue = require("./public/js/queue"),
+	game,
 	conveyer,
-	players,
-	hold,
+	players = [],
+	holdslot,
 	stats;
 
 function init() {
@@ -15,6 +20,7 @@ function init() {
 	server.listen(8000);
 	console.log('Magic on port 8000');
 	setEventHandlers();
+	setGameVariables();
 	intervalId = setInterval(update, 1000 / fps);
 };
 
@@ -26,6 +32,12 @@ function setEventHandlers() {
 	});
 }
 
+function setGameVariables() {
+	game = gamegrid();
+	conveyer = queue(5);
+	holdslot = hold();
+}
+
 function onClientDisconnect() {
 	console.log("Client has disconnected: " + this.id);
 };
@@ -33,6 +45,12 @@ function onClientDisconnect() {
 function onKeyPress(data) {
 	console.log(data.key);
 }
+
+function onNewPlayer(data) {
+	var newPlayer = new Player(data.x, data.y);
+	newPlayer.id = this.id;
+	players.push(newPlayer);
+};
 
 function update() {
 	io.emit("getgame", {});

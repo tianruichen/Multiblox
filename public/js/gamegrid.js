@@ -6,7 +6,6 @@ var numRows = 30;
 var numCols = 30;
 
 var Game = function() {
-	this.players = [];
 
 	//Initializes a grid with numRows rows and numCols columns
 	//Sets all of the elements to 0
@@ -21,3 +20,5 @@ var Game = function() {
 		}
 	}
 }
+
+if (typeof module !== "undefined") module.exports = Game;

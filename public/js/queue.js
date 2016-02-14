@@ -17,3 +17,5 @@ Queue.getPiece = function() {
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
 }
+
+if (typeof module !== "undefined") module.exports = Queue;

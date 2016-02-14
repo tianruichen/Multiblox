@@ -12,18 +12,19 @@ var Player = function(username, id) {
 	this.canHold = true;
 }
 
-Player.update = function(action) {
+Player.update = function(grid, action) {
 	if (action == "hold") {
 		if (this.canHold) {
 			return iNeedTheHeldPiece
 		}
 	}
-	var result;
-
 	else {
+		var result;
 		result = this.piece.update(grid, action);
 		if (result) {
 			return iNeedTheQueuePiece;
 		}
 	}
 }
+
+if (typeof module !== "undefined") module.exports = Player;
