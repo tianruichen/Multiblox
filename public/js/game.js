@@ -83,8 +83,6 @@ function onResize() {
 		ctx.scale(wratio, wratio);
 		console.log(wratio);
 	}
-	//console.log(canvas.width);
-	//console.log(canvas.height);
 };
 
 function onSocketConnected() {
@@ -133,6 +131,7 @@ function draw() {
 	ctx.fillRect(775, 50, 125, 700);
 	drawGrid();
 	drawHold();	
+	drawConveyer();
 }
 
 function drawGrid() {
@@ -150,9 +149,17 @@ function drawGrid() {
 function drawHold() {
 	if (hold != undefined) {
 		var piece = hold.piece;
-		//console.log(piece);
 		if (piece) {
 			drawPiece(piece, 2, 3, 10, 160);
+		}
+	}
+}
+
+function drawConveyer(){
+	if (conveyer != undefined) {
+		var array = conveyer.pieces;
+		for (i = 0; i < 5; i++) {
+			drawPiece(array[i], 2, 3 + i * 7, 785, 60);
 		}
 	}
 }
