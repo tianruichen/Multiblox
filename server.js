@@ -13,7 +13,8 @@ var express = require('express'),
 	conveyer,
 	players = [],
 	holdslot,
-	stats,
+	linesCleared,
+	timesLost,
 	command = '';
 
 function init() {
@@ -27,7 +28,7 @@ function init() {
 
 function setEventHandlers() {
 	io.on('connection', function(client) {
-		var newPlayer = new player("Donald Trump", client.id, 2, 15);
+		var newPlayer = new player("Donald Trump", client.id, 2, getRandomInt(0, 7) * 4 + 1);
 		newPlayer.id = this.id;
 		newPlayer.newPiece(game.grid, conveyer.getPiece());
 		client.emit('getId', {id: client.id});
@@ -39,10 +40,16 @@ function setEventHandlers() {
 	});
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 function setGameVariables() {
 	game = new gamegrid();
 	conveyer = new queue(5);
 	holdslot = new hold();
+	linesCleared = 0;
+	timesLost = 0;
 }
 
 function onClientDisconnect() {
@@ -96,7 +103,11 @@ function update() {
 			game.checkClear(checkClear[0], checkClear[1], players);
 		}
 	});
-	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer, players: players});
+	if (game.checkLose()) {
+		game.clearGrid();
+		timesLost += 1;
+	}
+	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer, players: players, clears: linesCleared, lost: timesLost});
 }
 
 init();

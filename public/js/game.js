@@ -7,12 +7,15 @@ var canvas,
 	gameWidth = 900,
 	gameHeight = 900,
 	colorArray,
+	outlineArray,
 	gameGrid,
 	hold,
 	conveyer,
 	gridStart = false,
 	playerId,
-	players;
+	players, 
+	linesCleared,
+	timesLost;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -20,6 +23,7 @@ function init() {
 	canvas.width = 900;
 	canvas.height = 900;
 	setColors();
+	setOutlineColors();
 	createArray();
 	socket = io.connect('http://localhost:8000/');
 	setEventHandlers();
@@ -27,13 +31,24 @@ function init() {
 
 function setColors() {
 	colorArray = new Array(7);
-	colorArray[0] = "aqua";
-	colorArray[1] = "blueviolet";
-	colorArray[2] = "coral";
-	colorArray[3] = "darkgreen";
-	colorArray[4] = "goldenrod";
-	colorArray[5] = "magenta";
-	colorArray[6] = "saddlebrown";
+	colorArray[0] = "#00FFFF";
+	colorArray[5] = "#993399";
+	colorArray[6] = "#FF0000";
+	colorArray[4] = "#99FF33";
+	colorArray[3] = "#FFCC00";
+	colorArray[2] = "#FF6600";
+	colorArray[1] = "#0033CC";
+}
+
+function setOutlineColors() {
+	outlineArray = new Array(7);
+	outlineArray[0] = "#33CCCC";
+	outlineArray[5] = "#660066";
+	outlineArray[6] = "#CC0000";
+	outlineArray[4] = "#669900";
+	outlineArray[3] = "#FF9900";
+	outlineArray[2] = "#FF3300";
+	outlineArray[1] = "#000099";
 }
 
 function createArray (){
@@ -100,6 +115,8 @@ function updateGameState(data) {
 	hold = data.hold;
 	conveyer = data.conveyer;
 	players = data.players
+	linesCleared = data.clears;
+	timesLost = data.lost;
 }
 
 function setId(data) {
@@ -126,25 +143,58 @@ function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = '#181818';
 	ctx.fillRect(0, 150, 125, 125);
-	ctx.fillRect(150, 100, 600, 600);
+	ctx.fillRect(150, 180, 600, 520);
 	ctx.fillRect(775, 50, 125, 700);
+	ctx.fillStyle = '#484848';
+	ctx.fillRect(150, 100, 600, 80);
 	drawGrid();
 	drawHold();	
 	drawConveyer();
 	drawBorder();
+	drawText();
+	
+
+}
+
+function drawText() {
+	ctx.font = "30px Comic Sans MS";
+	ctx.fillStyle = "red";
+	ctx.textAlign = "center";
+	ctx.fillText("hold", 62, 140); 
+	ctx.fillStyle = "blue";
+	ctx.fillText("next", 838, 40); 
+	
+	ctx.font = "16px Comic Sans MS";
+	ctx.fillStyle = "orange";
+	ctx.fillText("lines cleared: " + linesCleared, 62, 350);
+	ctx.fillStyle = "pink";
+	ctx.fillText("times lost: " + timesLost, 62, 370);
+
+	ctx.fillStyle = "green";
+	ctx.font = "50px Comic Sans MS";
+	ctx.textAlign = "left";
+	ctx.fillText("multiblox", 150, 90); 
+
 }
 
 function drawGrid() {
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
+			ctx.strokeStyle = "#000000";
+			ctx.lineWidth = 2;
+			drawRoundedOutline(j, i, 160, 110);
+		}
+	}
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j]
 			if (temp != -1) {
 				ctx.fillStyle = colorArray[temp.blockType];
-				drawBlock(j, i, 160, 110);
+				drawRoundedBlock(j, i, 160, 110);
+				ctx.strokeStyle = outlineArray[temp.blockType];
+				ctx.lineWidth = 2;
+				drawRoundedOutline(j, i, 160, 110)
 			}
-			ctx.strokeStyle = "#000000";
-			ctx.lineWidth = 2;
-			drawOutline(j, i, 160, 110)
 		}
 	}
 }
@@ -152,7 +202,7 @@ function drawGrid() {
 function drawHold() {
 	if (hold != undefined) {
 		var piece = hold.piece;
-		if (piece || piece == 0) {
+		if (piece || piece === 0) {
 			drawPiece(piece, 2, 3, 10, 160);
 		}
 	}
@@ -171,7 +221,7 @@ function drawBorder() {
 	var piece;
 	var array = [];
 	ctx.strokeStyle = "yellow";
-	ctx.lineWidth = 3;
+	ctx.lineWidth = 2;
 	if (players != undefined) {
 		players.forEach(function(p) {
 			if (p.playerId == playerId) {
@@ -185,7 +235,7 @@ function drawBorder() {
 		if (piece.blocks != undefined) {
 			for (i = 0; i < 4; i++) {
 				if (piece.blocks[i].row != undefined && piece.blocks[i].col != undefined) {
-					drawOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
+					drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
 					array.push(distToBot(gameGrid, piece.blocks[i].row, piece.blocks[i].col));
 				}		
 			}
@@ -194,7 +244,7 @@ function drawBorder() {
 	if (array.length == 4) {
 		var min = minDist(array);
 		for (i = 0; i < 4; i++) {
-			 drawOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
+			 drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
 		}
 	}
 }
@@ -224,79 +274,78 @@ function minDist(array) {
 
 function drawPiece(blockType, x, y, marginX, marginY) {
 	ctx.fillStyle = colorArray[blockType];
-	ctx.strokeStyle = "#000000";
+	ctx.strokeStyle = outlineArray[blockType];
 	ctx.lineWidth = 2;
 	if (blockType == 0) {
-		console.log("hello");
-		drawBlock(x, y, marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x + 2, y, marginX, marginY);
-		drawBlock(x - 1, y, marginX, marginY);
-		drawOutline(x, y, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x + 2, y, marginX, marginY);
-		drawOutline(x - 1, y, marginX, marginY);
+		drawRoundedBlock(x, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x + 2, y, marginX, marginY);
+		drawRoundedBlock(x - 1, y, marginX, marginY);
+		drawRoundedOutline(x, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x + 2, y, marginX, marginY);
+		drawRoundedOutline(x - 1, y, marginX, marginY);
 	}
 	else if (blockType == 1) {
-		drawBlock(x, y + 1, marginX, marginY);
-		drawBlock(x + 1, y - 1, marginX, marginY);
-		drawBlock(x + 1, y + 1, marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawOutline(x, y + 1, marginX, marginY);
-		drawOutline(x + 1, y - 1, marginX, marginY);
-		drawOutline(x + 1, y + 1, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x, y + 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y - 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y + 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x, y + 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y - 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y + 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
 	}
 	else if (blockType == 2) {
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x + 1, y + 1, marginX, marginY);
-		drawBlock(x + 1, y - 1, marginX, marginY);
-		drawBlock(x, y - 1, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x + 1, y + 1, marginX, marginY);
-		drawOutline(x + 1, y - 1, marginX, marginY);
-		drawOutline(x, y - 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y + 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y - 1, marginX, marginY);
+		drawRoundedBlock(x, y - 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y + 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y - 1, marginX, marginY);
+		drawRoundedOutline(x, y - 1, marginX, marginY);
 	}
 	else if (blockType == 3) {
-		drawBlock(x, y, marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x + 1, y - 1, marginX, marginY);
-		drawBlock(x, y - 1, marginX, marginY);
-		drawOutline(x, y, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x + 1, y - 1, marginX, marginY);
-		drawOutline(x, y - 1, marginX, marginY);
+		drawRoundedBlock(x, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y - 1, marginX, marginY);
+		drawRoundedBlock(x, y - 1, marginX, marginY);
+		drawRoundedOutline(x, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y - 1, marginX, marginY);
+		drawRoundedOutline(x, y - 1, marginX, marginY);
 	}
 	else if (blockType == 4) {
-		drawBlock(x, y, marginX, marginY);
-		drawBlock(x, y - 1 , marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x + 1, y + 1, marginX, marginY);
-		drawOutline(x, y, marginX, marginY);
-		drawOutline(x, y - 1 , marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x + 1, y + 1, marginX, marginY);
+		drawRoundedBlock(x, y, marginX, marginY);
+		drawRoundedBlock(x, y - 1 , marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y + 1, marginX, marginY);
+		drawRoundedOutline(x, y, marginX, marginY);
+		drawRoundedOutline(x, y - 1 , marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y + 1, marginX, marginY);
 	}
 	else if (blockType == 5) {
-		drawBlock(x, y, marginX, marginY);
-		drawBlock(x, y - 1, marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x, y + 1, marginX, marginY);
-		drawOutline(x, y, marginX, marginY);
-		drawOutline(x, y - 1, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x, y + 1, marginX, marginY);
+		drawRoundedBlock(x, y, marginX, marginY);
+		drawRoundedBlock(x, y - 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x, y + 1, marginX, marginY);
+		drawRoundedOutline(x, y, marginX, marginY);
+		drawRoundedOutline(x, y - 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x, y + 1, marginX, marginY);
 
 	}
 	else if (blockType == 6) {
-		drawBlock(x, y, marginX, marginY);
-		drawBlock(x, y + 1, marginX, marginY);
-		drawBlock(x + 1, y, marginX, marginY);
-		drawBlock(x + 1, y - 1, marginX, marginY);
-		drawOutline(x, y, marginX, marginY);
-		drawOutline(x, y + 1, marginX, marginY);
-		drawOutline(x + 1, y, marginX, marginY);
-		drawOutline(x + 1, y - 1, marginX, marginY);
+		drawRoundedBlock(x, y, marginX, marginY);
+		drawRoundedBlock(x, y + 1, marginX, marginY);
+		drawRoundedBlock(x + 1, y, marginX, marginY);
+		drawRoundedBlock(x + 1, y - 1, marginX, marginY);
+		drawRoundedOutline(x, y, marginX, marginY);
+		drawRoundedOutline(x, y + 1, marginX, marginY);
+		drawRoundedOutline(x + 1, y, marginX, marginY);
+		drawRoundedOutline(x + 1, y - 1, marginX, marginY);
 
 	}
 }
@@ -306,4 +355,42 @@ function drawBlock(x, y, marginX, marginY) {
 }
 function drawOutline(x, y, marginX, marginY) {
 	ctx.strokeRect(x * 20 - 10 + marginX, y * 20 - 10 + marginY, 20, 20);
+}
+
+function drawRoundedBlock(x, y, marginX, marginY){
+	var r = 3;
+	var x = x * 20 - 10 + marginX;
+	var y = y * 20 - 10 + marginY;
+	var w = 20;
+	var h = 20;
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r);
+    ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.fill();        
+}
+
+function drawRoundedOutline(x, y, marginX, marginY){
+	var r = 3;
+	var x = x * 20 - 10 + marginX + 1;
+	var y = y * 20 - 10 + marginY + 1;
+	var w = 18;
+	var h = 18;
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r);
+    ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.stroke();        
 }

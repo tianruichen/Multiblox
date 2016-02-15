@@ -116,4 +116,29 @@ Game.prototype.checkClear = function(start, stop, players) {
 	}
 }
 
+Game.prototype.checkLose = function() {
+	var lose = 0;
+	var line = this.grid[3];
+	line.forEach(function(b) {
+		if (b != -1) {
+			if (b.landed == 1) {
+				lose = 1;
+			}
+		}
+	});
+	return lose;
+}
+
+Game.prototype.clearGrid = function() {
+	for (i = 0; i < numRows; i++) {
+		for (j = 0; j < numCols; j++) {
+			if (this.grid[i][j] != -1) {
+				if (this.grid[i][j].landed == 1) {
+					this.grid[i][j] = -1
+				}
+			}
+		}
+	}
+}
+
 if (typeof module !== "undefined") module.exports = Game;
