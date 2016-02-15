@@ -4,6 +4,7 @@ Block class
 
 var Block = function(row, col, blockType) {
 	this.landed = 0;
+	console.log(row, col);
 	this.row = row;
 	this.col = col;
 	this.blockType = blockType
@@ -11,7 +12,7 @@ var Block = function(row, col, blockType) {
 	this.tempCol = 0;
 }
 
-Block.getNewPos = function(grid, action, centerRow, centerCol) {
+Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	var r = this.row;
 	var c = this.col;
 	if (action == "down") {
@@ -55,7 +56,7 @@ Block.getNewPos = function(grid, action, centerRow, centerCol) {
 	this.tempCol = c;
 }
 
-Block.checkEmpty = function(grid, action, centerRow, centerCol) {
+Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 	this.getNewPos(grid, action, centerRow, centerCol);
 	if (grid[this.tempRow][this.tempCol] == grid.empty) {
 		return -1;
@@ -63,12 +64,12 @@ Block.checkEmpty = function(grid, action, centerRow, centerCol) {
 	return grid[this.tempRow][this.tempCol].landed;
 }
 
-Block.move = function() {
+Block.prototype.move = function() {
 	this.row = this.tempRow;
 	this.col = this.tempCol;
 }
 
-Block.getBottom = function(grid) {
+Block.prototype.getBottom = function(grid) {
 	var r = this.row;
 	var c = this.col;
 	while (r < grid.length && grid[r][c] == this.empty || grid[r][c].landed == 0) {
@@ -77,7 +78,7 @@ Block.getBottom = function(grid) {
 	return r - 1;
 }
 
-Block.hardDrop = function(grid, num) {
+Block.prototype.hardDrop = function(grid, num) {
 	this.row += num;
 	this.landed = 1;
 }

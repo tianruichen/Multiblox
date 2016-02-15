@@ -27,8 +27,9 @@ function init() {
 function setEventHandlers() {
 	io.on('connection', function(client) {
 
-		var newPlayer = player();
+		var newPlayer = new player("YOLO", client.id, 15, 2);
 		newPlayer.id = this.id;
+		console.log(conveyer);
 		newPlayer.newPiece(game, conveyer.getPiece());
 		players.push(newPlayer);
 
@@ -39,9 +40,9 @@ function setEventHandlers() {
 }
 
 function setGameVariables() {
-	game = gamegrid();
-	conveyer = queue(5);
-	holdslot = hold();
+	game = new gamegrid();
+	conveyer = new queue(5);
+	holdslot = new hold();
 }
 
 function onClientDisconnect() {
@@ -83,7 +84,7 @@ function onKeyPress(data) {
 
 function update() {
 	players.forEach(function(p) {
-		p.update(game, '', conveyer)
+		//p.update(game, '', conveyer)
 	});
 	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
 }

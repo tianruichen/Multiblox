@@ -1,6 +1,7 @@
 /*
 Piece class
 */
+var Block = require("./block");
 
 //How many frames the block can be suspended before moving down
 var defaultDelay = 20;
@@ -11,57 +12,60 @@ var Piece = function(grid, blockType, row, col) {
 	this.col = col;
 	this.fallDelay = 20;
 	//An array of 4 blocks
-	this.blocks = [Block(row, col, blockType)]
+	this.blocks = [new Block(row, col, blockType)]
 	// I Block
 	if (blockType == 0) {
-		this.blocks.push(Block(row + 1, col, blockType));
-		this.blocks.push(Block(row + 2, col, blockType));
-		this.blocks.push(Block(row - 1, col, blockType));   
+		this.blocks.push(new Block(row + 1, col, blockType));
+		this.blocks.push(new Block(row + 2, col, blockType));
+		this.blocks.push(new Block(row - 1, col, blockType));   
 	}
 	// J block
 	else if (blockType == 1) {
-		this.blocks.push(Block(row, col - 1, blockType));
-		this.blocks.push(Block(row, col + 1, blockType));
-		this.blocks.push(Block(row + 1, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row + 1, col + 1, blockType));
 	}
 	// L block
 	else if (blockType == 2) {
-		this.blocks.push(Block(row, col + 1, blockType));
-		this.blocks.push(Block(row, col - 1, blockType));
-		this.blocks.push(Block(row + 1, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row + 1, col - 1, blockType));
 	}
 	//O block
 	else if (blockType == 3) {
-		this.blocks.push(Block(row - 1, col, blockType));
-		this.blocks.push(Block(row - 1, col + 1, blockType));
-		this.blocks.push(Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row - 1, col, blockType));
+		this.blocks.push(new Block(row - 1, col + 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
 	}
 	//S block
 	else if (blockType == 4) {
-		this.blocks.push(Block(row, col - 1, blockType));
-		this.blocks.push(Block(row - 1, col, blockType));
-		this.blocks.push(Block(row - 1, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row - 1, col, blockType));
+		this.blocks.push(new Block(row - 1, col + 1, blockType));
 	}
 	//T block
 	else if (blockType == 5) {
-		this.blocks.push(Block(row, col - 1, blockType));
-		this.blocks.push(Block(row - 1, col, blockType));
-		this.blocks.push(Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row - 1, col, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
 	}
 	//Z block
 	else if (blockType == 6) {
-		this.blocks.push(Block(row, col + 1, blockType));
-		this.blocks.push(Block(row - 1, col, blockType));
-		this.blocks.push(Block(row - 1, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row - 1, col, blockType));
+		this.blocks.push(new Block(row - 1, col - 1, blockType));
 	}
 
 	//Places the piece in the grid
 	for (var i = 0; i < 4; i++) {
+		console.log(this.blocks[i])
+		console.log(this.blocks[i].row, this.blocks[i].col)
+		console.log(this.blocks)
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
 }
 
-Piece.update = function(grid, action) {
+Piece.prototype.update = function(grid, action) {
 
 	//Returns true if the block has landed on the "ground"
 	//Returns false if the block is still in play
@@ -152,13 +156,13 @@ Piece.update = function(grid, action) {
 	return false;
 }
 
-Piece.putPiecesInGrid = function(grid) {
+Piece.prototype.putPiecesInGrid = function(grid) {
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
 }
 
-Piece.getSquares = function() {
+Piece.prototype.getSquares = function() {
 	var squares = [];
 	for (var i = 0; i < 4; i++) {
 		squares.push((this.blocks[i].row, this.blocks[i].col));

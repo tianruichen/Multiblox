@@ -9,7 +9,7 @@ var Queue = function(num) {
 	}
 }
 
-Queue.getPiece = function() {
+Queue.prototype.getPiece = function() {
 	this.pieces.push(getRandomInt(0, 7));
 	return this.pieces.shift();
 }

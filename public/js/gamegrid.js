@@ -18,12 +18,12 @@ var Game = function() {
 
 	for (var i = 0; i < this.grid.length; i++) {
 		for (var j = 0; j < this.grid[0].length; j++) {
-			this.grid[i][j] = empty;
+			this.grid[i][j] = this.empty;
 		}
 	}
 }
 
-Game.checkClear = function(start, stop) {
+Game.prototype.checkClear = function(start, stop) {
 	var filledRows = [];
 	var clear;
 	for (var i = start; i <= stop; i++) {

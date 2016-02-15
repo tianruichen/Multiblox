@@ -4,6 +4,7 @@ Game Player Class
 
 var iNeedTheHeldPiece = 73;
 var iNeedTheQueuePiece = 20;
+var Piece = require("./piece")
 
 var Player = function(username, id, spawnRow, spawnCol) {
 	this.username = username;
@@ -12,9 +13,12 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.canHold = true;
 	this.spawnRow = spawnRow;
 	this.spawnCol = spawnCol;
+	this.newPiece = function(grid, num) {
+		this.piece = new Piece(grid, num, this.spawnRow, this.spawnCol);
+	} 
 }
 
-Player.update = function(grid, action, conveyor, hold) {
+Player.prototype.update = function(grid, action, conveyor, hold) {
 	if (action == "hold") {
 		if (this.canHold) {
 			this.canHold = false;
@@ -31,19 +35,19 @@ Player.update = function(grid, action, conveyor, hold) {
 	}
 }
 
-Player.receivePiece = function(grid, piece) {
+Player.prototype.receivePiece = function(grid, piece) {
 	this.piece = new Piece(grid, piece, this.spawnRow, this.spawnCol);
 }
 
-Player.newPiece = function(grid, num) {
+Player.prototype.newPiece = function(grid, num) {
 	this.piece = new Piece(grid, num, this.spawnRow, this.spawnCol);
-} 
+}
 
-Player.getSquares = function() {
+Player.prototype.getSquares = function() {
 	return this.piece.getSquares();
 }
 
-Player.setSpawn = function(newRow, newCol) {
+Player.prototype.setSpawn = function(newRow, newCol) {
 	this.spawnRow = newRow;
 	this.spawnCol = newCol;
 }
