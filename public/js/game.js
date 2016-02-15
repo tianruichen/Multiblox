@@ -11,7 +11,8 @@ var canvas,
 	hold,
 	conveyer,
 	gridStart = false,
-	playerId;
+	playerId,
+	players;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -76,12 +77,10 @@ function onResize() {
 	if (window.innerWidth / gameWidth * gameHeight > window.innerHeight) {
 		var hratio = window.innerHeight / gameHeight;
 		ctx.scale(hratio, hratio);
-		console.log(hratio);
 	}
 	else {
 		var wratio = window.innerWidth / gameWidth;
 		ctx.scale(wratio, wratio);
-		console.log(wratio);
 	}
 };
 
@@ -96,11 +95,11 @@ function onSocketDisconnect() {
 function updateGameState(data) {
 	if (!gridStart) {
 		gridStart = true;
-		animate();
 	}
 	gameGrid = data.grid;
 	hold = data.hold;
 	conveyer = data.conveyer;
+	players = data.players
 }
 
 function setId(data) {
@@ -125,13 +124,14 @@ function animate() {
 
 function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = '#000000';
+	ctx.fillStyle = '#181818';
 	ctx.fillRect(0, 150, 125, 125);
 	ctx.fillRect(150, 100, 600, 600);
 	ctx.fillRect(775, 50, 125, 700);
 	drawGrid();
 	drawHold();	
 	drawConveyer();
+	drawBorder();
 }
 
 function drawGrid() {
@@ -142,6 +142,9 @@ function drawGrid() {
 				ctx.fillStyle = colorArray[temp.blockType];
 				drawBlock(j, i, 160, 110);
 			}
+			ctx.strokeStyle = "#000000";
+			ctx.lineWidth = 2;
+			drawOutline(j, i, 160, 110)
 		}
 	}
 }
@@ -164,8 +167,62 @@ function drawConveyer(){
 	}
 }
 
+function drawBorder() {
+	var piece;
+	var array = [];
+	ctx.strokeStyle = "yellow";
+	ctx.lineWidth = 3;
+	if (players != undefined) {
+		players.forEach(function(p) {
+			if (p.playerId == playerId) {
+				if (p.piece != undefined) {
+					piece = p.piece;
+				}
+			}
+		});
+	}
+	if (piece != undefined) {
+		if (piece.blocks != undefined) {
+			for (i = 0; i < 4; i++) {
+				if (piece.blocks[i].row != undefined && piece.blocks[i].col != undefined) {
+					drawOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
+					array.push(distToBot(gameGrid, piece.blocks[i].row, piece.blocks[i].col));
+				}		
+			}
+		}
+	}
+	if (array.length == 4) {
+		var min = minDist(array);
+		for (i = 0; i < 4; i++) {
+			 drawOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
+		}
+	}
+}
+
+function distToBot(grid, row, col) {
+	var dist = 0;
+	var r = row + 1;
+	var c = col;
+	while (r < grid.length && (grid[r][c] == -1 || grid[r][c].landed == 0)) {
+		dist += 1;
+		r += 1
+	}
+	return dist;
+}
+
+function minDist(array) {
+	var minDist = 999;
+	//Gets the number of rows until the first piece hits the "ground"
+	for (var i = 0; i < 4; i++) {
+		var temp = array[i];
+		if (temp < minDist) {
+			minDist = temp;
+		}
+	}
+	return minDist;
+}
+
 function drawPiece(blockType, x, y, marginX, marginY) {
-	console.log(blockType);
 	ctx.fillStyle = colorArray[blockType];
 	drawBlock(x, y, marginX, marginY);
 	if (blockType == 0) {
@@ -207,4 +264,7 @@ function drawPiece(blockType, x, y, marginX, marginY) {
 
 function drawBlock(x, y, marginX, marginY) {
 	ctx.fillRect(x * 20 - 10 + marginX, y * 20 - 10 + marginY, 20, 20);
+}
+function drawOutline(x, y, marginX, marginY) {
+	ctx.strokeRect(x * 20 - 10 + marginX, y * 20 - 10 + marginY, 20, 20);
 }
