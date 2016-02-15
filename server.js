@@ -41,13 +41,19 @@ function setEventHandlers() {
 
 function setGameVariables() {
 	game = new gamegrid();
-
 	conveyer = new queue(5);
 	holdslot = new hold();
 }
 
 function onClientDisconnect() {
 	console.log("Client has disconnected: " + this.id);
+	for (i = 0; i < players.length; i++) {
+		if (players[i].playerId == this.id) {
+			players[i].removePiece(game.grid);
+			players.splice(i, 1);
+			break;
+		}
+	}
 };
 
 function onKeyPress(data) {
