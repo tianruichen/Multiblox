@@ -25,6 +25,9 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 			var oldBlock = this.piece.blockType;
 			this.removePiece(grid);
 			this.newPiece(grid, hold.getPiece(oldBlock));
+			if (!this.piece) {
+				this.piece = new Piece(grid, conveyor.getPiece);
+			}
 		}
 	}
 	else {
@@ -32,9 +35,25 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 		result = this.piece.update(grid, action);
 		if (result) {
 			this.canHold = true;
+
+			squares = this.getSquares();
+			var min = squares[0][0];
+			var max = min;
+			for (var i = 1; i < 4; i++) {
+				if (min > squares[i][0]) {
+					min = squares[i][0];
+				}
+				else if (max < squares[i][0]) {
+					max = squares[i][0];
+				}
+			}
+
 			this.newPiece(grid, conveyor.getPiece());
+
+			return [min, max];
 		}
 	}
+	return false;
 }
 
 Player.prototype.receivePiece = function(grid, piece) {
