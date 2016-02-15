@@ -74,8 +74,7 @@ Piece.prototype.update = function(grid, action) {
 
 	var result = true;
 
-	//Special case for hard drops (Not implemented yet)
-	/*
+	//Special case for hard drops
 	if (action == "hard drop") {
 		var min = 999;
 		//Gets the number of rows until the first piece hits the "ground"
@@ -102,7 +101,7 @@ Piece.prototype.update = function(grid, action) {
 			this.putPiecesInGrid(grid);
 			return true;
 		}
-	}*/
+	}
 
 	//Handles soft drop (not implemented yet)
 	/*else if (action == "down") {
@@ -110,7 +109,7 @@ Piece.prototype.update = function(grid, action) {
 	}*/
 
 	//Every other user-input action
-	if (action != "") {
+	else if (action != "") {
 		for (var i = 0; i < 4; i++) {
 			if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
 				result = false;
