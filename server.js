@@ -11,7 +11,7 @@ var express = require('express'),
 	queue = require("./public/js/queue"),
 	game,
 	conveyer,
-	players = [0],
+	players = [],
 	holdslot,
 	stats;
 
@@ -30,7 +30,7 @@ function setEventHandlers() {
 		var newPlayer = new player("YOLO", client.id, 15, 2);
 		newPlayer.id = this.id;
 		console.log(conveyer);
-		newPlayer.newPiece(game, conveyer.getPiece());
+		newPlayer.newPiece(game.grid, conveyer.getPiece());
 		players.push(newPlayer);
 
 		console.log('Client connected: ' + client.id);
@@ -41,6 +41,8 @@ function setEventHandlers() {
 
 function setGameVariables() {
 	game = new gamegrid();
+	//console.log(game);
+
 	conveyer = new queue(5);
 	holdslot = new hold();
 }
@@ -84,7 +86,7 @@ function onKeyPress(data) {
 
 function update() {
 	players.forEach(function(p) {
-		//p.update(game, '', conveyer)
+		p.update(game.grid, '', conveyer, holdslot)
 	});
 	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
 }

@@ -58,7 +58,11 @@ Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 
 Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 	this.getNewPos(grid, action, centerRow, centerCol);
-	if (grid[this.tempRow][this.tempCol] == grid.empty) {
+	console.log(this.tempRow, this.tempCol)
+	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
+		return -1;
+	}
+	if (grid[this.tempRow][this.tempCol] == -1) {
 		return -1;
 	}
 	return grid[this.tempRow][this.tempCol].landed;

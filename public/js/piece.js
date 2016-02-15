@@ -58,22 +58,22 @@ var Piece = function(grid, blockType, row, col) {
 
 	//Places the piece in the grid
 	for (var i = 0; i < 4; i++) {
-		console.log(this.blocks[i])
-		console.log(this.blocks[i].row, this.blocks[i].col)
-		console.log(this.blocks)
+		//console.log(grid.grid[0][0])
+		//console.log(this.blocks[i])
+		//console.log(this.blocks[i].row, this.blocks[i].col)
+		//console.log(this.blocks)
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
 }
 
 Piece.prototype.update = function(grid, action) {
-
 	//Returns true if the block has landed on the "ground"
 	//Returns false if the block is still in play
 
 	//Removes the piece from the grid
 	//Gets placed back in the grid before the update function returns
 	for (var i = 0; i < 4; i++) {
-		grid[this.blocks[i].row][this.blocks[i].col] = grid.empty;
+		grid[this.blocks[i].row][this.blocks[i].col] = -1;
 	}
 
 	var result = true;
@@ -91,7 +91,7 @@ Piece.prototype.update = function(grid, action) {
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
 		for (var i = 0; i < 4; i++) {
-			if (grid[this.blocks[i].row + min][this.col] != grid.empty) {
+			if (grid[this.blocks[i].row + min][this.col] != -1) {
 				drop = false;
 				break;
 			}
@@ -102,7 +102,7 @@ Piece.prototype.update = function(grid, action) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].hardDrop(min);
 			}
-			this.putPiecesInGrid();
+			this.putPiecesInGrid(grid);
 			return true;
 		}
 	}
@@ -145,18 +145,19 @@ Piece.prototype.update = function(grid, action) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].landed = 1;
 			}
-			this.putPiecesInGrid();
+			this.putPiecesInGrid(grid);
 			return true;
 		}
 	}
 
 	this.fallDelay -= 1;
 
-	this.putPiecesInGrid();
+	this.putPiecesInGrid(grid);
 	return false;
 }
 
 Piece.prototype.putPiecesInGrid = function(grid) {
+	console.log(this.blocks);
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}

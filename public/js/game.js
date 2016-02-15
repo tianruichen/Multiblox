@@ -96,14 +96,13 @@ function animate() {
 }
 
 function draw() {
-	console.log("testing")
+	//console.log("testing")
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = '#FF0000';
 	ctx.fillRect(0, 150, 125, 125);
 	ctx.fillRect(150, 100, 600, 600);
 	ctx.fillRect(800, 50, 100, 700);
-
-	
+	drawGrid(gameGrid);	
 }
 
 function drawGrid(grid) {
