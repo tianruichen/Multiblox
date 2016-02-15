@@ -93,7 +93,7 @@ function update() {
 	players.forEach(function(p) {
 		var checkClear = p.update(game.grid, conveyer, holdslot)
 		if (checkClear) {
-			game.checkClear(checkClear[0], checkClear[1]);
+			game.checkClear(checkClear[0], checkClear[1], players);
 		}
 	});
 	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer, players: players});

@@ -29,7 +29,6 @@ Player.prototype.update = function(grid, conveyor, hold) {
 			if (next == false) {
 				next = conveyor.getPiece();
 			}
-			console.log(next);
 			this.piece = new Piece(grid, next, this.spawnRow, this.spawnCol);
 		}
 	}

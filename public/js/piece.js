@@ -68,9 +68,7 @@ Piece.prototype.update = function(grid, action) {
 
 	//Removes the piece from the grid
 	//Gets placed back in the grid before the update function returns
-	for (var i = 0; i < 4; i++) {
-		grid[this.blocks[i].row][this.blocks[i].col] = -1;
-	}
+	this.removeFromGrid(grid);
 
 	var result = true;
 
@@ -87,12 +85,12 @@ Piece.prototype.update = function(grid, action) {
 			}
 		}
 
-		//Drops all the pieces
+		//Drops all the blocks
 		if (drop) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].hardDrop(grid, minDist);
 			}
-			this.putPiecesInGrid(grid);
+			this.putInGrid(grid);
 			return true;
 		}
 	}
@@ -137,7 +135,7 @@ Piece.prototype.update = function(grid, action) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].landed = 1;
 			}
-			this.putPiecesInGrid(grid);
+			this.putInGrid(grid);
 			return true;
 		}
 	}
@@ -147,11 +145,17 @@ Piece.prototype.update = function(grid, action) {
 
 	this.fallDelay -= 1;
 
-	this.putPiecesInGrid(grid);
+	this.putInGrid(grid);
 	return false;
 }
 
-Piece.prototype.putPiecesInGrid = function(grid) {
+Piece.prototype.removeFromGrid = function(grid) {
+	for (var i = 0; i < 4; i++) {
+		grid[this.blocks[i].row][this.blocks[i].col] = -1;
+	}
+}
+
+Piece.prototype.putInGrid = function(grid) {
 
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
@@ -185,6 +189,15 @@ Piece.prototype.distToBot = function(grid) {
 		}
 	}
 	return minDist;
+}
+
+//Special function to handle really really ugly stuff
+//happening when lines get cleared since it's multiplayer
+Piece.prototype.jumpDown = function(grid, num) {
+	this.blocks.forEach(function(b) {
+		b.row += num;
+	});
+	this.row += 1;
 }
 
 if (typeof module !== "undefined") module.exports = Piece;

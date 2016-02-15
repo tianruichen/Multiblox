@@ -23,7 +23,8 @@ var Game = function() {
 	}
 }
 
-Game.prototype.checkClear = function(start, stop) {
+Game.prototype.checkClear = function(start, stop, players) {
+
 	var filledRows = [];
 	var clear;
 	for (var i = start; i <= stop; i++) {
@@ -40,6 +41,16 @@ Game.prototype.checkClear = function(start, stop) {
 	}
 
 	if (filledRows.length > 0) {
+
+		var pieces = [];
+		for (var i = 0; i < players.length; i++) {
+			pieces.push(players[i].piece);
+		}
+
+		for (var i = 0; i < pieces.length; i++) {
+			pieces[i].removeFromGrid(this.grid);
+		}
+
 		var curFall = 0;
 		var curRow = stop;
 		var block;
@@ -62,6 +73,45 @@ Game.prototype.checkClear = function(start, stop) {
 				}
 			}
 			curRow -= 1;
+		}
+		var badpieces;
+		var cont = true;
+		var squares;
+		while (cont) {
+			cont = false;
+			badpieces = [];
+			var i = 0;
+			while (i < pieces.length) {
+				squares = pieces[i].getSquares();
+				for (var j = 0; j < 4; j++) {
+					if (this.grid[squares[j][0]][squares[j][1]] != -1) {
+						badpieces.push(pieces.splice(i, 1)[0]);
+						cont = true;
+						j = 4;
+					}
+					else {
+						i += 1;
+					}
+				}
+			}
+			var jump = 0;
+
+			console.log(badpieces);
+
+			for (var i = 0; i < badpieces.length; i++) {
+				
+				while (filledRows[jump] < badpieces[i].row) {
+					jump += 1;
+				}
+				jump = filledRows.length - jump;
+
+				badpieces[i].jumpDown(this.grid, jump);
+				badpieces[i].putInGrid(this.grid);
+			}
+		}
+
+		for (var i = 0; i < pieces.length; i++) {
+			pieces[i].putInGrid(this.grid);
 		}
 	}
 }
