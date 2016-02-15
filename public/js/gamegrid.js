@@ -24,8 +24,6 @@ var Game = function() {
 }
 
 Game.prototype.checkClear = function(start, stop) {
-	console.log("check clear");
-	console.log("startstop: ", start, stop);
 	var filledRows = [];
 	var clear;
 	for (var i = start; i <= stop; i++) {
@@ -33,20 +31,15 @@ Game.prototype.checkClear = function(start, stop) {
 		for (var j = 0; j <= numCols; j++) {
 			if (this.grid[i][j] == this.empty) {
 				clear = false;
-				console.log("nop on row", i);
 				break;
 			}
 		}
-		console.log("Helo");
 		if (clear) {
-			console.log("yup on row", i)
 			filledRows.unshift(i);
 		}
 	}
 
-	console.log("filled Rows: ", filledRows)
 	if (filledRows.length > 0) {
-		console.log("WE'RE GOING IN")
 		var curFall = 0;
 		var curRow = stop;
 		while (curRow >= 5) {

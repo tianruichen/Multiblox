@@ -15,21 +15,21 @@ var Piece = function(grid, blockType, row, col) {
 	this.blocks = [new Block(row, col, blockType)]
 	// I Block
 	if (blockType == 0) {
-		this.blocks.push(new Block(row + 1, col, blockType));
-		this.blocks.push(new Block(row + 2, col, blockType));
-		this.blocks.push(new Block(row - 1, col, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row, col + 2, blockType));
 	}
 	// J block
 	else if (blockType == 1) {
-		this.blocks.push(new Block(row, col - 1, blockType));
 		this.blocks.push(new Block(row, col + 1, blockType));
-		this.blocks.push(new Block(row + 1, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row - 1, col - 1, blockType));
 	}
 	// L block
 	else if (blockType == 2) {
-		this.blocks.push(new Block(row, col + 1, blockType));
 		this.blocks.push(new Block(row, col - 1, blockType));
-		this.blocks.push(new Block(row + 1, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row - 1, col + 1, blockType));
 	}
 	//O block
 	else if (blockType == 3) {
@@ -39,9 +39,9 @@ var Piece = function(grid, blockType, row, col) {
 	}
 	//S block
 	else if (blockType == 4) {
-		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
 		this.blocks.push(new Block(row - 1, col, blockType));
-		this.blocks.push(new Block(row - 1, col - 1, blockType));
+		this.blocks.push(new Block(row - 1, col + 1, blockType));
 	}
 	//T block
 	else if (blockType == 5) {
@@ -51,9 +51,9 @@ var Piece = function(grid, blockType, row, col) {
 	}
 	//Z block
 	else if (blockType == 6) {
-		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
 		this.blocks.push(new Block(row - 1, col, blockType));
-		this.blocks.push(new Block(row - 1, col + 1, blockType));
+		this.blocks.push(new Block(row - 1, col - 1, blockType));
 	}
 
 	//Places the piece in the grid
@@ -76,6 +76,7 @@ Piece.prototype.update = function(grid, action) {
 
 	//Special case for hard drops
 	if (action == "hard drop") {
+		action = "";
 		var minDist = this.distToBot(grid);
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
@@ -96,7 +97,11 @@ Piece.prototype.update = function(grid, action) {
 		}
 	}
 
-	else if (action != "") {
+	if (this.blockType == 3 && (action == "cw" || action == "ccw")) {
+		action = "";
+	}
+
+	if (action != "") {
 		for (var i = 0; i < 4; i++) {
 			if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
 				result = false;
