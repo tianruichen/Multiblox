@@ -87,4 +87,8 @@ Player.prototype.setSpawn = function(newRow, newCol) {
 	this.spawnCol = newCol;
 }
 
+Player.prototype.getGhost = function(grid) {
+	return this.piece.getGhostSquares(grid);
+}
+
 if (typeof module !== "undefined") module.exports = Player;

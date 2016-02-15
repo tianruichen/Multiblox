@@ -17,7 +17,7 @@ var Piece = function(grid, blockType, row, col) {
 	if (blockType == 0) {
 		this.blocks.push(new Block(row + 1, col, blockType));
 		this.blocks.push(new Block(row + 2, col, blockType));
-		this.blocks.push(new Block(row - 1, col, blockType));   
+		this.blocks.push(new Block(row - 1, col, blockType));
 	}
 	// J block
 	else if (blockType == 1) {
@@ -76,14 +76,7 @@ Piece.prototype.update = function(grid, action) {
 
 	//Special case for hard drops
 	if (action == "hard drop") {
-		var minDist = 999;
-		//Gets the number of rows until the first piece hits the "ground"
-		for (var i = 0; i < 4; i++) {
-			var temp = this.blocks[i].distToBot(grid);
-			if (temp < minDist) {
-				minDist = temp;
-			}
-		}
+		var minDist = this.distToBot(grid);
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
 		for (var i = 0; i < 4; i++) {
@@ -103,12 +96,6 @@ Piece.prototype.update = function(grid, action) {
 		}
 	}
 
-	//Handles soft drop (not implemented yet)
-	/*else if (action == "down") {
-		this.fallDelay = -1;
-	}*/
-
-	//Every other user-input action
 	else if (action != "") {
 		for (var i = 0; i < 4; i++) {
 			if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
@@ -172,6 +159,27 @@ Piece.prototype.getSquares = function() {
 		squares.push([this.blocks[i].row, this.blocks[i].col]);
 	}
 	return squares;
+}
+
+Piece.prototype.getGhostSquares = function(grid) {
+	var dist = this.distToBot(grid);
+	var squares = [];
+	for (var i = 0; i < 4; i++) {
+		squares.push([this.blocks[i].row + dist, this.blocks[i].col]);
+	}
+	return squares;
+}
+
+Piece.prototype.distToBot = function(grid) {
+	var minDist = 999;
+	//Gets the number of rows until the first piece hits the "ground"
+	for (var i = 0; i < 4; i++) {
+		var temp = this.blocks[i].distToBot(grid);
+		if (temp < minDist) {
+			minDist = temp;
+		}
+	}
+	return minDist;
 }
 
 if (typeof module !== "undefined") module.exports = Piece;
