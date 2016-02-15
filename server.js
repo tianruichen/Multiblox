@@ -27,7 +27,7 @@ function init() {
 function setEventHandlers() {
 	io.on('connection', function(client) {
 
-		var newPlayer = new player("YOLO", client.id, 15, 2);
+		var newPlayer = new player("YOLO", client.id, 2, 15);
 		newPlayer.id = this.id;
 		console.log(conveyer);
 		newPlayer.newPiece(game.grid, conveyer.getPiece());

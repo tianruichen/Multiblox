@@ -137,10 +137,12 @@ Piece.prototype.update = function(grid, action) {
 		}
 		//Moves all pieces down one if all the spaces below are empty
 		if (result == -1) {
+			this.fallDelay = defaultDelay;
 			for (var i = 1; i < 4; i++) {
 				this.blocks[i].move();
 			}
 		}
+		//The piece should have landed and be out of play
 		else if (result == 1) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].landed = 1;
@@ -157,7 +159,11 @@ Piece.prototype.update = function(grid, action) {
 }
 
 Piece.prototype.putPiecesInGrid = function(grid) {
-	console.log(this.blocks);
+	console.log(this.blocks[0].row, this.blocks[0].col);
+	console.log(this.blocks[1].row, this.blocks[1].col);
+	console.log(this.blocks[2].row, this.blocks[2].col);
+	console.log(this.blocks[3].row, this.blocks[3].col);
+
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
