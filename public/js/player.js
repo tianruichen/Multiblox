@@ -8,7 +8,7 @@ var Piece = require("./piece")
 
 var Player = function(username, id, spawnRow, spawnCol) {
 	this.username = username;
-	this.id = id;
+	this.playerId = id;
 	this.piece = null;
 	this.canHold = true;
 	this.spawnRow = spawnRow;

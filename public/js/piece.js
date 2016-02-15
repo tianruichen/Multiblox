@@ -129,7 +129,7 @@ Piece.prototype.update = function(grid, action) {
 	if (this.fallDelay < 0) {
 		result = -1;
 		//Checks what kind of pieces are one row below the piece
-		for (var i = 1; i < 4; i++) {
+		for (var i = 0; i < 4; i++) {
 			var temp = this.blocks[i].checkEmpty(grid, "down", this.row, this.col);
 			if (temp > result) {
 				result = temp;
@@ -138,7 +138,7 @@ Piece.prototype.update = function(grid, action) {
 		//Moves all pieces down one if all the spaces below are empty
 		if (result == -1) {
 			this.fallDelay = defaultDelay;
-			for (var i = 1; i < 4; i++) {
+			for (var i = 0; i < 4; i++) {
 				this.blocks[i].move();
 			}
 		}
@@ -159,10 +159,10 @@ Piece.prototype.update = function(grid, action) {
 }
 
 Piece.prototype.putPiecesInGrid = function(grid) {
-	console.log(this.blocks[0].row, this.blocks[0].col);
-	console.log(this.blocks[1].row, this.blocks[1].col);
-	console.log(this.blocks[2].row, this.blocks[2].col);
-	console.log(this.blocks[3].row, this.blocks[3].col);
+	//console.log(this.blocks[0].row, this.blocks[0].col);
+	//console.log(this.blocks[1].row, this.blocks[1].col);
+	//console.log(this.blocks[2].row, this.blocks[2].col);
+	//console.log(this.blocks[3].row, this.blocks[3].col);
 
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];

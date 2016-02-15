@@ -29,8 +29,8 @@ function setEventHandlers() {
 
 		var newPlayer = new player("YOLO", client.id, 2, 15);
 		newPlayer.id = this.id;
-		console.log(conveyer);
 		newPlayer.newPiece(game.grid, conveyer.getPiece());
+		client.emit('getId', {id: client.id});
 		players.push(newPlayer);
 
 		console.log('Client connected: ' + client.id);
@@ -54,41 +54,44 @@ function onClientDisconnect() {
 function onKeyPress(data) {
 	var currentplayer;
 	players.forEach(function(p) {
-		if (p.id == data.id) {
+		console.log(p.playerId);
+		if (p.playerId == data.id) {
 			currentplayer = p;
 		}	
 	});
 	if (data.key == 'shift') {
-		currentplayer.update(game, 'hold', conveyer)
+		currentplayer.update(game.grid, 'hold', conveyer, holdslot)
 	}
 	else if (data.key == 'left') {
-		currentplayer.update(game, 'left', conveyer)
+		currentplayer.update(game.grid, 'left', conveyer, holdslot)
 	}
 	else if (data.key == 'up') {
-		currentplayer.update(game, 'cw', conveyer)
+		currentplayer.update(game.grid, 'cw', conveyer, holdslot)
 	}
 
 	else if (data.key == 'right') {
-		currentplayer.update(game, 'right', conveyer)
+		console.log("asdfadsf")
+		currentplayer.update(game.grid, 'right', conveyer, holdslot)
 	}
 
 	else if (data.key == 'down') {
-		currentplayer.update(game, 'down', conveyer)
+		//currentplayer.update(game, 'down', conveyer)
 	}
 
 	else if (data.key == 'z') {
-		currentplayer.update(game, 'ccw', conveyer)
+		currentplayer.update(game.grid, 'ccw', conveyer, holdslot)
 	}
 	else if (data.key == 'x') {
-		currentplayer.update(game, 'cw', conveyer)
+		currentplayer.update(game.grid, 'cw', conveyer, holdslot)
 	}
 }
 
 function update() {
+	//console.log(game.grid);
 	players.forEach(function(p) {
 		p.update(game.grid, '', conveyer, holdslot)
 	});
-	io.emit("getgame", {grid: game, hold: holdslot, conveyer: conveyer});
+	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer});
 }
 
 init();
