@@ -22,7 +22,9 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 	if (action == "hold") {
 		if (this.canHold) {
 			this.canHold = false;
-			this.newPiece(grid, hold.getPiece(this.piece.blockType));
+			var oldBlock = this.piece.blockType;
+			this.removePiece(grid);
+			this.newPiece(grid, hold.getPiece(oldBlock));
 		}
 	}
 	else {
@@ -45,6 +47,17 @@ Player.prototype.newPiece = function(grid, num) {
 
 Player.prototype.getSquares = function() {
 	return this.piece.getSquares();
+}
+
+Player.prototype.removePiece = function(grid) {
+	var squares = this.piece.getSquares();
+	var r, c;
+	for (var i = 0; i < 4; i++) {
+		r = squares[i][0];
+		c = squares[i][1];
+		grid[r][c] = -1;
+	}
+	this.piece = null;
 }
 
 Player.prototype.setSpawn = function(newRow, newCol) {

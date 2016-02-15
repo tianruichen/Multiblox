@@ -170,7 +170,7 @@ Piece.prototype.putPiecesInGrid = function(grid) {
 Piece.prototype.getSquares = function() {
 	var squares = [];
 	for (var i = 0; i < 4; i++) {
-		squares.push((this.blocks[i].row, this.blocks[i].col));
+		squares.push([this.blocks[i].row, this.blocks[i].col]);
 	}
 	return squares;
 }

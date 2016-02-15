@@ -127,7 +127,7 @@ function draw() {
 	ctx.fillStyle = '#000000';
 	ctx.fillRect(0, 150, 125, 125);
 	ctx.fillRect(150, 100, 600, 600);
-	ctx.fillRect(800, 50, 100, 700);
+	ctx.fillRect(775, 50, 125, 700);
 	drawGrid();	
 }
 
