@@ -91,7 +91,10 @@ function onKeyPress(data) {
 
 function update() {
 	players.forEach(function(p) {
-		p.update(game.grid, '', conveyer, holdslot)
+		var checkClear = p.update(game.grid, '', conveyer, holdslot)
+		if (checkClear) {
+			game.checkClear(checkClear[0], checkClear[1]);
+		}
 	});
 	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer});
 }
