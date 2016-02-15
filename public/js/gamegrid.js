@@ -10,13 +10,15 @@ var Game = function() {
 	//Initializes a grid with numRows rows and numCols columns
 	//Sets all of the elements to 0
 	this.grid = new Array(numRows);
+	this.empty = -1;
+
 	for (var i = 0; i < numRows; i++) {
 		this.grid[i] = new Array(numCols);
 	}
 
 	for (var i = 0; i < this.grid.length; i++) {
 		for (var j = 0; j < this.grid[0].length; j++) {
-			this.grid[i][j] = 0;
+			this.grid[i][j] = empty;
 		}
 	}
 }
@@ -27,7 +29,7 @@ Game.checkClear = function(start, stop) {
 	for (var i = start; i <= stop; i++) {
 		clear = true;
 		for (var j = 0; j <= numCols; j++) {
-			if (this.grid[i][j] == 0) {
+			if (this.grid[i][j] == this.empty) {
 				clear = false;
 				break;
 			}
@@ -43,7 +45,7 @@ Game.checkClear = function(start, stop) {
 		while (curRow >= 5) {
 			if (filledRows.indexOf(curRow) != -1) {
 				for (var i = 0; i < numCols; i++) {
-					this.grid[r][i] = 0;
+					this.grid[r][i] = this.empty;
 				}
 				curFall += 1;
 			}
@@ -51,7 +53,7 @@ Game.checkClear = function(start, stop) {
 				if (curFall > 0) {
 					for (var i = 0; i < numCols; i++) {
 						this.grid[curRow + curFall][i] = this.grid[curRow][i];
-						this.grid[curRow][i] = 0;
+						this.grid[curRow][i] = this.empty;
 					}
 				}
 			}

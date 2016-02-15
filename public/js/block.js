@@ -57,7 +57,7 @@ Block.getNewPos = function(grid, action, centerRow, centerCol) {
 
 Block.checkEmpty = function(grid, action, centerRow, centerCol) {
 	this.getNewPos(grid, action, centerRow, centerCol);
-	if (grid[this.tempRow][this.tempCol] == 0) {
+	if (grid[this.tempRow][this.tempCol] == grid.empty) {
 		return -1;
 	}
 	return grid[this.tempRow][this.tempCol].landed;
@@ -71,7 +71,7 @@ Block.move = function() {
 Block.getBottom = function(grid) {
 	var r = this.row;
 	var c = this.col;
-	while (r < grid.length && grid[r][c] == 0 || grid[r][c].landed == 0) {
+	while (r < grid.length && grid[r][c] == this.empty || grid[r][c].landed == 0) {
 		r += 1;
 	}
 	return r - 1;

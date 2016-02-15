@@ -79,7 +79,7 @@ Piece.update = function(grid, action) {
 	//Removes the piece from the grid
 	//Gets placed back in the grid before the update function returns
 	for (var i = 0; i < 4; i++) {
-		grid[this.blocks[i].row][this.blocks[i].col] = 0;
+		grid[this.blocks[i].row][this.blocks[i].col] = grid.empty;
 	}
 
 	var result = true;
@@ -97,7 +97,7 @@ Piece.update = function(grid, action) {
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
 		for (var i = 0; i < 4; i++) {
-			if (grid[this.blocks[i].row + min][this.col] != 0) {
+			if (grid[this.blocks[i].row + min][this.col] != grid.empty) {
 				drop = false;
 				break;
 			}
