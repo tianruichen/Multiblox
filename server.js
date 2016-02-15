@@ -13,7 +13,8 @@ var express = require('express'),
 	conveyer,
 	players = [],
 	holdslot,
-	stats;
+	stats,
+	command = '';
 
 function init() {
 	app.use(express.static(__dirname + '/public'));
@@ -64,34 +65,34 @@ function onKeyPress(data) {
 		}	
 	});
 	if (data.key == 'shift') {
-		currentplayer.update(game.grid, 'hold', conveyer, holdslot)
+		currentplayer.nextInput = 'hold';
 	}
 	if (data.key == 'space') {
-		currentplayer.update(game.grid, 'hard drop', conveyer, holdslot)
+		currentplayer.nextInput = 'hard drop';
 	}
 	else if (data.key == 'left') {
-		currentplayer.update(game.grid, 'left', conveyer, holdslot)
+		currentplayer.nextInput = 'left';
 	}
 	else if (data.key == 'up') {
-		currentplayer.update(game.grid, 'cw', conveyer, holdslot)
+		currentplayer.nextInput = 'cw';
 	}
 	else if (data.key == 'right') {
-		currentplayer.update(game.grid, 'right', conveyer, holdslot)
+		currentplayer.nextInput = 'right';
 	}
 	else if (data.key == 'down') {
-		currentplayer.update(game, 'down', conveyer, holdslot)
+		currentplayer.nextInput = 'down';
 	}
 	else if (data.key == 'z') {
-		currentplayer.update(game.grid, 'ccw', conveyer, holdslot)
+		currentplayer.nextInput = 'z';
 	}
 	else if (data.key == 'x') {
-		currentplayer.update(game.grid, 'cw', conveyer, holdslot)
+		currentplayer.nextInput = 'x';
 	}
 }
 
 function update() {
 	players.forEach(function(p) {
-		var checkClear = p.update(game.grid, '', conveyer, holdslot)
+		var checkClear = p.update(game.grid, conveyer, holdslot)
 		if (checkClear) {
 			game.checkClear(checkClear[0], checkClear[1]);
 		}
