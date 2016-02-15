@@ -29,9 +29,9 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 	}
 	else {
 		var result;
-		this.canHold = true;
 		result = this.piece.update(grid, action);
 		if (result) {
+			this.canHold = true;
 			this.newPiece(grid, conveyor.getPiece());
 		}
 	}
