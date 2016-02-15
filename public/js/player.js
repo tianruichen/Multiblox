@@ -13,13 +13,14 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.canHold = true;
 	this.spawnRow = spawnRow;
 	this.spawnCol = spawnCol;
+	this.nextInput = "";
 	this.newPiece = function(grid, num) {
 		this.piece = new Piece(grid, num, this.spawnRow, this.spawnCol);
 	} 
 }
 
-Player.prototype.update = function(grid, action, conveyor, hold) {
-	if (action == "hold") {
+Player.prototype.update = function(grid, conveyor, hold) {
+	if (this.nextInput == "hold") {
 		if (this.canHold) {
 			this.canHold = false;
 			var oldBlock = this.piece.blockType;
@@ -32,7 +33,7 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 	}
 	else {
 		var result;
-		result = this.piece.update(grid, action);
+		result = this.piece.update(grid, this.nextInput);
 		if (result) {
 			this.canHold = true;
 
@@ -50,9 +51,11 @@ Player.prototype.update = function(grid, action, conveyor, hold) {
 
 			this.newPiece(grid, conveyor.getPiece());
 
+			this.nextInput = "";
 			return [min, max];
 		}
 	}
+	this.nextInput = "";
 	return false;
 }
 

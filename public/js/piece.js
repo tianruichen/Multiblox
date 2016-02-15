@@ -39,9 +39,9 @@ var Piece = function(grid, blockType, row, col) {
 	}
 	//S block
 	else if (blockType == 4) {
-		this.blocks.push(new Block(row, col - 1, blockType));
+		this.blocks.push(new Block(row, col + 1, blockType));
 		this.blocks.push(new Block(row - 1, col, blockType));
-		this.blocks.push(new Block(row - 1, col + 1, blockType));
+		this.blocks.push(new Block(row - 1, col - 1, blockType));
 	}
 	//T block
 	else if (blockType == 5) {
@@ -51,9 +51,9 @@ var Piece = function(grid, blockType, row, col) {
 	}
 	//Z block
 	else if (blockType == 6) {
-		this.blocks.push(new Block(row, col + 1, blockType));
+		this.blocks.push(new Block(row, col - 1, blockType));
 		this.blocks.push(new Block(row - 1, col, blockType));
-		this.blocks.push(new Block(row - 1, col - 1, blockType));
+		this.blocks.push(new Block(row - 1, col + 1, blockType));
 	}
 
 	//Places the piece in the grid
