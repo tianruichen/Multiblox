@@ -8,6 +8,8 @@ var canvas,
 	gameHeight = 900,
 	colorArray,
 	gameGrid,
+	hold,
+	conveyer,
 	gridStart = false,
 	playerId;
 
@@ -94,12 +96,14 @@ function onSocketDisconnect() {
 }
 
 function updateGameState(data) {
-	console.log("update");
+	//console.log("update");
 	if (!gridStart) {
 		gridStart = true;
 		animate();
 	}
 	gameGrid = data.grid;
+	hold = data.hold;
+	conveyer = data.conveyer;
 }
 
 function setId(data) {
@@ -118,7 +122,6 @@ window.requestAnimFrame = (function(){
 })();
 
 function animate() {
-	console.log("animate");
 	draw();
 	window.requestAnimFrame(animate);
 }
@@ -129,7 +132,8 @@ function draw() {
 	ctx.fillRect(0, 150, 125, 125);
 	ctx.fillRect(150, 100, 600, 600);
 	ctx.fillRect(775, 50, 125, 700);
-	drawGrid();	
+	drawGrid();
+	drawHold();	
 }
 
 function drawGrid() {
@@ -141,6 +145,55 @@ function drawGrid() {
 				drawBlock(j, i, 160, 110);
 			}
 		}
+	}
+}
+
+function drawHold() {
+	if (hold != undefined) {
+		var piece = hold.piece;
+		if (!piece) {
+			drawPiece(piece.blockType, 2, 2, 10, 160);
+		}
+	}
+}
+
+function drawPiece(blockType, x, y, marginX, marginY) {
+	ctx.fillStyle = colorArray[blockType];
+	drawBlock(x, y, marginX, marginY);
+	if (blockType == 0) {
+		drawBlock(x + 1, y, marginX, marginY);
+		drawBlock(x + 2, y, marginX, marginY);
+		drawBlock(x - 1, y, marginX, marginY);
+	}
+	else if (blockType == 1) {
+		drawBlock(x, y - 1, marginX, marginY);
+		drawBlock(x, y + 1, marginX, marginY);
+		drawBlock(x + 1, y + 1, marginX, marginY);
+	}
+	else if (blockType == 2) {
+		drawBlock(x, y + 1, marginX, marginY);
+		drawBlock(x, y - 1, marginX, marginY);
+		drawBlock(x + 1, y - 1, marginX, marginY);
+	}
+	else if (blockType == 3) {
+		drawBlock(x - 1, y, marginX, marginY);
+		drawBlock(x - 1, y + 1, marginX, marginY);
+		drawBlock(x, y + 1, marginX, marginY);
+	}
+	else if (blockType == 4) {
+		drawBlock(x, y - 1, marginX, marginY);
+		drawBlock(x - 1, y, marginX, marginY);
+		drawBlock(x - 1, y + 1, marginX, marginY);
+	}
+	else if (blockType == 5) {
+		drawBlock(x, y - 1, marginX, marginY);
+		drawBlock(x - 1, y, marginX, marginY);
+		drawBlock(x, y + 1, marginX, marginY);
+	}
+	else if (blockType == 6) {
+		drawBlock(x, y + 1, marginX, marginY);
+		drawBlock(x - 1, y, marginX, marginY);
+		drawBlock(x - 1, y - 1, marginX, marginY);
 	}
 }
 
