@@ -2,11 +2,11 @@
 Block class
 */
 
-var Block = function(row, col, fill) {
+var Block = function(row, col, blockType) {
 	this.landed = 0;
 	this.row = row;
 	this.col = col;
-	this.fill = fill;
+	this.blockType = blockType
 	this.tempRow = 0;
 	this.tempCol = 0;
 }
