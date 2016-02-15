@@ -144,5 +144,5 @@ function drawGrid() {
 }
 
 function drawBlock(x, y, marginX, marginY) {
-	ctx.fillRect(x * 10 - 9 + marginX, y * 10 - 9 + marginY, 18, 18);
+	ctx.fillRect(x * 20 - 10 + marginX, y * 20 - 10 + marginY, 20, 20);
 }
