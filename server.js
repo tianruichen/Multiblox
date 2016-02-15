@@ -79,7 +79,7 @@ function onKeyPress(data) {
 		currentplayer.update(game.grid, 'right', conveyer, holdslot)
 	}
 	else if (data.key == 'down') {
-		//currentplayer.update(game, 'down', conveyer)
+		currentplayer.update(game, 'down', conveyer, holdslot)
 	}
 	else if (data.key == 'z') {
 		currentplayer.update(game.grid, 'ccw', conveyer, holdslot)
