@@ -152,7 +152,7 @@ function drawGrid() {
 function drawHold() {
 	if (hold != undefined) {
 		var piece = hold.piece;
-		if (piece) {
+		if (piece || piece == 0) {
 			drawPiece(piece, 2, 3, 10, 160);
 		}
 	}
@@ -224,41 +224,80 @@ function minDist(array) {
 
 function drawPiece(blockType, x, y, marginX, marginY) {
 	ctx.fillStyle = colorArray[blockType];
-	drawBlock(x, y, marginX, marginY);
+	ctx.strokeStyle = "#000000";
+	ctx.lineWidth = 2;
 	if (blockType == 0) {
+		console.log("hello");
+		drawBlock(x, y, marginX, marginY);
 		drawBlock(x + 1, y, marginX, marginY);
 		drawBlock(x + 2, y, marginX, marginY);
 		drawBlock(x - 1, y, marginX, marginY);
+		drawOutline(x, y, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x + 2, y, marginX, marginY);
+		drawOutline(x - 1, y, marginX, marginY);
 	}
 	else if (blockType == 1) {
-		drawBlock(x, y - 1, marginX, marginY);
 		drawBlock(x, y + 1, marginX, marginY);
+		drawBlock(x + 1, y - 1, marginX, marginY);
 		drawBlock(x + 1, y + 1, marginX, marginY);
+		drawBlock(x + 1, y, marginX, marginY);
+		drawOutline(x, y + 1, marginX, marginY);
+		drawOutline(x + 1, y - 1, marginX, marginY);
+		drawOutline(x + 1, y + 1, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
 	}
 	else if (blockType == 2) {
-		drawBlock(x, y + 1, marginX, marginY);
-		drawBlock(x, y - 1, marginX, marginY);
+		drawBlock(x + 1, y, marginX, marginY);
+		drawBlock(x + 1, y + 1, marginX, marginY);
 		drawBlock(x + 1, y - 1, marginX, marginY);
+		drawBlock(x, y - 1, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x + 1, y + 1, marginX, marginY);
+		drawOutline(x + 1, y - 1, marginX, marginY);
+		drawOutline(x, y - 1, marginX, marginY);
 	}
 	else if (blockType == 3) {
+		drawBlock(x, y, marginX, marginY);
 		drawBlock(x + 1, y, marginX, marginY);
 		drawBlock(x + 1, y - 1, marginX, marginY);
 		drawBlock(x, y - 1, marginX, marginY);
+		drawOutline(x, y, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x + 1, y - 1, marginX, marginY);
+		drawOutline(x, y - 1, marginX, marginY);
 	}
 	else if (blockType == 4) {
+		drawBlock(x, y, marginX, marginY);
 		drawBlock(x, y - 1 , marginX, marginY);
 		drawBlock(x + 1, y, marginX, marginY);
 		drawBlock(x + 1, y + 1, marginX, marginY);
+		drawOutline(x, y, marginX, marginY);
+		drawOutline(x, y - 1 , marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x + 1, y + 1, marginX, marginY);
 	}
 	else if (blockType == 5) {
+		drawBlock(x, y, marginX, marginY);
 		drawBlock(x, y - 1, marginX, marginY);
 		drawBlock(x + 1, y, marginX, marginY);
 		drawBlock(x, y + 1, marginX, marginY);
+		drawOutline(x, y, marginX, marginY);
+		drawOutline(x, y - 1, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x, y + 1, marginX, marginY);
+
 	}
 	else if (blockType == 6) {
+		drawBlock(x, y, marginX, marginY);
 		drawBlock(x, y + 1, marginX, marginY);
 		drawBlock(x + 1, y, marginX, marginY);
 		drawBlock(x + 1, y - 1, marginX, marginY);
+		drawOutline(x, y, marginX, marginY);
+		drawOutline(x, y + 1, marginX, marginY);
+		drawOutline(x + 1, y, marginX, marginY);
+		drawOutline(x + 1, y - 1, marginX, marginY);
+
 	}
 }
 
