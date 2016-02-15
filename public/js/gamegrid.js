@@ -42,18 +42,22 @@ Game.prototype.checkClear = function(start, stop) {
 	if (filledRows.length > 0) {
 		var curFall = 0;
 		var curRow = stop;
+		var block;
 		while (curRow >= 5) {
 			if (filledRows.indexOf(curRow) != -1) {
 				for (var i = 0; i < numCols; i++) {
-					this.grid[curRow][i] = this.empty;
+					this.grid[curRow][i] = -1;
 				}
 				curFall += 1;
 			}
 			else {
 				if (curFall > 0) {
 					for (var i = 0; i < numCols; i++) {
-						this.grid[curRow + curFall][i] = this.grid[curRow][i];
-						this.grid[curRow][i] = this.empty;
+						block = this.grid[curRow][i];
+						if (block != -1 && block.landed == 1) {
+							this.grid[curRow + curFall][i] = this.grid[curRow][i];
+							this.grid[curRow][i] = -1;
+						}
 					}
 				}
 			}

@@ -23,12 +23,14 @@ Player.prototype.update = function(grid, conveyor, hold) {
 	if (this.nextInput == "hold") {
 		if (this.canHold) {
 			this.canHold = false;
-			var oldBlock = this.piece.blockType;
+			var oldPiece = this.piece.blockType;
 			this.removePiece(grid);
-			this.newPiece(grid, hold.getPiece(oldBlock));
-			if (!this.piece) {
-				this.piece = new Piece(grid, conveyor.getPiece);
+			var next = hold.getPiece(oldPiece);
+			if (next == false) {
+				next = conveyor.getPiece();
 			}
+			console.log(next);
+			this.piece = new Piece(grid, next, this.spawnRow, this.spawnCol);
 		}
 	}
 	else {
