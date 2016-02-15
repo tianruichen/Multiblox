@@ -99,7 +99,6 @@ function updateGameState(data) {
 		animate();
 	}
 	gameGrid = data.grid;
-	//console.log(gameGrid)
 }
 
 function setId(data) {
@@ -124,7 +123,6 @@ function animate() {
 }
 
 function draw() {
-	//console.log("testing")
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = '#000000';
 	ctx.fillRect(0, 150, 125, 125);

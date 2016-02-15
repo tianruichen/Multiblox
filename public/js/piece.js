@@ -58,10 +58,6 @@ var Piece = function(grid, blockType, row, col) {
 
 	//Places the piece in the grid
 	for (var i = 0; i < 4; i++) {
-		//console.log(grid.grid[0][0])
-		//console.log(this.blocks[i])
-		//console.log(this.blocks[i].row, this.blocks[i].col)
-		//console.log(this.blocks)
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
 	}
 }
@@ -165,10 +161,6 @@ Piece.prototype.update = function(grid, action) {
 }
 
 Piece.prototype.putPiecesInGrid = function(grid) {
-	//console.log(this.blocks[0].row, this.blocks[0].col);
-	//console.log(this.blocks[1].row, this.blocks[1].col);
-	//console.log(this.blocks[2].row, this.blocks[2].col);
-	//console.log(this.blocks[3].row, this.blocks[3].col);
 
 	for (var i = 0; i < 4; i++) {
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];

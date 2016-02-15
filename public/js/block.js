@@ -4,7 +4,6 @@ Block class
 
 var Block = function(row, col, blockType) {
 	this.landed = 0;
-	console.log(row, col);
 	this.row = row;
 	this.col = col;
 	this.blockType = blockType

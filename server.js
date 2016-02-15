@@ -41,7 +41,6 @@ function setEventHandlers() {
 
 function setGameVariables() {
 	game = new gamegrid();
-	//console.log(game);
 
 	conveyer = new queue(5);
 	holdslot = new hold();
@@ -54,7 +53,6 @@ function onClientDisconnect() {
 function onKeyPress(data) {
 	var currentplayer;
 	players.forEach(function(p) {
-		console.log(p.playerId);
 		if (p.playerId == data.id) {
 			currentplayer = p;
 		}	
@@ -70,7 +68,6 @@ function onKeyPress(data) {
 	}
 
 	else if (data.key == 'right') {
-		console.log("asdfadsf")
 		currentplayer.update(game.grid, 'right', conveyer, holdslot)
 	}
 
@@ -87,7 +84,6 @@ function onKeyPress(data) {
 }
 
 function update() {
-	//console.log(game.grid);
 	players.forEach(function(p) {
 		p.update(game.grid, '', conveyer, holdslot)
 	});
