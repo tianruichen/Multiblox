@@ -59,6 +59,7 @@ function onKeydown(e) {
 	var d = false;
 	switch (e.keyCode) {
 		case 16: d = 'shift'; break;
+		case 32: d = 'space'; break;
 		case 37: d = 'left'; break;
 		case 38: d = 'up'; break;
 		case 39: d = 'right'; break;

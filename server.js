@@ -66,21 +66,21 @@ function onKeyPress(data) {
 	if (data.key == 'shift') {
 		currentplayer.update(game.grid, 'hold', conveyer, holdslot)
 	}
+	if (data.key == 'space') {
+		currentplayer.update(game.grid, 'hard drop', conveyer, holdslot)
+	}
 	else if (data.key == 'left') {
 		currentplayer.update(game.grid, 'left', conveyer, holdslot)
 	}
 	else if (data.key == 'up') {
 		currentplayer.update(game.grid, 'cw', conveyer, holdslot)
 	}
-
 	else if (data.key == 'right') {
 		currentplayer.update(game.grid, 'right', conveyer, holdslot)
 	}
-
 	else if (data.key == 'down') {
 		//currentplayer.update(game, 'down', conveyer)
 	}
-
 	else if (data.key == 'z') {
 		currentplayer.update(game.grid, 'ccw', conveyer, holdslot)
 	}
