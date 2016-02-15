@@ -76,13 +76,14 @@ Block.prototype.move = function() {
 	this.col = this.tempCol;
 }
 
-Block.prototype.getBottom = function(grid) {
-	var r = this.row;
+Block.prototype.distToBot = function(grid) {
+	var dist = 0;
+	var r = this.row + 1;
 	var c = this.col;
 	while (r < grid.length && grid[r][c] == this.empty || grid[r][c].landed == 0) {
-		r += 1;
+		dist += 1;
 	}
-	return r - 1;
+	return dist;
 }
 
 Block.prototype.hardDrop = function(grid, num) {

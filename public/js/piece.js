@@ -76,12 +76,12 @@ Piece.prototype.update = function(grid, action) {
 
 	//Special case for hard drops
 	if (action == "hard drop") {
-		var min = 999;
+		var minDist = 999;
 		//Gets the number of rows until the first piece hits the "ground"
 		for (var i = 0; i < 4; i++) {
-			var temp = this.blocks[i].getBottom(grid);
-			if (this.blocks[i].getBottom(grid) < min) {
-				min = temp;
+			var temp = this.blocks[i].distToBot(grid);
+			if (this.blocks[i].distToBot(grid) < min) {
+				minDist = temp;
 			}
 		}
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
