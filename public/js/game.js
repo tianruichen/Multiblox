@@ -5,15 +5,29 @@ var canvas,
 	height = 30,
 	width = 30,
 	gameWidth = 900,
-	gameHeight = 900;
+	gameHeight = 900,
+	colorArray,
+	gameGrid;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
 	canvas.width = 900;
 	canvas.height = 900;
+	setColors();
 	socket = io.connect('http://localhost:8000/');
 	setEventHandlers();
+}
+
+function setColors() {
+	colorArray = new Array(7);
+	colorArray[0] = "aqua";
+	colorArray[1] = "blueviolet";
+	colorArray[2] = "coral";
+	colorArray[3] = "darkgreen";
+	colorArray[4] = "goldenrod";
+	colorArray[5] = "magenta";
+	colorArray[6] = "saddlebrown";
 }
 
 function setEventHandlers() {
@@ -61,7 +75,8 @@ function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
 }
 
-function updateGameState(){
+function updateGameState(data){
+	gameGrid = data.grid;
 }
 
 window.requestAnimFrame = (function(){
@@ -87,9 +102,22 @@ function draw() {
 	ctx.fillRect(0, 150, 125, 125);
 	ctx.fillRect(150, 100, 600, 600);
 	ctx.fillRect(800, 50, 100, 700);
+
 	
 }
 
+function drawGrid(grid) {
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			var temp = grid[i][j]
+			if (temp != -1) {
+				ctx.fillStyle = colorArray[temp.blockType];
+				drawBlock(i, j, 160, 110);
+			}
+		}
+	}
+}
+
 function drawBlock(x, y, marginX, marginY) {
-	ctx.fillRect(x - 10 + marginX, y - 10 + marginY, x + 10 + marginX, y + 10 + marginY);
+	ctx.fillRect(x * 10 - 9 + marginX, y * 10 - 9 + marginY, x * 10 + 9 + marginX, y * 10 + 9 + marginY);
 }
