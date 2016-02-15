@@ -78,7 +78,8 @@ Piece.prototype.update = function(grid, action) {
 
 	var result = true;
 
-	//Special case for hard drops
+	//Special case for hard drops (Not implemented yet)
+	/*
 	if (action == "hard drop") {
 		var min = 999;
 		//Gets the number of rows until the first piece hits the "ground"
@@ -105,22 +106,24 @@ Piece.prototype.update = function(grid, action) {
 			this.putPiecesInGrid(grid);
 			return true;
 		}
-	}
+	}*/
+
+	//Handles soft drop (not implemented yet)
+	/*else if (action == "down") {
+		this.fallDelay = -1;
+	}*/
 
 	//Every other user-input action
-	else if (action != "") {
-		for (var i = 1; i < 4; i++) {
+	if (action != "") {
+		for (var i = 0; i < 4; i++) {
 			if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
 				result = false;
 				break;
 			}
-			if (result) {
-				for (var i = 1; i < 4; i++) {
-					this.blocks[i].move();
-				}
-				if (action == "down") {
-					this.fallDelay = defaultDelay;
-				}
+		}
+		if (result) {
+			for (var i = 0; i < 4; i++) {
+				this.blocks[i].move();
 			}
 		}
 	}
@@ -151,6 +154,9 @@ Piece.prototype.update = function(grid, action) {
 			return true;
 		}
 	}
+
+	this.row = this.blocks[0].row;
+	this.col = this.blocks[0].col;
 
 	this.fallDelay -= 1;
 

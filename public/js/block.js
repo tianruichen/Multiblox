@@ -24,32 +24,34 @@ Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	else if (action == "left") {
 		c -= 1
 	}
-	else if (action == "cw") {
-		if (r == this.row)  {
-			c = this.col;
-			r += (this.col - centerCol);
+	else if (r != centerRow || c != centerCol) {
+		if (action == "cw") {
+			if (r == centerRow)  {
+				c = centerCol;
+				r += (this.col - centerCol);
+			}
+			else if (c == centerCol) {
+				r = centerRow;
+				c += (centerRow - this.row);
+			}
+			else {
+				r += ( (centerRow - this.row) - (centerCol - this.col));
+				c += ( (centerRow - this.row) + (centerCol - this.col));
+			}
 		}
-		else if (c == this.col) {
-			r = this.row;
-			c += (centerRow - this.row);
-		}
-		else {
-			r += ( -(centerRow - this.row) + (centerCol - this.col));
-			c += ( -(centerRow - this.row) - (centerCol - this.col));
-		}
-	}
-	else if (action == "ccw") {
-		if (r == this.row) {
-			c = this.col;
-			r -= (this.col - centerCol);
-		}
-		else if (c == this.col) {
-			r = this.row
-			c -= (centerRow - this.row);
-		}
-		else {
-			r += ( -(centerRow - this.row) - (centerCol - this.col));
-			c += (  (centerRow - this.row) - (centerCol - this.col));
+		else if (action == "ccw") {
+			if (r == centerRow) {
+				c = centerCol;
+				r -= (this.col - centerCol);
+			}
+			else if (c == centerCol) {
+				r = centerRow;
+				c -= (centerRow - this.row);
+			}
+			else {
+				r += (  (centerRow - this.row) + (centerCol - this.col));
+				c += ( -(centerRow - this.row) + (centerCol - this.col));
+			}
 		}
 	}
 	this.tempRow = r;
@@ -62,7 +64,7 @@ Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 		return 1;
 	}
 	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
-		return -1;
+		return 0;
 	}
 	if (grid[this.tempRow][this.tempCol] == -1) {
 		return -1;
