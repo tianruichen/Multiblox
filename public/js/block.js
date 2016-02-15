@@ -80,8 +80,9 @@ Block.prototype.distToBot = function(grid) {
 	var dist = 0;
 	var r = this.row + 1;
 	var c = this.col;
-	while (r < grid.length && grid[r][c] == this.empty || grid[r][c].landed == 0) {
+	while (r < grid.length && (grid[r][c] == -1 || grid[r][c].landed == 0)) {
 		dist += 1;
+		r += 1
 	}
 	return dist;
 }

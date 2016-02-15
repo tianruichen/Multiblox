@@ -80,14 +80,14 @@ Piece.prototype.update = function(grid, action) {
 		//Gets the number of rows until the first piece hits the "ground"
 		for (var i = 0; i < 4; i++) {
 			var temp = this.blocks[i].distToBot(grid);
-			if (this.blocks[i].distToBot(grid) < min) {
+			if (temp < minDist) {
 				minDist = temp;
 			}
 		}
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
 		for (var i = 0; i < 4; i++) {
-			if (grid[this.blocks[i].row + min][this.col] != -1) {
+			if (grid[this.blocks[i].row + minDist][this.blocks[i].col] != -1) {
 				drop = false;
 				break;
 			}
@@ -96,7 +96,7 @@ Piece.prototype.update = function(grid, action) {
 		//Drops all the pieces
 		if (drop) {
 			for (var i = 0; i < 4; i++) {
-				this.blocks[i].hardDrop(min);
+				this.blocks[i].hardDrop(grid, minDist);
 			}
 			this.putPiecesInGrid(grid);
 			return true;
