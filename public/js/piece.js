@@ -114,23 +114,25 @@ Piece.prototype.rotate = function(grid, direction) {
 	this.removeFromGrid(grid);
 	result = true;
 	if (this.blockType != 3) {
+		var WK = new Array(4);
 		for (var i = 0; i < 4; i++) {
-			if (this.blocks[i].checkRotation(grid, direction, this.row, this.col) != -1) {
-				result = false;
+			WK[i] = this.blocks[i].checkRotation(grid, direction, this.row, 
+												this.col, this.orientation);
+		}
+		for (var i = 0; i < 5; i++) {
+			if (WK[0][i] == -1 && WK[1][i] == -1 &&
+				WK[2][i] == -1 && WK[3][i] == -1) {
+				var k = 1;
+				if (direction == "cw") {
+					k = 0;
+				}
+				for (var j = 0; j < 4; j++) {
+					this.blocks[j].wallKickMove(this.orientation*2 + k, i);
+				}
+				this.orientation += (k*(-2) + 1);
+				this.orientation = (this.orientation + 4) % 4;
 				break;
 			}
-		}
-		if (result) {
-			for (var i = 0; i < 4; i++) {
-				this.blocks[i].move();
-			}
-			if (direction == "cw") {
-				this.orientation += 1;
-			}
-			else {
-				this.orientation -= 1;
-			}
-			this.orientation = (this.orientation + 4) % 4;
 		}
 	}
 	this.putInGrid(grid);

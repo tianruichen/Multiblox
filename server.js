@@ -146,9 +146,7 @@ function update() {
 	players.forEach(function(p) {
 		var checkClear = p.update(game.grid, conveyor, holdslot, '')
 		if (checkClear) {
-			console.log("ok");
 			linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
-			console.log(linesCleared);
 			if (game.checkLose()) {
 				game.clearGrid();
 				timesLost += 1;
