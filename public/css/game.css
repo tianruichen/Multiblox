@@ -6,5 +6,7 @@ canvas {
 }
 
 body {
+	background-image: url("../img/background.png");
 	overflow: hidden;
+	background-repeat: repeat;
 }
