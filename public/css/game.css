@@ -47,3 +47,61 @@ body {
 	margin: auto;
 }
 
+#textbox {
+   width: 100px;
+   height: 20px;
+   font-family: Comic Sans MS;
+   font-weight: bold;
+   border: solid 5px #5697B5;
+   padding: 2px;
+   border-radius: 5px;
+   font-size: 10px;
+   background-color: #000000;
+   outline: none;
+   color: #FFFFFF;
+   text-align: center;
+ }
+
+ #players {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  z-index: 101;
+  width: 90px;
+  height: 120px;
+  position: absolute;
+  padding: 2px;
+  overflow: scroll;
+  border: none;
+  font: normal 10px/1 "Comic Sans MS", cursive, sans-serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: scroll;
+  text-overflow: scroll;
+  background: #000000;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+}
+
+.playerTitle {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  z-index: 101;
+  width: 90px;
+  height: 15px;
+  position: absolute;
+  padding: 2px;
+  overflow: scroll;
+  border: none;
+  font: normal 12px/1 "Comic Sans MS", cursive, sans-serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: scroll;
+  text-overflow: scroll;
+  background: #000000;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+}
+
+

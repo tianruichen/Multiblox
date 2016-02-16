@@ -110,10 +110,8 @@ function setEventHandlers() {
 	socket.on("connect", onSocketConnected);
 	socket.on("disconnect", onSocketDisconnect);
 	socket.on('getgame', updateGameState);
-	socket.on('getId', setId);
+	socket.on('getInfo', setInfo);
 };
-
-
 
 function onKeydown(e) {
 	if (!keysPressed[e.keyCode]) {
@@ -146,12 +144,22 @@ function onResize() {
 	}
 };
 
+function onNameChange() {
+	var name = document.getElementById("textbox").value;
+	socket.emit('namechange', {id: playerId, name: name});
+}
+
 function onSocketConnected() {
 	console.log("Connected to socket server");
 }
 
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
+}
+
+function setInfo(data) {
+	playerId = data.id;
+	document.getElementById("textbox").value = data.name;
 }
 
 function updateGameState(data) {
@@ -164,10 +172,15 @@ function updateGameState(data) {
 	players = data.players
 	linesCleared = data.clears;
 	timesLost = data.lost;
+	changePlayerText();
 }
 
-function setId(data) {
-	playerId = data.id;
+function changePlayerText() {
+	var playerString = '';
+	players.forEach(function(p) {
+		playerString = playerString + '\n' + p.username + '\n';
+	});
+	document.getElementById("players").innerHTML = playerString;
 }
 
 window.requestAnimFrame = (function(){
