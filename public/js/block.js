@@ -11,8 +11,8 @@ var Block = function(row, col, blockType) {
 	this.tempCol = 0;
 }
 
-Block.prototype.checkRotation = function(grid, action, centerRow, centerCol) {
-	if (action == "cw") {
+Block.prototype.checkRotation = function(grid, direction, centerRow, centerCol) {
+	if (direction == "cw") {
 		this.posClock(grid, centerRow, centerCol);
 	}
 	else {
