@@ -212,7 +212,6 @@ function drawText() {
 }
 
 function drawGrid() {
-	console.log(imgArray);
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j]

@@ -1,12 +1,49 @@
+#container {
+	width: 100%;
+}
+
+#center {
+	height: 2000px;
+	display: block;
+	overflow: auto;
+	margin: auto;
+	box-shadow: -2px 0px 2px 2px #808080, 2px 0px 2px 2px #808080;
+	position: relative;
+	z-index: 10;
+}
+
+#left {
+	float: left;
+	width: 100px;
+	height: 2000px;
+	background-image: url("../img/background.png");
+	background-repeat: repeat-y;
+	margin: 0px;
+	padding: 0px;
+}
+
+#right {
+	float: right;
+	width: 100px;
+	height: 2000px;
+	background-image: url("../img/background.png");
+	background-repeat: repeat-y;
+	margin: 0px;
+	padding: 0px;
+}
+
 canvas {
-	padding: 0;
-    margin: auto;
+	padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     width: 900px;
+	height: 900px;
 }
 
 body {
-	background-image: url("../img/background.png");
 	overflow: hidden;
-	background-repeat: repeat;
+	margin: auto;
 }
+
