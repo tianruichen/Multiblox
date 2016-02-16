@@ -17,7 +17,8 @@ var canvas,
 	players, 
 	linesCleared,
 	timesLost,
-	keysPressed = [];
+	keysPressed = [],
+	gameBackground;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -61,6 +62,10 @@ function setImg() {
 	imgArray[6] = red;
 	imgArray[7] = black;
 	imgArray[8] = grey;
+	gameBackground = new Image();
+	gameBackground.src = '../img/gameBackground.png';
+
+
 }
 
 function setColors() {
@@ -174,20 +179,32 @@ function animate() {
 }
 
 function draw() {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = '#181818';
-	ctx.fillRect(0, 150, 125, 125);
-	ctx.fillRect(150, 180, 600, 520);
-	ctx.fillRect(775, 50, 125, 700);
-	ctx.fillStyle = '#484848';
-	ctx.fillRect(150, 100, 600, 80);
+	//ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawUI();
 	drawGrid();
 	drawHold();	
 	drawConveyor();
 	drawBorder();
 	drawText();
-	
+}
 
+function clearArea() {
+	ctx.clearRect(150, 100, 600, 600);
+	//ctx.clearRect()
+}
+
+function drawUI() {
+	ctx.fillStyle = '#000000';
+	ctx.drawImage(gameBackground, 100, 50);
+	ctx.fillRect(10, 160, 105, 105);
+	ctx.fillRect(10, 320, 105, 300);
+	ctx.fillRect(785, 100, 105, 600);
+	ctx.strokeStyle = "#012b3e"
+	ctx.lineWidth = 10;
+	drawRoundedRect(145, 95, 610, 610, 10);
+	drawRoundedRect(5, 155, 115, 115, 10);
+	drawRoundedRect(5, 315, 115, 310, 10);
+	drawRoundedRect(780, 95, 115, 610, 10);
 }
 
 function drawText() {
@@ -198,7 +215,7 @@ function drawText() {
 	ctx.fillStyle = "blue";
 	ctx.fillText("next", 838, 40); 
 	
-	ctx.font = "16px Comic Sans MS";
+	ctx.font = "13px Comic Sans MS";
 	ctx.fillStyle = "orange";
 	ctx.fillText("lines cleared: " + linesCleared, 62, 350);
 	ctx.fillStyle = "pink";
@@ -243,7 +260,7 @@ function drawConveyor(){
 	if (conveyor != undefined) {
 		var array = conveyor.pieces;
 		for (i = 0; i < 5; i++) {
-			drawPiece(array[i], 2, 3 + i * 7, 785, 60);
+			drawPiece(array[i], 2, 5 + i * 6, 785, 60);
 		}
 	}
 }
@@ -277,7 +294,7 @@ function drawBorder() {
 	if (array.length == 4) {
 		var min = minDist(array);
 		for (i = 0; i < 4; i++) {
-			 drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
+			drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
 		}
 	}
 }
@@ -387,6 +404,20 @@ function drawRoundedOutline(x, y, marginX, marginY){
 	var y = y * 20 - 10 + marginY + 1;
 	var w = 18;
 	var h = 18;
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r);
+    ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.stroke();        
+}
+
+function drawRoundedRect(x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x+r, y);
     ctx.lineTo(x+w-r, y);
