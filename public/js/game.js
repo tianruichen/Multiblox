@@ -120,6 +120,14 @@ function onKeydown(e) {
 		keysPressed[e.keyCode] = true;
 		socket.emit('keydown', {id: playerId, key: e.keyCode});
 	}
+	if (e.which == 77) {
+		if (document.getElementById('music').muted) {
+			document.getElementById('music').muted = false;
+		}
+		else {
+			document.getElementById('music').muted = true;
+		}
+	}
 }
 
 function onKeyup(e) {
