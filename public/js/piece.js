@@ -115,7 +115,7 @@ Piece.prototype.rotate = function(grid, direction) {
 	result = true;
 	if (this.blockType != 3) {
 		for (var i = 0; i < 4; i++) {
-			if (this.blocks[i].checkEmpty(grid, direction, this.row, this.col) != -1) {
+			if (this.blocks[i].checkRotation(grid, direction, this.row, this.col) != -1) {
 				result = false;
 				break;
 			}
@@ -124,6 +124,13 @@ Piece.prototype.rotate = function(grid, direction) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].move();
 			}
+			if (direction == "cw") {
+				this.orientation += 1;
+			}
+			else {
+				this.orientation -= 1;
+			}
+			this.orientation = (this.orientation + 4) % 4;
 		}
 	}
 	this.putInGrid(grid);

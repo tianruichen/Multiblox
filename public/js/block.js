@@ -11,12 +11,14 @@ var Block = function(row, col, blockType) {
 	this.tempCol = 0;
 }
 
-Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
-	this.getNewPos(grid, action, centerRow, centerCol);
-
-	if (this.tempRow >= grid.length && action == "down") {
-		return 1;
+Block.prototype.checkRotation = function(grid, action, centerRow, centerCol) {
+	if (action == "cw") {
+		this.posClock(grid, centerRow, centerCol);
 	}
+	else {
+		this.posCounter(grid, centerRow, centerCol);
+	}
+
 	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
 		return 0;
 	}
@@ -24,6 +26,48 @@ Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 		return -1;
 	}
 	return grid[this.tempRow][this.tempCol].landed;
+}
+
+Block.prototype.posClock = function(grid, centerRow, centerCol) {
+	var r = this.row;
+	var c = this.col;
+	if (r != centerRow || c != centerCol) {
+		if (r == centerRow)  {
+			c = centerCol;
+			r += (this.col - centerCol);
+		}
+		else if (c == centerCol) {
+			r = centerRow;
+			c += (centerRow - this.row);
+		}
+		else {
+			r += ( (centerRow - this.row) - (centerCol - this.col));
+			c += ( (centerRow - this.row) + (centerCol - this.col));
+		}
+	}
+	this.tempRow = r;
+	this.tempCol = c;
+}
+
+Block.prototype.posCounter = function(grid, centerRow, centerCol) {
+	var r = this.row;
+	var c = this.col;
+	if (r != centerRow || c != centerCol) {
+		if (r == centerRow) {
+			c = centerCol;
+			r -= (this.col - centerCol);
+		}
+		else if (c == centerCol) {
+			r = centerRow;
+			c -= (centerRow - this.row);
+		}
+		else {
+			r += (  (centerRow - this.row) + (centerCol - this.col));
+			c += ( -(centerRow - this.row) + (centerCol - this.col));
+		}
+	}
+	this.tempRow = r;
+	this.tempCol = c;
 }
 
 Block.prototype.checkTranslation = function(grid, direction) {
@@ -41,53 +85,16 @@ Block.prototype.checkTranslation = function(grid, direction) {
 	this.tempRow = r;
 	this.tempCol = c;
 
-	if (this.tempRow >= grid.length && direction == "down") {
+	if (this.tempRow >= grid.length) {
 		return 1;
 	}
-	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
+	if (this.tempCol < 0 || this.tempCol >= grid[0].length) {
 		return 0;
 	}
 	if (grid[this.tempRow][this.tempCol] == -1) {
 		return -1;
 	}
 	return grid[this.tempRow][this.tempCol].landed;
-}
-
-Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
-	var r = this.row;
-	var c = this.col;
-	if (r != centerRow || c != centerCol) {
-		if (action == "cw") {
-			if (r == centerRow)  {
-				c = centerCol;
-				r += (this.col - centerCol);
-			}
-			else if (c == centerCol) {
-				r = centerRow;
-				c += (centerRow - this.row);
-			}
-			else {
-				r += ( (centerRow - this.row) - (centerCol - this.col));
-				c += ( (centerRow - this.row) + (centerCol - this.col));
-			}
-		}
-		else if (action == "ccw") {
-			if (r == centerRow) {
-				c = centerCol;
-				r -= (this.col - centerCol);
-			}
-			else if (c == centerCol) {
-				r = centerRow;
-				c -= (centerRow - this.row);
-			}
-			else {
-				r += (  (centerRow - this.row) + (centerCol - this.col));
-				c += ( -(centerRow - this.row) + (centerCol - this.col));
-			}
-		}
-	}
-	this.tempRow = r;
-	this.tempCol = c;
 }
 
 Block.prototype.move = function() {
