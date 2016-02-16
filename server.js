@@ -74,12 +74,11 @@ function onKeyDown(data) {
 
 	//SHIFT
 	if (data.key == 16) {
-		currentplayer.update(game.grid, conveyor, holdslot, 'hold');
+		currentplayer.holdPiece(game.grid, conveyor, holdslot);
 	}
 	//SPACE
 	if (data.key == 32) {
-		var checkClear = currentplayer.update(game.grid, conveyor,
-											  holdslot, 'hard drop');
+		var checkClear = currentplayer.hardDrop(game.grid, conveyor);
 		if (checkClear) {
 			game.checkClear(checkClear[0], checkClear[1], players);
 			if (game.checkLose()) {
@@ -90,11 +89,11 @@ function onKeyDown(data) {
 	}
 	//UP or X
 	if (data.key == 38 || data.key == 88) {
-		currentplayer.update(game.grid, conveyor, holdslot, 'cw');
+		currentplayer.rotate(game.grid, 'cw');
 	}
 	//Z
 	if (data.key == 90) {
-		currentplayer.update(game.grid, conveyor, holdslot, 'ccw');
+		currentplayer.rotate(game.grid, 'ccw')
 	}
 	
 	//HELD DOWN KEYS

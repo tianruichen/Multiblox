@@ -64,7 +64,7 @@ var Piece = function(grid, blockType, row, col) {
 	}
 }
 
-Piece.prototype.update = function(grid, action) {
+Piece.prototype.update = function(grid) {
 	//Returns true if the block has landed on the "ground"
 	//Returns false if the block is still in play
 
@@ -73,53 +73,6 @@ Piece.prototype.update = function(grid, action) {
 	this.removeFromGrid(grid);
 
 	var result = true;
-
-	//Special case for hard drops
-	if (action == "hard drop") {
-		var minDist = this.distToBot(grid);
-		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
-		var drop = true;
-		for (var i = 0; i < 4; i++) {
-			if (grid[this.blocks[i].row + minDist][this.blocks[i].col] != -1) {
-				drop = false;
-				break;
-			}
-		}
-
-		//Drops all the blocks
-		if (drop) {
-			for (var i = 0; i < 4; i++) {
-				this.blocks[i].hardDrop(grid, minDist);
-			}
-			this.putInGrid(grid);
-			return true;
-		}
-	}
-
-	//Special case for soft drops
-	else if (action == "soft drop") {
-		if (this.fallDelay > softDropDelay) {
-			this.fallDelay = softDropDelay;
-		}
-	}
-
-	//Makes sure action isn't nothing
-	else if (action != "") {
-		//O Blocks can't rotate
-		if (this.blockType != 3 || (action != "cw" && action != "ccw")) {
-			for (var i = 0; i < 4; i++) {
-				if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
-					result = false;
-					break;
-				}
-			}
-			if (result) {
-				for (var i = 0; i < 4; i++) {
-					this.blocks[i].move();
-				}
-			}
-		}
-	}
 
 	//Checks if the piece needs to move down
 	if (this.fallDelay < 0) {
@@ -151,12 +104,75 @@ Piece.prototype.update = function(grid, action) {
 	this.row = this.blocks[0].row;
 	this.col = this.blocks[0].col;
 
-	//Only decrements the fallDelay if the action passed in was nothing
-	if (action == "") {
-		this.fallDelay -= 1;
-	}
+	this.fallDelay -= 1
 
 	this.putInGrid(grid);
+	return false;
+}
+
+Piece.prototype.rotate = function(grid, direction) {
+	this.removeFromGrid(grid);
+	result = true;
+	if (this.blockType != 3) {
+		for (var i = 0; i < 4; i++) {
+			if (this.blocks[i].checkEmpty(grid, direction, this.row, this.col) != -1) {
+				result = false;
+				break;
+			}
+		}
+		if (result) {
+			for (var i = 0; i < 4; i++) {
+				this.blocks[i].move();
+			}
+		}
+	}
+	this.putInGrid(grid);
+}
+
+Piece.prototype.translate = function(grid, direction) {
+	this.removeFromGrid(grid);
+	var result = true;
+	for (var i = 0; i < 4; i++) {
+		if (this.blocks[i].checkEmpty(grid, direction, this.row, this.col) != -1) {
+			result = false;
+			break;
+		}
+	}
+	if (result) {
+		for (var i = 0; i < 4; i++) {
+			this.blocks[i].move();
+		}
+	}
+	this.putInGrid(grid);
+}
+
+Piece.prototype.softDrop = function() {
+	if (this.fallDelay > softDropDelay) {
+		this.fallDelay = softDropDelay;
+	}
+}
+
+Piece.prototype.hardDrop = function(grid) {
+	var minDist = this.distToBot(grid);
+
+	//Checks if all the grid spaces are empty if all blocks move down /min/ rows
+	var drop = true;
+	for (var i = 0; i < 4; i++) {
+		if (grid[this.blocks[i].row + minDist][this.blocks[i].col] != -1) {
+			drop = false;
+			break;
+		}
+	}
+
+	//Drops all the blocks
+	if (drop) {
+		this.removeFromGrid(grid);
+		for (var i = 0; i < 4; i++) {
+			this.blocks[i].hardDrop(grid, minDist);
+		}
+		this.putInGrid(grid);
+		return true;
+	}
 	return false;
 }
 

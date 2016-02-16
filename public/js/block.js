@@ -25,6 +25,33 @@ Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 	return grid[this.tempRow][this.tempCol].landed;
 }
 
+Block.prototype.checkTranslation = function(grid, direction) {
+	var r = this.row;
+	var c = this.col;
+	if (action == "down") {
+		r += 1;
+	}
+	else if (action == "right") {
+		c += 1;
+	}
+	else if (action == "left") {
+		c -= 1
+	}
+	this.tempRow = r;
+	this.tempCol = c;
+
+	if (this.tempRow >= grid.length && action == "down") {
+		return 1;
+	}
+	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
+		return 0;
+	}
+	if (grid[this.tempRow][this.tempCol] == -1) {
+		return -1;
+	}
+	return grid[this.tempRow][this.tempCol].landed;
+}
+
 Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	var r = this.row;
 	var c = this.col;
