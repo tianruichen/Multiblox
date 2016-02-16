@@ -145,8 +145,6 @@ Game.prototype.checkClear = function(start, stop, players) {
 		for (var i = 0; i < pieces.length; i++) {
 			pieces[i].putInGrid(this.grid);
 		}
-		//5 end
-		//console.log(filledRows.length);
 		return filledRows.length;
 	}
 	return 0;
