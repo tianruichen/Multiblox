@@ -101,12 +101,13 @@ function update() {
 		var checkClear = p.update(game.grid, conveyer, holdslot)
 		if (checkClear) {
 			game.checkClear(checkClear[0], checkClear[1], players);
+			if (game.checkLose()) {
+				game.clearGrid();
+				timesLost += 1;
+			}
 		}
 	});
-	if (game.checkLose()) {
-		game.clearGrid();
-		timesLost += 1;
-	}
+	
 	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyer: conveyer, players: players, clears: linesCleared, lost: timesLost});
 }
 
