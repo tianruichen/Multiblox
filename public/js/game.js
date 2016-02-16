@@ -16,7 +16,8 @@ var canvas,
 	playerId,
 	players, 
 	linesCleared,
-	timesLost;
+	timesLost,
+	keysPressed = [];
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -99,7 +100,7 @@ function createArray (){
 
 function setEventHandlers() {
 	window.addEventListener("keydown", onKeydown, false);
-	window.addEventListener("keyup", onKeyUp, false);
+	window.addEventListener("keyup", onKeyup, false);
 	//window.addEventListener("resize", onResize, false);
 	socket.on("connect", onSocketConnected);
 	socket.on("disconnect", onSocketDisconnect);
@@ -110,12 +111,14 @@ function setEventHandlers() {
 
 
 function onKeydown(e) {
-	console.log("Keydown: ", e.keyCode);
-	socket.emit('keydown', {id: playerId, key: e.keyCode});
+	if (!keysPressed[e.keyCode]) {
+		keysPressed[e.keyCode] = true;
+		socket.emit('keydown', {id: playerId, key: e.keyCode});
+	}
 }
 
-function onKeyUp(e) {
-	console.log("Keyup: ", e.keyCode);
+function onKeyup(e) {
+	keysPressed[e.keyCode] = false;
 	socket.emit('keyup', {id: playerId, key: e.keyCode});
 }
 

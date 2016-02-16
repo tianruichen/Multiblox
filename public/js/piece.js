@@ -11,6 +11,7 @@ var Piece = function(grid, blockType, row, col) {
 	this.blockType = blockType
 	this.row = row;
 	this.col = col;
+	this.orientation = 0;
 	this.fallDelay = 20;
 	//An array of 4 blocks
 	this.blocks = [new Block(row, col, blockType)]

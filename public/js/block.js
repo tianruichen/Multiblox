@@ -11,6 +11,20 @@ var Block = function(row, col, blockType) {
 	this.tempCol = 0;
 }
 
+Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
+	this.getNewPos(grid, action, centerRow, centerCol);
+	if (this.tempRow >= grid.length && action == "down") {
+		return 1;
+	}
+	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
+		return 0;
+	}
+	if (grid[this.tempRow][this.tempCol] == -1) {
+		return -1;
+	}
+	return grid[this.tempRow][this.tempCol].landed;
+}
+
 Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	var r = this.row;
 	var c = this.col;
@@ -55,20 +69,6 @@ Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	}
 	this.tempRow = r;
 	this.tempCol = c;
-}
-
-Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
-	this.getNewPos(grid, action, centerRow, centerCol);
-	if (this.tempRow >= grid.length && action == "down") {
-		return 1;
-	}
-	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
-		return 0;
-	}
-	if (grid[this.tempRow][this.tempCol] == -1) {
-		return -1;
-	}
-	return grid[this.tempRow][this.tempCol].landed;
 }
 
 Block.prototype.move = function() {

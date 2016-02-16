@@ -92,18 +92,18 @@ Game.prototype.checkClear = function(start, stop, players) {
 		var badpieces;
 		var cont = true;
 		var squares;
-		//Every iteration:
-		//1) 	Check which (if any) players' pieces overlap with any already
-		//	 	placed blocks now that some rows have been cleared
-		//2) 	If a block now overlaps with a placed block,
-		//		look at where the center of the piece is to determine
-		//		how many rows it needs to move down by comparing the center
-		//		with the lines that were cleared
-		//3)	Move all the overlapped block down however many rows
-		//		and place it back in the grid
-		//4)	Keep repeating this process until there are no blocks that
-		//		got overlapped in the previous iteration
-		//5)	Place all the remaining pieces back in the grid
+		/*Every iteration:
+		1) 	Check which (if any) players' pieces overlap with any already
+			placed blocks now that some rows have been cleared
+		2) 	If a block now overlaps with a placed block,
+			look at where the center of the piece is to determine
+			how many rows it needs to move down by comparing the center
+			with the lines that were cleared
+		3)	Move all the overlapped block down however many rows
+			and place it back in the grid
+		4)	Keep repeating this process until there are no blocks that
+			got overlapped in the previous iteration
+		5)	Place all the remaining pieces back in the grid*/
 
 		while (cont) { // 4
 			cont = false;
