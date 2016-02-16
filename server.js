@@ -28,16 +28,17 @@ function init() {
 
 function setEventHandlers() {
 	io.on('connection', function(client) {
-		var newPlayer = new player("Donald Trump", client.id, 2, getRandomInt(0, 7) * 4 + 1);
+		var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, getRandomInt(0, 7) * 4 + 1);
 		newPlayer.id = this.id;
 		newPlayer.newPiece(game.grid, conveyor.getPiece());
-		client.emit('getId', {id: client.id});
+		client.emit('getInfo', {id: client.id, name: newPlayer.username});
 		players.push(newPlayer);
 
 		console.log('Client connected: ' + client.id);
 		client.on('disconnect', onClientDisconnect);
 		client.on('keydown', onKeyDown);
 		client.on('keyup', onKeyUp);
+		client.on('namechange', onNameChange);
 	});
 }
 
@@ -63,6 +64,16 @@ function onClientDisconnect() {
 		}
 	}
 };
+
+function onNameChange(data) {
+	var currentplayer;
+	players.forEach(function(p) {
+		if (p.playerId == data.id) {
+			currentplayer = p;
+		}	
+	});
+	currentplayer.username = data.name;
+}
 
 function onKeyDown(data) {
 	var currentplayer;

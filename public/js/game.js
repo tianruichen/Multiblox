@@ -178,7 +178,7 @@ function updateGameState(data) {
 function changePlayerText() {
 	var playerString = '';
 	players.forEach(function(p) {
-		playerString = playerString + '\n' + p.username + '\n';
+		playerString = playerString + p.username + '</br>';
 	});
 	document.getElementById("players").innerHTML = playerString;
 }
