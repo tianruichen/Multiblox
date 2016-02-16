@@ -32,7 +32,7 @@ function init() {
 }
 
 function setImg() {
-	imgArray = new Array(8);
+	imgArray = new Array(9);
 	var blue = new Image();
 	var lightBlue = new Image();
 	var red = new Image();
@@ -41,6 +41,7 @@ function setImg() {
 	var green = new Image();
 	var purple = new Image();
 	var black = new Image();
+	var grey = new Image();
 	blue.src = '../img/darkblue.png';
 	lightBlue.src = '../img/lightblue.png';
 	red.src = '../img/red.png';
@@ -49,6 +50,7 @@ function setImg() {
 	green.src = '../img/green.png';
 	purple.src = '../img/purple.png';
 	black.src = '../img/black.png';
+	grey.src = '../img/grey.png';
 	imgArray[0] = lightBlue;
 	imgArray[1] = blue;
 	imgArray[2] = orange;
@@ -57,6 +59,7 @@ function setImg() {
 	imgArray[5] = purple;
 	imgArray[6] = red;
 	imgArray[7] = black;
+	imgArray[8] = grey;
 }
 
 function setColors() {
@@ -214,7 +217,12 @@ function drawGrid() {
 				drawImage(j, i, 160, 110, imgArray[temp.blockType])
 			}
 			else {
-				drawImage(j, i, 160, 110, imgArray[7]);
+				if (i < 4) {
+					drawImage(j, i, 160, 110, imgArray[8]);
+				}
+				else {
+					drawImage(j, i, 160, 110, imgArray[7]);
+				}
 			}
 		}
 	}
@@ -252,6 +260,7 @@ function drawBorder() {
 			}
 		});
 	}
+
 	if (piece != undefined) {
 		if (piece.blocks != undefined) {
 			for (i = 0; i < 4; i++) {
@@ -262,6 +271,7 @@ function drawBorder() {
 			}
 		}
 	}
+	ctx.strokeStyle = "grey";
 	if (array.length == 4) {
 		var min = minDist(array);
 		for (i = 0; i < 4; i++) {
