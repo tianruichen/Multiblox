@@ -62,7 +62,7 @@ Player.prototype.update = function(grid, conveyor, hold, action) {
 		this.longRight = true;
 	}
 	if (this.heldKeys[2]) {
-		this.piece.softDrop();
+		this.piece.softDrop(grid);
 	}
 
 	var result;

@@ -13,6 +13,7 @@ var Piece = function(grid, blockType, row, col) {
 	this.col = col;
 	this.orientation = 0;
 	this.fallDelay = 20;
+	this.groundActions = 15;
 	//An array of 4 blocks
 	this.blocks = [new Block(row, col, blockType)]
 	// I Block
@@ -131,6 +132,7 @@ Piece.prototype.rotate = function(grid, direction) {
 				}
 				this.orientation += (k*(-2) + 1);
 				this.orientation = (this.orientation + 4) % 4;
+				this.groundTimer(grid);
 				break;
 			}
 		}
@@ -151,12 +153,22 @@ Piece.prototype.translate = function(grid, direction) {
 		for (var i = 0; i < 4; i++) {
 			this.blocks[i].move();
 		}
+		this.groundTimer(grid);
 	}
 	this.putInGrid(grid);
 }
 
-Piece.prototype.softDrop = function() {
-	if (this.fallDelay > softDropDelay) {
+Piece.prototype.groundTimer = function(grid) {
+	if (this.distToBot(grid) == 0) {
+		this.groundActions -= 1;
+		if (this.groundActions > 0) {
+			this.fallDelay = defaultDelay;
+		}
+	}
+}
+
+Piece.prototype.softDrop = function(grid) {
+	if (this.fallDelay > softDropDelay && this.distToBot(grid) > 0) {
 		this.fallDelay = softDropDelay;
 	}
 }
