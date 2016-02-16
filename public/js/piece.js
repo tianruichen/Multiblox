@@ -79,7 +79,7 @@ Piece.prototype.update = function(grid) {
 		result = -1;
 		//Checks what kind of pieces are one row below the piece
 		for (var i = 0; i < 4; i++) {
-			var temp = this.blocks[i].checkEmpty(grid, "down", this.row, this.col);
+			var temp = this.blocks[i].checkTranslation(grid, "down");
 			if (temp > result) {
 				result = temp;
 			}
@@ -133,7 +133,7 @@ Piece.prototype.translate = function(grid, direction) {
 	this.removeFromGrid(grid);
 	var result = true;
 	for (var i = 0; i < 4; i++) {
-		if (this.blocks[i].checkEmpty(grid, direction, this.row, this.col) != -1) {
+		if (this.blocks[i].checkTranslation(grid, direction) != -1) {
 			result = false;
 			break;
 		}

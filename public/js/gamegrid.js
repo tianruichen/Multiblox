@@ -146,7 +146,9 @@ Game.prototype.checkClear = function(start, stop, players) {
 			pieces[i].putInGrid(this.grid);
 		}
 		//5 end
+		return filledRows.length;
 	}
+	return 0;
 }
 
 Game.prototype.checkLose = function() {

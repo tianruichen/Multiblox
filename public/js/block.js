@@ -13,6 +13,7 @@ var Block = function(row, col, blockType) {
 
 Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 	this.getNewPos(grid, action, centerRow, centerCol);
+
 	if (this.tempRow >= grid.length && action == "down") {
 		return 1;
 	}
@@ -28,19 +29,19 @@ Block.prototype.checkEmpty = function(grid, action, centerRow, centerCol) {
 Block.prototype.checkTranslation = function(grid, direction) {
 	var r = this.row;
 	var c = this.col;
-	if (action == "down") {
+	if (direction == "down") {
 		r += 1;
 	}
-	else if (action == "right") {
+	else if (direction == "right") {
 		c += 1;
 	}
-	else if (action == "left") {
+	else if (direction == "left") {
 		c -= 1
 	}
 	this.tempRow = r;
 	this.tempCol = c;
 
-	if (this.tempRow >= grid.length && action == "down") {
+	if (this.tempRow >= grid.length && direction == "down") {
 		return 1;
 	}
 	if (this.tempRow >= grid.length || this.tempCol < 0 || this.tempCol >= grid[0].length) {
@@ -55,16 +56,7 @@ Block.prototype.checkTranslation = function(grid, direction) {
 Block.prototype.getNewPos = function(grid, action, centerRow, centerCol) {
 	var r = this.row;
 	var c = this.col;
-	if (action == "down") {
-		r += 1;
-	}
-	else if (action == "right") {
-		c += 1
-	}
-	else if (action == "left") {
-		c -= 1
-	}
-	else if (r != centerRow || c != centerCol) {
+	if (r != centerRow || c != centerCol) {
 		if (action == "cw") {
 			if (r == centerRow)  {
 				c = centerCol;
