@@ -26,7 +26,7 @@ Player.prototype.update = function(grid, conveyor, hold) {
 			var oldPiece = this.piece.blockType;
 			this.removePiece(grid);
 			var next = hold.getPiece(oldPiece);
-			if (next == false) {
+			if (next === false) {
 				next = conveyor.getPiece();
 			}
 			this.piece = new Piece(grid, next, this.spawnRow, this.spawnCol);
