@@ -11,7 +11,7 @@ var canvas,
 	imgArray,
 	gameGrid,
 	hold,
-	conveyer,
+	conveyor,
 	gridStart = false,
 	playerId,
 	players, 
@@ -96,6 +96,7 @@ function createArray (){
 
 function setEventHandlers() {
 	window.addEventListener("keydown", onKeydown, false);
+	window.addEventListener("keyup", onKeyUp, false);
 	//window.addEventListener("resize", onResize, false);
 	socket.on("connect", onSocketConnected);
 	socket.on("disconnect", onSocketDisconnect);
@@ -103,19 +104,16 @@ function setEventHandlers() {
 	socket.on('getId', setId);
 };
 
+
+
 function onKeydown(e) {
-	var d = false;
-	switch (e.keyCode) {
-		case 16: d = 'shift'; break;
-		case 32: d = 'space'; break;
-		case 37: d = 'left'; break;
-		case 38: d = 'up'; break;
-		case 39: d = 'right'; break;
-		case 40: d = 'down'; break;
-		case 88: d = 'x'; break;
-		case 90: d = 'z'; break;
-	}
-	if (d) socket.emit("keypress", {id: playerId, key: d});
+	console.log("Keydown: ", e.keyCode);
+	socket.emit('keydown', {id: playerId, key: e.keyCode});
+}
+
+function onKeyUp(e) {
+	console.log("Keyup: ", e.keyCode);
+	socket.emit('keyup', {id: playerId, key: e.keyCode});
 }
 
 function onResize() {
@@ -143,7 +141,7 @@ function updateGameState(data) {
 	}
 	gameGrid = data.grid;
 	hold = data.hold;
-	conveyer = data.conveyer;
+	conveyor = data.conveyor;
 	players = data.players
 	linesCleared = data.clears;
 	timesLost = data.lost;
@@ -179,7 +177,7 @@ function draw() {
 	ctx.fillRect(150, 100, 600, 80);
 	drawGrid();
 	drawHold();	
-	drawConveyer();
+	drawConveyor();
 	drawBorder();
 	drawText();
 	
@@ -231,9 +229,9 @@ function drawHold() {
 	}
 }
 
-function drawConveyer(){
-	if (conveyer != undefined) {
-		var array = conveyer.pieces;
+function drawConveyor(){
+	if (conveyor != undefined) {
+		var array = conveyor.pieces;
 		for (i = 0; i < 5; i++) {
 			drawPiece(array[i], 2, 3 + i * 7, 785, 60);
 		}

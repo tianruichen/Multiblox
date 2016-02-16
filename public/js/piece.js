@@ -5,6 +5,7 @@ var Block = require("./block");
 
 //How many frames the block can be suspended before moving down
 var defaultDelay = 20;
+var softDropDelay = 1;
 
 var Piece = function(grid, blockType, row, col) {
 	this.blockType = blockType
@@ -74,7 +75,6 @@ Piece.prototype.update = function(grid, action) {
 
 	//Special case for hard drops
 	if (action == "hard drop") {
-		action = "";
 		var minDist = this.distToBot(grid);
 		//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 		var drop = true;
@@ -95,20 +95,27 @@ Piece.prototype.update = function(grid, action) {
 		}
 	}
 
-	if (this.blockType == 3 && (action == "cw" || action == "ccw")) {
-		action = "";
+	//Special case for soft drops
+	else if (action == "soft drop") {
+		if (this.fallDelay > softDropDelay) {
+			this.fallDelay = softDropDelay;
+		}
 	}
 
-	if (action != "") {
-		for (var i = 0; i < 4; i++) {
-			if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
-				result = false;
-				break;
-			}
-		}
-		if (result) {
+	//Makes sure action isn't nothing
+	else if (action != "") {
+		//O Blocks can't rotate
+		if (this.blockType != 3 || (action != "cw" && action != "ccw")) {
 			for (var i = 0; i < 4; i++) {
-				this.blocks[i].move();
+				if (this.blocks[i].checkEmpty(grid, action, this.row, this.col) != -1) {
+					result = false;
+					break;
+				}
+			}
+			if (result) {
+				for (var i = 0; i < 4; i++) {
+					this.blocks[i].move();
+				}
 			}
 		}
 	}
@@ -143,7 +150,10 @@ Piece.prototype.update = function(grid, action) {
 	this.row = this.blocks[0].row;
 	this.col = this.blocks[0].col;
 
-	this.fallDelay -= 1;
+	//Only decrements the fallDelay if the action passed in was nothing
+	if (action == "") {
+		this.fallDelay -= 1;
+	}
 
 	this.putInGrid(grid);
 	return false;
