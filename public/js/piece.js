@@ -5,7 +5,7 @@ var Block = require("./block");
 
 //How many frames the block can be suspended before moving down
 var defaultDelay = 20;
-var softDropDelay = 1;
+var softDropDelay = 0;
 
 var Piece = function(grid, blockType, row, col) {
 	this.blockType = blockType

@@ -78,7 +78,15 @@ function onKeyDown(data) {
 	}
 	//SPACE
 	if (data.key == 32) {
-		currentplayer.update(game.grid, conveyor, holdslot, 'hard drop');
+		var checkClear = currentplayer.update(game.grid, conveyor,
+											  holdslot, 'hard drop');
+		if (checkClear) {
+			game.checkClear(checkClear[0], checkClear[1], players);
+			if (game.checkLose()) {
+				game.clearGrid();
+				timesLost += 1;
+			}
+		}
 	}
 	//UP or X
 	if (data.key == 38 || data.key == 88) {
@@ -133,39 +141,6 @@ function getPlayer(data) {
 			return p;
 		}
 	});
-}
-
-function onKeyPress(data) {
-	var currentplayer;
-	players.forEach(function(p) {
-		if (p.playerId == data.id) {
-			currentplayer = p;
-		}	
-	});
-	if (data.key == 'shift') {
-		currentplayer.nextInput = 'hold';
-	}
-	if (data.key == 'space') {
-		currentplayer.nextInput = 'hard drop';
-	}
-	else if (data.key == 'left') {
-		currentplayer.nextInput = 'left';
-	}
-	else if (data.key == 'up') {
-		currentplayer.nextInput = 'cw';
-	}
-	else if (data.key == 'right') {
-		currentplayer.nextInput = 'right';
-	}
-	else if (data.key == 'down') {
-		currentplayer.nextInput = 'down';
-	}
-	else if (data.key == 'z') {
-		currentplayer.nextInput = 'ccw';
-	}
-	else if (data.key == 'x') {
-		currentplayer.nextInput = 'cw';
-	}
 }
 
 function update() {

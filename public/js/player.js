@@ -2,9 +2,9 @@
 Game Player Class
 */
 
-var iNeedTheHeldPiece = 73;
-var iNeedTheQueuePiece = 20;
-var Piece = require("./piece")
+var Piece = require("./piece");
+var longDelay = 5;
+var shortDelay = 1;
 
 var Player = function(username, id, spawnRow, spawnCol) {
 	this.username = username;
@@ -13,7 +13,12 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.canHold = true;
 	this.spawnRow = spawnRow;
 	this.spawnCol = spawnCol;
+	this.leftDelay = 0;
+	this.rightDelay = 0;
+	this.longLeft = true;
+	this.longRight = true;
 	this.heldKeys = [false, false, false];
+
 	this.newPiece = function(grid, num) {
 		this.piece = new Piece(grid, num, this.spawnRow, this.spawnCol);
 	} 
@@ -34,10 +39,44 @@ Player.prototype.update = function(grid, conveyor, hold, action) {
 	}
 	else {
 		if (this.heldKeys[0]) {
-			this.piece.update(grid, "left");
+			this.rightDelay = 0;
+			this.longRight = true;
+			if (this.leftDelay <= 0) {
+				this.piece.update(grid, "left");
+				if (this.longLeft) {
+					this.leftDelay = longDelay;
+					this.longLeft = false;
+				}
+				else {
+					this.leftDelay = shortDelay;
+				}
+			}
+			else {
+				this.leftDelay -= 1;
+			}
 		}
-		if (this.heldKeys[1]) {
-			this.piece.update(grid, "right");
+		else if (this.heldKeys[1]) {
+			this.leftDelay = 0
+			this.longLeft = true;
+			if (this.rightDelay <= 0) {
+				this.piece.update(grid, "right");
+				if (this.longRight) {
+					this.rightDelay = longDelay;
+					this.longRight = false;
+				}
+				else {
+					this.rightDelay = shortDelay;
+				}
+			}
+			else {
+				this.rightDelay -= 1;
+			}
+		}
+		else {
+			this.leftDelay = 0;
+			this.rightDelay = 0;
+			this.longLeft = true;
+			this.longRight = true;
 		}
 		if (this.heldKeys[2]) {
 			this.piece.update(grid, "soft drop");
