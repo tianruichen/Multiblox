@@ -80,7 +80,7 @@ function onKeyDown(data) {
 	if (data.key == 32) {
 		var checkClear = currentplayer.hardDrop(game.grid, conveyor);
 		if (checkClear) {
-			game.checkClear(checkClear[0], checkClear[1], players);
+			linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
 			if (game.checkLose()) {
 				game.clearGrid();
 				timesLost += 1;
@@ -146,7 +146,9 @@ function update() {
 	players.forEach(function(p) {
 		var checkClear = p.update(game.grid, conveyor, holdslot, '')
 		if (checkClear) {
-			game.checkClear(checkClear[0], checkClear[1], players);
+			console.log("ok");
+			linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
+			console.log(linesCleared);
 			if (game.checkLose()) {
 				game.clearGrid();
 				timesLost += 1;
