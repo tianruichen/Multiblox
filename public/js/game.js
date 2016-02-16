@@ -18,7 +18,10 @@ var canvas,
 	linesCleared,
 	timesLost,
 	keysPressed = [],
-	gameBackground;
+	gameBackground,
+	title,
+	holdText,
+	nextText;
 
 function init() {
 	canvas = document.getElementById("gameCanvas");
@@ -64,8 +67,12 @@ function setImg() {
 	imgArray[8] = grey;
 	gameBackground = new Image();
 	gameBackground.src = '../img/gameBackground.png';
-
-
+	title = new Image();
+	title.src = '../img/title.png';
+	holdText = new Image();
+	holdText.src = '../img/hold.png';
+	nextText = new Image();
+	nextText.src = '../img/next.png';
 }
 
 function setColors() {
@@ -229,15 +236,12 @@ function drawUI() {
 }
 
 function drawText() {
-	ctx.font = "30px Comic Sans MS";
-	ctx.fillStyle = "red";
-	ctx.textAlign = "center";
-	ctx.fillText("hold", 62, 140); 
-	ctx.fillStyle = "blue";
-	ctx.fillText("next", 838, 40); 
+	ctx.drawImage(holdText, 25, 125);
+	ctx.drawImage(nextText, 800, 65);
 	
 	ctx.font = "13px Comic Sans MS";
 	ctx.fillStyle = "orange";
+	ctx.textAlign = "center";
 	ctx.fillText("lines cleared: " + linesCleared, 62, 350);
 	ctx.fillStyle = "pink";
 	ctx.fillText("times lost: " + timesLost, 62, 370);
@@ -245,7 +249,8 @@ function drawText() {
 	ctx.fillStyle = "green";
 	ctx.font = "50px Comic Sans MS";
 	ctx.textAlign = "left";
-	ctx.fillText("multiblox", 150, 90); 
+	//ctx.fillText("multiblox", 150, 90); 
+	ctx.drawImage(title, 150, 10);
 
 }
 
