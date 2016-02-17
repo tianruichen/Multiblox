@@ -3,7 +3,7 @@ Game Player Class
 */
 
 var Piece = require("./piece");
-var longDelay = 5;
+var longDelay = 7;
 var shortDelay = 1;
 
 var Player = function(username, id, spawnRow, spawnCol) {
@@ -68,13 +68,13 @@ Player.prototype.update = function(grid, conveyor, hold) {
 
 	var result;
 	result = this.piece.update(grid);
-	if (result) {
-		if (result == 73) {
-			return this.lockIn(grid, conveyor, true)
-		}
-		return this.lockIn(grid, conveyor, false)
+	if (result[0]) {
+		return this.lockIn(grid, conveyor, result[1], result[2]);
 	}
-	return false;
+	if (this.heldKeys[2]) {
+		return [false, false, result[1], false];
+	}
+	return [false, false, 0, false];
 	}
 }
 
@@ -97,15 +97,12 @@ Player.prototype.holdPiece = function(grid, conveyor, hold) {
 
 Player.prototype.hardDrop = function(grid, conveyor) {
 	var result = this.piece.hardDrop(grid);
-	if (result) {
-		if (result == 73) {
-			return this.lockIn(grid, conveyor, true);
-		}
-		return this.lockIn(grid, conveyor, false);
+	if (result[0]) {
+		return this.lockIn(grid, conveyor, result[1], result[2]);
 	}
 }
 
-Player.prototype.lockIn = function(grid, conveyor, tSpin) {
+Player.prototype.lockIn = function(grid, conveyor, score, tSpin) {
 	this.canHold = true;
 	squares = this.getSquares();
 	var min = squares[0][0];
@@ -121,7 +118,7 @@ Player.prototype.lockIn = function(grid, conveyor, tSpin) {
 
 	this.newPiece(grid, conveyor.getPiece());
 
-	return [min, max, tSpin];
+	return [min, max, score, tSpin];
 }
 
 Player.prototype.newPiece = function(grid, num) {

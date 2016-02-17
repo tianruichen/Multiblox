@@ -6,14 +6,15 @@ var Block = require("./block");
 //How many frames the block can be suspended before moving down
 var defaultDelay = 20;
 var softDropDelay = 0;
+var juggleDelay = 20;
 
 var Piece = function(grid, blockType, row, col) {
 	this.blockType = blockType
 	this.row = row;
 	this.col = col;
 	this.orientation = 0;
-	this.fallDelay = 20;
-	this.groundActions = 15;
+	this.fallDelay = defaultDelay;
+	this.groundActions = 20 - Math.floor(defaultDelay / 4);
 	this.distanceToBottom = 0;
 	this.justRotated = false;
 	//An array of 4 blocks
@@ -75,10 +76,10 @@ Piece.prototype.update = function(grid) {
 	//Gets placed back in the grid before the update function returns
 	this.removeFromGrid(grid);
 
-	var result = true;
+	var result;
 
 	//Checks if the piece needs to move down
-	if (this.fallDelay < 0) {
+	if (this.fallDelay <= 0) {
 		result = -1;
 		//Checks what kind of pieces are one row below the piece
 		for (var i = 0; i < 4; i++) {
@@ -93,6 +94,13 @@ Piece.prototype.update = function(grid) {
 			for (var i = 0; i < 4; i++) {
 				this.blocks[i].move();
 			}
+			this.groundTimer(grid);
+			this.row = this.blocks[0].row;
+			this.col = this.blocks[0].col;
+			this.putInGrid(grid);
+			this.distanceToBottom = this.distToBot(grid);
+			this.justRotated = false;
+			return [false, 1, false];
 		}
 		//The piece should have landed and be out of play
 		else if (result == 1) {
@@ -101,10 +109,10 @@ Piece.prototype.update = function(grid) {
 			}
 			this.putInGrid(grid);
 
-			if (this.blockType == 5) {
-				return this.checkTSpin(grid);
+			if (this.blockType == 5 && this.justRotated) {
+				return [true, 0, this.checkTSpin(grid)];
 			}
-			return true;
+			return [true, 0, false];
 		}
 	}
 
@@ -112,12 +120,40 @@ Piece.prototype.update = function(grid) {
 	this.col = this.blocks[0].col;
 
 	this.fallDelay -= 1
-
 	this.putInGrid(grid);
-
 	this.distanceToBottom = this.distToBot(grid);
-	this.justRotated = false;
-	return false;
+
+	return [false, 0, false];
+}
+
+Piece.prototype.hardDrop = function(grid) {
+	var minDist = this.distToBot(grid);
+	this.removeFromGrid(grid);
+
+	//Checks if all the grid spaces are empty if all blocks move down /min/ rows
+	var drop = true;
+	for (var i = 0; i < 4; i++) {
+		if (grid[this.blocks[i].row + minDist][this.blocks[i].col] != -1) {
+			drop = false;
+			break;
+		}
+	}
+
+	//Drops all the blocks
+	if (drop) {
+		for (var i = 0; i < 4; i++) {
+			this.blocks[i].hardDrop(grid, minDist);
+		}
+		this.putInGrid(grid);
+
+		if (this.blockType == 5 && minDist == 0) {
+			return [true, minDist*2, this.checkTSpin(grid)];
+		}
+
+		return [true, minDist*2, false];
+	}
+	this.putInGrid(grid);
+	return [false, 0, false];
 }
 
 Piece.prototype.checkTSpin = function(grid) {
@@ -135,10 +171,26 @@ Piece.prototype.checkTSpin = function(grid) {
 			}
 		}
 		if (numCorners >= 3) {
-			return 73;
+			var c;
+			if (this.orientation == 0) {
+				c = [[-1, -1], [-1, 1]];
+			}
+			else if (this.orientation == 1) {
+				c = [[-1, 1], [1, 1]];
+			}
+			else if (this.orientation == 2) {
+				c = [[1, -1], [1, 1]];
+			}
+			else {
+				c = [[-1, -1], [1, -1]];
+			}
+			if (grid[c[0][0] + r][c[0][1] + c] == -1 || grid[c[1][0] + r][c[1][1] + c] == -1) {
+				return 1;
+			}
+			return 2;
 		}
 	}
-	return true;
+	return false;
 }
 
 Piece.prototype.rotate = function(grid, direction) {
@@ -194,6 +246,11 @@ Piece.prototype.groundTimer = function(grid) {
 	if (this.distToBot(grid) == 0) {
 		this.groundActions -= 1;
 		if (this.groundActions > 0) {
+			this.fallDelay = juggleDelay;
+		}
+	}
+	else {
+		if (this.fallDelay > defaultDelay) {
 			this.fallDelay = defaultDelay;
 		}
 	}
@@ -203,36 +260,6 @@ Piece.prototype.softDrop = function(grid) {
 	if (this.fallDelay > softDropDelay && this.distToBot(grid) > 0) {
 		this.fallDelay = softDropDelay;
 	}
-}
-
-Piece.prototype.hardDrop = function(grid) {
-	var minDist = this.distToBot(grid);
-	this.removeFromGrid(grid);
-
-	//Checks if all the grid spaces are empty if all blocks move down /min/ rows
-	var drop = true;
-	for (var i = 0; i < 4; i++) {
-		if (grid[this.blocks[i].row + minDist][this.blocks[i].col] != -1) {
-			drop = false;
-			break;
-		}
-	}
-
-	//Drops all the blocks
-	if (drop) {
-		for (var i = 0; i < 4; i++) {
-			this.blocks[i].hardDrop(grid, minDist);
-		}
-		this.putInGrid(grid);
-
-		if (this.blockType == 5 && minDist == 0) {
-			return this.checkTSpin(grid);
-		}
-
-		return true;
-	}
-	this.putInGrid(grid);
-	return false;
 }
 
 Piece.prototype.removeFromGrid = function(grid) {

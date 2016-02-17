@@ -180,6 +180,7 @@ function updateGameState(data) {
 	conveyor = data.conveyor;
 	players = data.players
 	linesCleared = data.clears;
+	score = data.points;
 	timesLost = data.lost;
 	changePlayerText();
 }
@@ -251,11 +252,13 @@ function drawText() {
 	ctx.fillText(linesCleared[1], 62, 385);
 	ctx.fillText("Current Lines:", 62, 400);
 	ctx.fillText(linesCleared[2], 62, 415);
-	ctx.fillText("Times Lost: ", 62, 430);
-	ctx.fillText(timesLost, 62, 445);
-	ctx.fillText("Players:" , 62, 470);
+	ctx.fillText("Total Score:", 62, 430);
+	ctx.fillText(score, 62, 445);
+	ctx.fillText("Times Lost: ", 62, 460);
+	ctx.fillText(timesLost, 62, 475);
+	ctx.fillText("Players:" , 62, 500);
 	if (players != undefined) {
-		var yPos = 470;
+		var yPos = 500;
 		ctx.font = "11px Verdana";
 		players.forEach(function(p) {
 			yPos += 15;

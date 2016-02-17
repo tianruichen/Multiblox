@@ -9,6 +9,7 @@ var Game = function() {
 
 	//Initializes a grid with numRows rows and numCols columns
 	//Sets all of the elements to 0
+	this.score = [0];
 	this.grid = new Array(numRows);
 	this.empty = -1;
 
