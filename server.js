@@ -3,7 +3,7 @@ var express = require('express'),
 	server = require('http').createServer(app),
 	io = require('socket.io')(server),
 	fs = require("fs"),
-	fps = 30,
+	fps = 40,
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
 	hold = require("./public/js/hold"),
@@ -15,15 +15,14 @@ var express = require('express'),
 	players = [],
 	holdslot,
 	linesCleared,
-	timesLost,
-	command = '';
+	linesThisGame,
+	mostLines,
+	timesLost;
 
 	var convertedGrid = new Array(30);
 	for (var i = 0; i < convertedGrid.length; i++) {
 		convertedGrid[i] = new Array(30);
 	}
-
-	timeTestThatShouldBeRemoved = 30;
 
 function init() {
 	app.get("/js/game.js", function (req, res) {
@@ -64,6 +63,8 @@ function setGameVariables() {
 	conveyor = new queue(5);
 	holdslot = new hold();
 	linesCleared = 0;
+	linesThisGame = 0;
+	mostLines = 0;
 	timesLost = 0;
 }
 
@@ -104,11 +105,15 @@ function onKeyDown(data) {
 	//SPACE
 	if (data.key == 32) {
 		var checkClear = currentplayer.hardDrop(game.grid, conveyor);
+		if (checkClear[2]) {
+			console.log('t spin harddrop');
+		}
 		if (checkClear) {
-			linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
+			clearLines(checkClear);
 			if (game.checkLose()) {
 				game.clearGrid();
 				timesLost += 1;
+				linesThisGame = 0;
 			}
 		}
 	}
@@ -172,20 +177,35 @@ function update() {
 
 	if (players.length > 0) {
 		players.forEach(function(p) {
-			var checkClear = p.update(game.grid, conveyor, holdslot, '')
+			var checkClear = p.update(game.grid, conveyor, holdslot)
+			if (checkClear[2]) {
+				console.log('t spin no harddrop')
+			}
 			if (checkClear) {
-				linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
+				clearLines(checkClear);
 				if (game.checkLose()) {
 					game.clearGrid();
 					timesLost += 1;
+					linesThisGame = 0;
 				}
 			}
 		});
 
 		convertGrid();
-		
+
+		clearArray = [linesCleared, mostLines, linesThisGame];
+
 		io.emit("getgame", {grid: convertedGrid, hold: holdslot, conveyor: conveyor,
-			players: players, clears: linesCleared, lost: timesLost});
+			players: players, clears: clearArray, lost: timesLost});
+	}
+}
+
+function clearLines(checkClear) {
+	var l = game.checkClear(checkClear[0], checkClear[1], players);
+	linesCleared += l;
+	linesThisGame += l;
+	if (linesThisGame > mostLines) {
+		mostLines = linesThisGame;
 	}
 }
 

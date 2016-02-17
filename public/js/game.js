@@ -238,27 +238,32 @@ function drawUI() {
 }
 
 function drawText() {
+	if (linesCleared) {
 	ctx.drawImage(holdText, 25, 125);
 	ctx.drawImage(nextText, 800, 65);
 	
 	ctx.font = "13px Verdana";
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
-	ctx.fillText("Lines Cleared:", 62, 340);
-	ctx.fillText(linesCleared, 62, 355);
-	ctx.fillText("Times Lost: ", 62, 370);
-	ctx.fillText(timesLost, 62, 385);
-	ctx.fillText("Players:" , 62, 410);
+	ctx.fillText("Total Lines:", 62, 340);
+	ctx.fillText(linesCleared[0], 62, 355);
+	ctx.fillText("Best Lines:", 62, 370);
+	ctx.fillText(linesCleared[1], 62, 385);
+	ctx.fillText("Current Lines:", 62, 400);
+	ctx.fillText(linesCleared[2], 62, 415);
+	ctx.fillText("Times Lost: ", 62, 430);
+	ctx.fillText(timesLost, 62, 445);
+	ctx.fillText("Players:" , 62, 470);
 	if (players != undefined) {
-		var yPos = 410;
-		ctx.font = "10px Verdana";
+		var yPos = 470;
+		ctx.font = "11px Verdana";
 		players.forEach(function(p) {
 			yPos += 15;
 			ctx.fillText(p.username, 62, yPos);
 		});
 	}
 	ctx.drawImage(title, 150, 10);
-
+	}
 }
 
 function drawGrid() {

@@ -66,7 +66,7 @@ Game.prototype.checkClear = function(start, stop, players) {
 		var block;
 
 		//Goes through every single non-game-over row
-		while (curRow >= 4) {
+		while (curRow >= 0) {
 			//If a row is filled, deletes all blocks in the row
 			if (filledRows.indexOf(curRow) != -1) {
 				for (var i = 0; i < numCols; i++) {

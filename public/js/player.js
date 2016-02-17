@@ -20,7 +20,7 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.heldKeys = [false, false, false];
 }
 
-Player.prototype.update = function(grid, conveyor, hold, action) {
+Player.prototype.update = function(grid, conveyor, hold) {
 	if (this) {
 	if (this.heldKeys[0]) {
 		this.rightDelay = 0;
@@ -69,7 +69,10 @@ Player.prototype.update = function(grid, conveyor, hold, action) {
 	var result;
 	result = this.piece.update(grid);
 	if (result) {
-		return this.lockIn(grid, conveyor);
+		if (result == 73) {
+			return this.lockIn(grid, conveyor, true)
+		}
+		return this.lockIn(grid, conveyor, false)
 	}
 	return false;
 	}
@@ -95,11 +98,14 @@ Player.prototype.holdPiece = function(grid, conveyor, hold) {
 Player.prototype.hardDrop = function(grid, conveyor) {
 	var result = this.piece.hardDrop(grid);
 	if (result) {
-		return this.lockIn(grid, conveyor);
+		if (result == 73) {
+			return this.lockIn(grid, conveyor, true);
+		}
+		return this.lockIn(grid, conveyor, false);
 	}
 }
 
-Player.prototype.lockIn = function(grid, conveyor) {
+Player.prototype.lockIn = function(grid, conveyor, tSpin) {
 	this.canHold = true;
 	squares = this.getSquares();
 	var min = squares[0][0];
@@ -115,7 +121,7 @@ Player.prototype.lockIn = function(grid, conveyor) {
 
 	this.newPiece(grid, conveyor.getPiece());
 
-	return [min, max];
+	return [min, max, tSpin];
 }
 
 Player.prototype.newPiece = function(grid, num) {

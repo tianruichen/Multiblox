@@ -15,6 +15,7 @@ var Piece = function(grid, blockType, row, col) {
 	this.fallDelay = 20;
 	this.groundActions = 15;
 	this.distanceToBottom = 0;
+	this.justRotated = false;
 	//An array of 4 blocks
 	this.blocks = [new Block(row, col, blockType)]
 	// I Block
@@ -99,6 +100,10 @@ Piece.prototype.update = function(grid) {
 				this.blocks[i].landed = 1;
 			}
 			this.putInGrid(grid);
+
+			if (this.blockType == 5) {
+				return this.checkTSpin(grid);
+			}
 			return true;
 		}
 	}
@@ -111,7 +116,29 @@ Piece.prototype.update = function(grid) {
 	this.putInGrid(grid);
 
 	this.distanceToBottom = this.distToBot(grid);
+	this.justRotated = false;
 	return false;
+}
+
+Piece.prototype.checkTSpin = function(grid) {
+	var r = this.blocks[0].row;
+
+	if (r < grid.length - 1) {
+		var c = this.blocks[0].col;
+		numCorners = 0;
+		for (var i = -1; i < 2; i += 2) {
+			for (var j = -1; j < 2; j += 2) {
+				temp = grid[r + i][c + j];
+				if (temp === undefined || temp != -1) {
+					numCorners += 1;
+				}
+			}
+		}
+		if (numCorners >= 3) {
+			return 73;
+		}
+	}
+	return true;
 }
 
 Piece.prototype.rotate = function(grid, direction) {
@@ -136,6 +163,7 @@ Piece.prototype.rotate = function(grid, direction) {
 				this.orientation += (k*(-2) + 1);
 				this.orientation = (this.orientation + 4) % 4;
 				this.groundTimer(grid);
+				this.justRotated = true;
 				break;
 			}
 		}
@@ -157,6 +185,7 @@ Piece.prototype.translate = function(grid, direction) {
 			this.blocks[i].move();
 		}
 		this.groundTimer(grid);
+		this.justRotated = false;
 	}
 	this.putInGrid(grid);
 }
@@ -195,6 +224,11 @@ Piece.prototype.hardDrop = function(grid) {
 			this.blocks[i].hardDrop(grid, minDist);
 		}
 		this.putInGrid(grid);
+
+		if (this.blockType == 5 && minDist == 0) {
+			return this.checkTSpin(grid);
+		}
+
 		return true;
 	}
 	this.putInGrid(grid);
