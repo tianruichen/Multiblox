@@ -250,6 +250,7 @@ function drawText() {
 	ctx.fillText("Players:" , 62, 410);
 	if (players != undefined) {
 		var yPos = 410;
+		ctx.font = "10px Verdana";
 		players.forEach(function(p) {
 			yPos += 15;
 			ctx.fillText(p.username, 62, yPos);
