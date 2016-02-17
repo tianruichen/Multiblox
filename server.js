@@ -90,7 +90,7 @@ function onKeyDown(data) {
 			currentplayer = p;
 		}	
 	});
-
+	if (currentplayer) {
 	//SHIFT
 	if (data.key == 16) {
 		currentplayer.holdPiece(game.grid, conveyor, holdslot);
@@ -127,6 +127,7 @@ function onKeyDown(data) {
 	//DOWN
 	if (data.key == 40) {
 		currentplayer.heldKeys[2] = true;
+	}
 	}
 }
 

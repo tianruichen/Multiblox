@@ -21,6 +21,7 @@ var Player = function(username, id, spawnRow, spawnCol) {
 }
 
 Player.prototype.update = function(grid, conveyor, hold, action) {
+	if (this) {
 	if (this.heldKeys[0]) {
 		this.rightDelay = 0;
 		this.longRight = true;
@@ -71,6 +72,7 @@ Player.prototype.update = function(grid, conveyor, hold, action) {
 		return this.lockIn(grid, conveyor);
 	}
 	return false;
+	}
 }
 
 Player.prototype.rotate = function(grid, direction) {
