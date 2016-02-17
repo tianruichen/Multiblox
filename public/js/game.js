@@ -152,8 +152,8 @@ function onResize() {
 };
 
 function onNameChange() {
-	var name = document.getElementById("textbox").value;
-	socket.emit('namechange', {id: playerId, name: name});
+	//var name = document.getElementById("textbox").value;
+	//socket.emit('namechange', {id: playerId, name: name});
 }
 
 function onSocketConnected() {
@@ -166,7 +166,7 @@ function onSocketDisconnect() {
 
 function setInfo(data) {
 	playerId = data.id;
-	document.getElementById("textbox").value = data.name;
+	//document.getElementById("textbox").value = data.name;
 }
 
 function updateGameState(data) {
@@ -187,7 +187,7 @@ function changePlayerText() {
 	players.forEach(function(p) {
 		playerString = playerString + p.username + '</br>';
 	});
-	document.getElementById("players").innerHTML = playerString;
+	//document.getElementById("players").innerHTML = playerString;
 }
 
 window.requestAnimFrame = (function(){

@@ -17,18 +17,34 @@
 			<div id="right"></div>
 
 			<div id="center">
-				<canvas id="gameCanvas">
+				<canvas id="gameCanvas" style="display: none">
 				</canvas>
 				<script src="/socket.io/socket.io.js"></script>
 				<script src="js/game.js"></script>
 				<script>
-					init();
-					setTimeout( animate(), 100000);
+					function startGame() {
+						document.getElementById("screen").style.display = "none";
+						document.getElementById("gameCanvas").style.display = "block";
+						init();
+						animate();
+					}
 				</script>
-				<div class="playerTitle" style="top:380px; left:85px;">Player Name:</div>
-				<input type="text" id="textbox" onchange="onNameChange();" style="z-index:101; position:absolute; top:400px; left:75px;"/>
-				<div class="playerTitle" style="top:440px; left:85px;">Players:</div>
-				<div id="players" style="top:460px; left:85px;"></div>
+				<div id="screen">
+					<div class="start">
+						<div class="header">
+							Multiblox
+						</div>
+						<div class="center">
+
+						</div>
+						<button class="myButton" onclick="startGame()">
+								Start
+							</button>
+						<div class="footer">
+							Created by Tianrui Chen and Matthew Wu
+						</div>
+					</div>
+				</div>
 				<audio id="music" src="KazooTetris.wav" autoplay preload loop>
 				<p>Your browser does not support the <code>audio</code> element </p>
 				</audio>
