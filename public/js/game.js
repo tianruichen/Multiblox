@@ -258,8 +258,8 @@ function drawGrid() {
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j]
-			if (temp != -1) {
-				drawImage(j, i, 160, 110, imgArray[temp.blockType])
+			if (temp !== false && temp !== -1) {
+				drawImage(j, i, 160, 110, imgArray[temp]);
 			}
 			else {
 				if (i < 4) {
@@ -311,17 +311,15 @@ function drawBorder() {
 			for (i = 0; i < 4; i++) {
 				if (piece.blocks[i].row != undefined && piece.blocks[i].col != undefined) {
 					drawOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
-					array.push(distToBot(gameGrid, piece.blocks[i].row, piece.blocks[i].col));
 				}		
 			}
 		}
-	}
-	ctx.strokeStyle = "grey";
-	if (array.length == 4) {
-		var min = minDist(array);
+		ctx.strokeStyle = "grey";
+		var q = piece.distanceToBottom;
 		for (i = 0; i < 4; i++) {
-			drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + min, 160, 110);
+			drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + q, 160, 110);
 		}
+
 	}
 }
 

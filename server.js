@@ -17,6 +17,13 @@ var express = require('express'),
 	timesLost,
 	command = '';
 
+	var convertedGrid = new Array(30);
+	for (var i = 0; i < convertedGrid.length; i++) {
+		convertedGrid[i] = new Array(30);
+	}
+
+	timeTestThatShouldBeRemoved = 30;
+
 function init() {
 	app.use(express.static(__dirname + '/public'));
 	server.listen(8000);
@@ -77,6 +84,7 @@ function onNameChange(data) {
 
 function onKeyDown(data) {
 	var currentplayer;
+
 	players.forEach(function(p) {
 		if (p.playerId == data.id) {
 			currentplayer = p;
@@ -154,18 +162,38 @@ function getPlayer(data) {
 }
 
 function update() {
-	players.forEach(function(p) {
-		var checkClear = p.update(game.grid, conveyor, holdslot, '')
-		if (checkClear) {
-			linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
-			if (game.checkLose()) {
-				game.clearGrid();
-				timesLost += 1;
+
+	if (players.length > 0) {
+		players.forEach(function(p) {
+			var checkClear = p.update(game.grid, conveyor, holdslot, '')
+			if (checkClear) {
+				linesCleared += game.checkClear(checkClear[0], checkClear[1], players);
+				if (game.checkLose()) {
+					game.clearGrid();
+					timesLost += 1;
+				}
+			}
+		});
+
+		convertGrid();
+		
+		io.emit("getgame", {grid: convertedGrid, hold: holdslot, conveyor: conveyor,
+			players: players, clears: linesCleared, lost: timesLost});
+	}
+}
+
+function convertGrid() {
+	for (var i = 0; i < convertedGrid.length; i++) {
+		for (var j = 0; j < convertedGrid[0].length; j++) {
+			var temp = game.grid[i][j];
+			if (temp == -1) {
+				convertedGrid[i][j] = false;
+			}
+			else {
+				convertedGrid[i][j] = temp.blockType;
 			}
 		}
-	});
-	
-	io.emit("getgame", {grid: game.grid, hold: holdslot, conveyor: conveyor, players: players, clears: linesCleared, lost: timesLost});
+	}
 }
 
 init();

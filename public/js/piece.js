@@ -14,6 +14,7 @@ var Piece = function(grid, blockType, row, col) {
 	this.orientation = 0;
 	this.fallDelay = 20;
 	this.groundActions = 15;
+	this.distanceToBottom = 0;
 	//An array of 4 blocks
 	this.blocks = [new Block(row, col, blockType)]
 	// I Block
@@ -108,6 +109,8 @@ Piece.prototype.update = function(grid) {
 	this.fallDelay -= 1
 
 	this.putInGrid(grid);
+
+	this.distanceToBottom = this.distToBot(grid);
 	return false;
 }
 
@@ -175,6 +178,7 @@ Piece.prototype.softDrop = function(grid) {
 
 Piece.prototype.hardDrop = function(grid) {
 	var minDist = this.distToBot(grid);
+	this.removeFromGrid(grid);
 
 	//Checks if all the grid spaces are empty if all blocks move down /min/ rows
 	var drop = true;
@@ -187,13 +191,13 @@ Piece.prototype.hardDrop = function(grid) {
 
 	//Drops all the blocks
 	if (drop) {
-		this.removeFromGrid(grid);
 		for (var i = 0; i < 4; i++) {
 			this.blocks[i].hardDrop(grid, minDist);
 		}
 		this.putInGrid(grid);
 		return true;
 	}
+	this.putInGrid(grid);
 	return false;
 }
 
