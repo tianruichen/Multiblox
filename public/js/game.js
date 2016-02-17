@@ -16,7 +16,8 @@ var canvas,
 	playerId,
 	playerName,
 	players, 
-	linesCleared,
+	linesArray,
+	scoreArray,
 	timesLost,
 	keysPressed = [],
 	gameBackground,
@@ -179,8 +180,8 @@ function updateGameState(data) {
 	hold = data.hold;
 	conveyor = data.conveyor;
 	players = data.players
-	linesCleared = data.clears;
-	score = data.points;
+	linesArray = data.clears;
+	scoreArray = data.score;
 	timesLost = data.lost;
 	changePlayerText();
 }
@@ -239,7 +240,7 @@ function drawUI() {
 }
 
 function drawText() {
-	if (linesCleared) {
+	if (linesArray && scoreArray) {
 	ctx.drawImage(holdText, 25, 125);
 	ctx.drawImage(nextText, 800, 65);
 	
@@ -247,18 +248,22 @@ function drawText() {
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
 	ctx.fillText("Total Lines:", 62, 340);
-	ctx.fillText(linesCleared[0], 62, 355);
+	ctx.fillText(linesArray[0], 62, 355);
 	ctx.fillText("Best Lines:", 62, 370);
-	ctx.fillText(linesCleared[1], 62, 385);
+	ctx.fillText(linesArray[1], 62, 385);
 	ctx.fillText("Current Lines:", 62, 400);
-	ctx.fillText(linesCleared[2], 62, 415);
+	ctx.fillText(linesArray[2], 62, 415);
 	ctx.fillText("Total Score:", 62, 430);
-	ctx.fillText(score, 62, 445);
-	ctx.fillText("Times Lost: ", 62, 460);
-	ctx.fillText(timesLost, 62, 475);
-	ctx.fillText("Players:" , 62, 500);
+	ctx.fillText(scoreArray[0], 62, 445);
+	ctx.fillText("Best Score:", 62, 460);
+	ctx.fillText(scoreArray[1], 62, 475);
+	ctx.fillText("Current Score:", 62, 490);
+	ctx.fillText(scoreArray[2], 62, 505);
+	ctx.fillText("Times Lost: ", 62, 520);
+	ctx.fillText(timesLost, 62, 535);
+	ctx.fillText("Players:" , 62, 560);
 	if (players != undefined) {
-		var yPos = 500;
+		var yPos = 560;
 		ctx.font = "11px Verdana";
 		players.forEach(function(p) {
 			yPos += 15;
@@ -273,7 +278,8 @@ function drawGrid() {
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j]
-			if (temp !== false && temp !== -1) {
+			if (temp !== false && temp != -1) {
+				console.log(temp);
 				drawImage(j, i, 160, 110, imgArray[temp]);
 			}
 			else {

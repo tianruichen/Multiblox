@@ -158,9 +158,8 @@ Piece.prototype.hardDrop = function(grid) {
 
 Piece.prototype.checkTSpin = function(grid) {
 	var r = this.blocks[0].row;
-
+	var c = this.blocks[0].col;
 	if (r < grid.length - 1) {
-		var c = this.blocks[0].col;
 		numCorners = 0;
 		for (var i = -1; i < 2; i += 2) {
 			for (var j = -1; j < 2; j += 2) {
@@ -171,24 +170,34 @@ Piece.prototype.checkTSpin = function(grid) {
 			}
 		}
 		if (numCorners >= 3) {
-			var c;
+			var d;
 			if (this.orientation == 0) {
-				c = [[-1, -1], [-1, 1]];
+				d = [[-1, -1], [-1, 1]];
 			}
 			else if (this.orientation == 1) {
-				c = [[-1, 1], [1, 1]];
+				d = [[-1, 1], [1, 1]];
 			}
 			else if (this.orientation == 2) {
-				c = [[1, -1], [1, 1]];
+				d = [[1, -1], [1, 1]];
 			}
 			else {
-				c = [[-1, -1], [1, -1]];
+				d = [[-1, -1], [1, -1]];
 			}
-			if (grid[c[0][0] + r][c[0][1] + c] == -1 || grid[c[1][0] + r][c[1][1] + c] == -1) {
+			if (grid[d[0][0] + r][d[0][1] + c] == -1 || grid[d[1][0] + r][d[1][1] + c] == -1) {
 				return 1;
 			}
 			return 2;
 		}
+	}
+	else {
+		var q = 0;
+		if (grid[r - 1][c - 1] == -1) {
+			q += 1;
+		}
+		if (grid[r - 1][c + 1] == -1) {
+			q += 1;
+		}
+		return q;
 	}
 	return false;
 }

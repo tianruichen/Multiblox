@@ -15,9 +15,11 @@ var express = require('express'),
 	players = [],
 	holdslot,
 	linesCleared,
-	linesThisGame,
+	currLines,
 	mostLines,
-	score,
+	totalScore,
+	bestScore,
+	currScore,
 	level,
 	diffMult,
 	tMiniMult,
@@ -67,10 +69,12 @@ function setGameVariables() {
 	conveyor = new queue(5);
 	holdslot = new hold();
 	linesCleared = 0;
-	linesThisGame = 0;
+	currLines = 0;
 	mostLines = 0;
 	timesLost = 0;
-	score = 0;
+	totalScore = 0;
+	bestScore = 0;
+	currScore = 0;
 	level = 1;
 	diffMult = 1;
 	tMiniMult = 1;
@@ -114,14 +118,19 @@ function onKeyDown(data) {
 	if (data.key == 32) {
 		var checkClear = currentplayer.hardDrop(game.grid, conveyor);
 
-		score += checkClear[2];
+		totalScore += checkClear[2];
+		currScore += checkClear[2];
+		if (currScore > bestScore) {
+			bestScore = currScore;
+		}
 
 		if (checkClear[0]) {
 			clearLines(checkClear);
 			if (game.checkLose()) {
 				game.clearGrid();
 				timesLost += 1;
-				linesThisGame = 0;
+				currLines = 0;
+				currScore = 0;
 			}
 		}
 	}
@@ -186,56 +195,63 @@ function update() {
 		players.forEach(function(p) {
 			var checkClear = p.update(game.grid, conveyor, holdslot)
 
-			score += checkClear[2];
+			totalScore += checkClear[2];
+			currScore += checkClear[2];
+			if (currScore > bestScore) {
+				bestScore = currScore;
+			}
 
 			if (checkClear[0]) {
 				clearLines(checkClear);
 				if (game.checkLose()) {
 					game.clearGrid();
 					timesLost += 1;
-					linesThisGame = 0;
+					currLines = 0;
+					currScore = 0;
 				}
 			}
 		});
 
 		convertGrid();
 
-		clearArray = [linesCleared, mostLines, linesThisGame];
+		clearArray = [linesCleared, mostLines, currLines];
+		scoreArray = [totalScore, bestScore, currScore]
 
 		io.emit("getgame", {grid: convertedGrid, hold: holdslot, conveyor: conveyor,
-			players: players, clears: clearArray, lost: timesLost, points: score});
+			players: players, clears: clearArray, lost: timesLost, score: scoreArray});
 	}
 }
 
 function clearLines(checkClear) {
 	var L = game.checkClear(checkClear[0], checkClear[1], players);
 	linesCleared += L;
-	linesThisGame += L;
-	if (linesThisGame > mostLines) {
-		mostLines = linesThisGame;
+	currLines += L;
+	if (currLines > mostLines) {
+		mostLines = currLines;
 	}
+	var tempScore = 0;
 	if (L == 0) {
 		tMiniMult = 1;
 		if (checkClear[3] == 2) {
-			score += 400 * level;
+			tempScore = 400 * level;
 		}
 		else if (checkClear[3] == 1) {
-			score += 100 * level;
+			tempScore = 100 * level;
 		}
 	}
 	else if (L == 1) {
 		if (checkClear[3] == 2) {
-			score += 800 * level * diffMult;
+			tempScore = 800 * level * diffMult;
 			diffMult = 1.5;
 			tMiniMult = 1;
 		}
 		else if (checkClear[3] == 1) {
-			score += 200 * level * tMiniMult;
+			tempScore = 200 * level * tMiniMult;
 			diffMult = 1;
 			tMiniMult = 1.5;
 		}
 		else {
-			score += 100 * level;
+			tempScore = 100 * level;
 			diffMult = 1;
 			tMiniMult = 1;
 		}
@@ -243,28 +259,33 @@ function clearLines(checkClear) {
 	else if (L == 2) {
 		tMiniMult = 1;
 		if (checkClear[3]) {
-			score += 1200 * level * diffMult;
+			tempScore = 1200 * level * diffMult;
 			diffMult = 1.5;
 		}
 		else {
-			score += 300 * level;
+			tempScore = 300 * level;
 			diffMult = 1;
 		}
 	}
 	else if (L == 3) {
 		tMiniMult = 1;
 		if (checkClear[3]) {
-			score += 1600 * level * diffMult;
+			tempScore = 1600 * level * diffMult;
 			diffMult = 1.5;
 		}
 		else {
-			score += 500 * level;
+			tempScore = 500 * level;
 			diffMult = 1;
 		}
 	}
 	else if (L == 4) {
-		score += 800 * level * diffMult;
+		tempScore = 800 * level * diffMult;
 		diffMult = 1.5;
+	}
+	totalScore += tempScore;
+	currScore += tempScore;
+	if (currScore > bestScore) {
+		bestScore = currScore;
 	}
 }
 
