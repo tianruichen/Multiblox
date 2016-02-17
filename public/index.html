@@ -7,6 +7,7 @@
 		<meta charset="utf-8">
 
 		<link rel="stylesheet" href="css/game.css">
+		<link rel="stylesheet" href="css/screen.css">
 	</head>
 	<body>
 		<div id="container">
@@ -32,16 +33,19 @@
 				<div id="screen">
 					<div class="start">
 						<div class="header">
-							Multiblox
+							<div id="titleImage"></div>
 						</div>
 						<div class="center">
-
 						</div>
-						<button class="myButton" onclick="startGame()">
+							<div id="textWrapper">
+								Player Name:
+								<input id="textbox" style="display: block" maxlength="20"></input>
+							</div>
+							<button class="myButton" onclick="startGame()" style="display: block">
 								Start
 							</button>
 						<div class="footer">
-							Created by Tianrui Chen and Matthew Wu
+							Created by Tianrui Chen and Matthew Wu. Music by Tsuko G. Not associated with Tetris.
 						</div>
 					</div>
 				</div>
