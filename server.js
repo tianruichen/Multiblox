@@ -2,6 +2,7 @@ var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
 	io = require('socket.io')(server),
+	fs = require("fs"),
 	fps = 30,
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
@@ -25,6 +26,11 @@ var express = require('express'),
 	timeTestThatShouldBeRemoved = 30;
 
 function init() {
+	app.get("/js/game.js", function (req, res) {
+		res.set("Content-Type", "text/javascript");
+		res.send(fs.readFileSync(__dirname + "/public" + req.path, {encoding: "utf8"})
+			.replace(/{{\s*url\s*}}/, req.protocol + "://" +  req.get("host")));
+	});
 	app.use(express.static(__dirname + '/public'));
 	server.listen(8000);
 	console.log('Magic on port 8000');

@@ -34,7 +34,8 @@ function init(name) {
 	setOutlineColors();
 	setImg();
 	createArray();
-	socket = io.connect('http://localhost:8000/');
+	socket = io.connect('{{url}}');
+	//socket = io.connect('http://localhost:8000/');
 	setEventHandlers();
 }
 
