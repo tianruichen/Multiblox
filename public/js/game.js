@@ -14,6 +14,7 @@ var canvas,
 	conveyor,
 	gridStart = false,
 	playerId,
+	playerName,
 	players, 
 	linesCleared,
 	timesLost,
@@ -23,11 +24,12 @@ var canvas,
 	holdText,
 	nextText;
 
-function init() {
+function init(name) {
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
 	canvas.width = 900;
 	canvas.height = 900;
+	playerName = name;
 	setColors();
 	setOutlineColors();
 	setImg();
@@ -151,9 +153,13 @@ function onResize() {
 	}
 };
 
-function onNameChange() {
-	//var name = document.getElementById("textbox").value;
-	//socket.emit('namechange', {id: playerId, name: name});
+function setInfo(data) {
+	playerId = data.id;
+	setName();
+}
+
+function setName() {
+	socket.emit('setname', {id: playerId, name: playerName});
 }
 
 function onSocketConnected() {
@@ -162,11 +168,6 @@ function onSocketConnected() {
 
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
-}
-
-function setInfo(data) {
-	playerId = data.id;
-	//document.getElementById("textbox").value = data.name;
 }
 
 function updateGameState(data) {
@@ -239,17 +240,21 @@ function drawText() {
 	ctx.drawImage(holdText, 25, 125);
 	ctx.drawImage(nextText, 800, 65);
 	
-	ctx.font = "13px Comic Sans MS";
-	ctx.fillStyle = "orange";
+	ctx.font = "13px Verdana";
+	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
-	ctx.fillText("lines cleared: " + linesCleared, 62, 350);
-	ctx.fillStyle = "pink";
-	ctx.fillText("times lost: " + timesLost, 62, 370);
-
-	ctx.fillStyle = "green";
-	ctx.font = "50px Comic Sans MS";
-	ctx.textAlign = "left";
-	//ctx.fillText("multiblox", 150, 90); 
+	ctx.fillText("Lines Cleared:", 62, 340);
+	ctx.fillText(linesCleared, 62, 355);
+	ctx.fillText("Times Lost: ", 62, 370);
+	ctx.fillText(timesLost, 62, 385);
+	ctx.fillText("Players:" , 62, 410);
+	if (players != undefined) {
+		var yPos = 410;
+		players.forEach(function(p) {
+			yPos += 15;
+			ctx.fillText(p.username, 62, yPos);
+		});
+	}
 	ctx.drawImage(title, 150, 10);
 
 }
