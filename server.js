@@ -13,6 +13,8 @@ var express = require('express'),
 	game,
 	conveyor,
 	players = [],
+	spawns = [false, false, false, false, false, false, false],
+	checkOrder = [2, 4, 3, 1, 5, 6, 0],
 	holdslot,
 	linesCleared,
 	currLines,
@@ -46,7 +48,9 @@ function init() {
 
 function setEventHandlers() {
 	io.on('connection', function(client) {
-		var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, getRandomInt(0, 7) * 4 + 1);
+		var num = getSpawnLocation();
+		var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, num * 4 + 2);
+		console.log(spawns);
 		newPlayer.id = this.id;
 		newPlayer.newPiece(game.grid, conveyor.getPiece());
 		client.emit('getInfo', {id: client.id});
@@ -58,6 +62,17 @@ function setEventHandlers() {
 		client.on('keyup', onKeyUp);
 		client.on('setname', setName);
 	});
+}
+
+function getSpawnLocation() {
+	for (var i = 0; i < 7; i++) {
+		if (spawns[i] == false) {
+			spawns[i] = true;
+			return checkOrder[i];
+		}
+	}
+	console.log('wow so many ppl');
+	return false;
 }
 
 function getRandomInt(min, max) {
@@ -85,6 +100,8 @@ function onClientDisconnect() {
 	for (i = 0; i < players.length; i++) {
 		if (players[i].playerId == this.id) {
 			players[i].removePiece(game.grid);
+			var index = checkOrder.indexOf((players[i].spawnCol - 2) / 4);
+			spawns[index] = false;
 			players.splice(i, 1);
 			break;
 		}

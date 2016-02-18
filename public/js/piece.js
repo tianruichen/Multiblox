@@ -16,7 +16,7 @@ var Piece = function(grid, blockType, row, col) {
 	this.fallDelay = defaultDelay;
 	this.groundActions = 20 - Math.floor(defaultDelay / 4);
 	this.distanceToBottom = 0;
-	this.justRotated = false;
+	this.tSpin = false;
 	//An array of 4 blocks
 	this.blocks = [new Block(row, col, blockType)]
 	// I Block
@@ -99,7 +99,7 @@ Piece.prototype.update = function(grid) {
 			this.col = this.blocks[0].col;
 			this.putInGrid(grid);
 			this.distanceToBottom = this.distToBot(grid);
-			this.justRotated = false;
+			this.tSpin = false;
 			return [false, 1, false];
 		}
 		//The piece should have landed and be out of play
@@ -109,10 +109,7 @@ Piece.prototype.update = function(grid) {
 			}
 			this.putInGrid(grid);
 
-			if (this.blockType == 5 && this.justRotated) {
-				return [true, 0, this.checkTSpin(grid)];
-			}
-			return [true, 0, false];
+			return [true, 0, this.tSpin];
 		}
 	}
 
@@ -146,11 +143,7 @@ Piece.prototype.hardDrop = function(grid) {
 		}
 		this.putInGrid(grid);
 
-		if (this.blockType == 5 && minDist == 0) {
-			return [true, minDist*2, this.checkTSpin(grid)];
-		}
-
-		return [true, minDist*2, false];
+		return [true, minDist*2, this.tSpin];
 	}
 	this.putInGrid(grid);
 	return [false, 0, false];
@@ -164,7 +157,7 @@ Piece.prototype.checkTSpin = function(grid) {
 		for (var i = -1; i < 2; i += 2) {
 			for (var j = -1; j < 2; j += 2) {
 				temp = grid[r + i][c + j];
-				if (temp === undefined || temp != -1) {
+				if (temp === undefined || (temp != -1 && temp.landed == 1)) {
 					numCorners += 1;
 				}
 			}
@@ -224,7 +217,9 @@ Piece.prototype.rotate = function(grid, direction) {
 				this.orientation += (k*(-2) + 1);
 				this.orientation = (this.orientation + 4) % 4;
 				this.groundTimer(grid);
-				this.justRotated = true;
+				if (this. blockType == 5) {
+					this.tSpin = this.checkTSpin(grid);
+				}
 				break;
 			}
 		}
@@ -246,7 +241,7 @@ Piece.prototype.translate = function(grid, direction) {
 			this.blocks[i].move();
 		}
 		this.groundTimer(grid);
-		this.justRotated = false;
+		this.tSpin = false;
 	}
 	this.putInGrid(grid);
 }

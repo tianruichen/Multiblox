@@ -247,27 +247,28 @@ function drawText() {
 	ctx.font = "13px Verdana";
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
-	ctx.fillText("Total Lines:", 62, 340);
-	ctx.fillText(linesArray[0], 62, 355);
-	ctx.fillText("Best Lines:", 62, 370);
-	ctx.fillText(linesArray[1], 62, 385);
-	ctx.fillText("Current Lines:", 62, 400);
-	ctx.fillText(linesArray[2], 62, 415);
-	ctx.fillText("Total Score:", 62, 430);
-	ctx.fillText(scoreArray[0], 62, 445);
-	ctx.fillText("Best Score:", 62, 460);
-	ctx.fillText(scoreArray[1], 62, 475);
-	ctx.fillText("Current Score:", 62, 490);
-	ctx.fillText(scoreArray[2], 62, 505);
-	ctx.fillText("Times Lost: ", 62, 520);
-	ctx.fillText(timesLost, 62, 535);
-	ctx.fillText("Players:" , 62, 560);
+	var yPos = 350;
+	var diff = 15
+	ctx.fillText("Total Lines:", 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[0], 62, yPos); yPos += diff;
+	ctx.fillText("Best Lines:", 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[1], 62, yPos); yPos += diff;
+	ctx.fillText("Current Lines:", 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[2], 62, yPos); yPos += diff;
+	ctx.fillText("Total Score:", 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[0], 62, yPos); yPos += diff;
+	ctx.fillText("Best Score:", 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[1], 62, yPos); yPos += diff;
+	ctx.fillText("Current Score:", 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[2], 62, yPos); yPos += diff;
+	ctx.fillText("Times Lost: ", 62, yPos); yPos += diff;
+	ctx.fillText(timesLost, 62, yPos);
 	if (players != undefined) {
-		var yPos = 560;
-		ctx.font = "11px Verdana";
+		var yPos = 115;
+		ctx.font = "12px Verdana";
 		players.forEach(function(p) {
-			yPos += 15;
-			ctx.fillText(p.username, 62, yPos);
+			//yPos += 15;
+			ctx.fillText(p.username, 160 + 20 * p.spawnCol, yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
 		});
 	}
 	ctx.drawImage(title, 150, 10);
@@ -279,7 +280,6 @@ function drawGrid() {
 		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j]
 			if (temp !== false && temp != -1) {
-				console.log(temp);
 				drawImage(j, i, 160, 110, imgArray[temp]);
 			}
 			else {
@@ -303,7 +303,7 @@ function drawHold() {
 	}
 }
 
-function drawConveyor(){
+function drawConveyor() {
 	if (conveyor != undefined) {
 		var array = conveyor.pieces;
 		for (i = 0; i < 5; i++) {
