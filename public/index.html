@@ -32,6 +32,9 @@
 							init(text.value);
 							animate();
 						} 
+						else {
+							document.getElementById("message").innerHTML = "Enter a username with at least one number or letter.";
+						}
 					}
 
 					function checkValidName(string) {
@@ -61,6 +64,7 @@
 							<button class="myButton" onclick="startGame()" style="display: block">
 								Start
 							</button>
+							<div id="message"></div>
 						<div class="footer">
 							Created by Tianrui Chen and Matthew Wu. Music by Tsuko G. Not associated with Tetris.
 						</div>

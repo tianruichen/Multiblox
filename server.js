@@ -4,6 +4,7 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	fs = require("fs"),
 	fps = 40,
+	//rooms = new Array(5),
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
 	hold = require("./public/js/hold"),
@@ -25,7 +26,8 @@ var express = require('express'),
 	level,
 	diffMult,
 	tMiniMult,
-	timesLost;
+	timesLost,
+	numPlayers = 0;
 
 	var convertedGrid = new Array(30);
 	for (var i = 0; i < convertedGrid.length; i++) {
@@ -48,19 +50,25 @@ function init() {
 
 function setEventHandlers() {
 	io.on('connection', function(client) {
-		var num = getSpawnLocation();
-		var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, num * 4 + 2);
-		console.log(spawns);
-		newPlayer.id = this.id;
-		newPlayer.newPiece(game.grid, conveyor.getPiece());
-		client.emit('getInfo', {id: client.id});
-		players.push(newPlayer);
+		if (numPlayers < 7) {
+			numPlayers ++;
+			var num = getSpawnLocation();
+			var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, num * 4 + 2);
+			console.log(spawns);
+			newPlayer.id = this.id;
+			newPlayer.newPiece(game.grid, conveyor.getPiece());
+			client.emit('getInfo', {id: client.id});
+			players.push(newPlayer);
 
-		console.log('Client connected: ' + client.id);
-		client.on('disconnect', onClientDisconnect);
-		client.on('keydown', onKeyDown);
-		client.on('keyup', onKeyUp);
-		client.on('setname', setName);
+			console.log('Client connected: ' + client.id);
+			client.on('disconnect', onClientDisconnect);
+			client.on('keydown', onKeyDown);
+			client.on('keyup', onKeyUp);
+			client.on('setname', setName);
+		}
+		else {
+			client.emit("roomisfull");
+		}
 	});
 }
 
@@ -74,6 +82,25 @@ function getSpawnLocation() {
 	console.log('wow so many ppl');
 	return false;
 }
+
+/*function setRooms() {
+	for (var i = 0; i < rooms.length; i++) {
+		rooms[i] = ['room ' + (i + 1), 0];
+	}
+}
+
+function getAvailableRoom() {
+	var i = 0;
+	while (i < rooms.length) {
+		if (rooms[i][1] >= 7) {
+			i += 1;
+		}
+		else {
+			return rooms[i][0];
+		}
+	}
+	return false;
+}*/
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -96,6 +123,7 @@ function setGameVariables() {
 }
 
 function onClientDisconnect() {
+	numPlayers --;
 	console.log("Client has disconnected: " + this.id);
 	for (i = 0; i < players.length; i++) {
 		if (players[i].playerId == this.id) {

@@ -122,6 +122,7 @@ function setEventHandlers() {
 	socket.on("disconnect", onSocketDisconnect);
 	socket.on('getgame', updateGameState);
 	socket.on('getInfo', setInfo);
+	socket.on('roomisfull', returnToHome);
 };
 
 function onKeydown(e) {
@@ -170,6 +171,14 @@ function onSocketConnected() {
 
 function onSocketDisconnect() {
 	console.log("Disconnected from socket server");
+}
+
+function returnToHome() {
+	document.getElementById("screen").style.display = "block";
+	document.getElementById("gameCanvas").style.display = "none";
+	document.getElementById("music").pause();
+	document.getElementById("music").currentTime = 0;
+	document.getElementById("message").innerHTML = "Room is currently full. Try again later";
 }
 
 function updateGameState(data) {

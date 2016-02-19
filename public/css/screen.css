@@ -77,6 +77,13 @@
 	color: #012b3e;
 }
 
+#message{
+	font-weight: bold;
+	font-family: Verdana;
+	font-size: 14px;
+	color: #012b3e;
+}
+
 #textbox {
    width: 200px;
    height: 30px;
