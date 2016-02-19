@@ -402,7 +402,7 @@ function getTrumpColor(row, col) {
 		return 1;
 	}
 	else if (row <= 17 && col <= 12) {
-		if (7 <= row && row <= 15 && 2 <= col && col <= 10 && (row + col) % 2 == 1) {
+		if (7 <= row && row <= 15 && 1 <= col && col <= 11 && (row + col) % 2 == 0) {
 			return 1;
 		}
 		return 2;
