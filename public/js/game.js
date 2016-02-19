@@ -23,7 +23,8 @@ var canvas,
 	gameBackground,
 	title,
 	holdText,
-	nextText;
+	nextText,
+	theTrump = false;
 
 function init(name) {
 	canvas = document.getElementById("gameCanvas");
@@ -31,13 +32,70 @@ function init(name) {
 	canvas.width = 900;
 	canvas.height = 900;
 	playerName = name;
-	setColors();
-	setOutlineColors();
-	setImg();
+	console.log(name)
+	if (name === "Trump") {
+		theTrump = true;
+		setTrump();
+	}
+	else {
+		setColors();
+		setOutlineColors();
+		setImg();
+	}
 	createArray();
 	socket = io.connect('{{url}}');
 	//socket = io.connect('http://localhost:8000/');
 	setEventHandlers();
+}
+
+function setTrump() {
+	imgArray = new Array(9);
+	var blue = new Image();
+	var red = new Image();
+	var white = new Image();
+	var black = new Image();
+	var grey = new Image();
+	blue.src = '../img/darkblue.png';
+	red.src = '../img/red.png';
+	white.src = '../img/white.png'
+	black.src = '../img/black.png';
+	grey.src = '../img/grey.png';
+	imgArray[0] = white;
+	imgArray[1] = blue;
+	imgArray[2] = red;
+	imgArray[3] = white;
+	imgArray[4] = blue;
+	imgArray[5] = red;
+	imgArray[6] = red;
+	imgArray[7] = black;
+	imgArray[8] = grey;
+
+	colorArray = new Array(7);
+	colorArray[0] = "#000000";
+	colorArray[5] = "#FF0000";
+	colorArray[6] = "#FF0000";
+	colorArray[4] = "#0033CC";
+	colorArray[3] = "#000000";
+	colorArray[2] = "#FF0000";
+	colorArray[1] = "#0033CC";
+
+	outlineArray = new Array(7);
+	outlineArray[0] = "#000000";
+	outlineArray[5] = "#FF0000";
+	outlineArray[6] = "#FF0000";
+	outlineArray[4] = "#0033CC";
+	outlineArray[3] = "#000000";
+	outlineArray[2] = "#FF0000";
+	outlineArray[1] = "#0033CC";
+
+	gameBackground = new Image();
+	gameBackground.src = '../img/gameBackground.png';
+	title = new Image();
+	title.src = '../img/title.png';
+	holdText = new Image();
+	holdText.src = '../img/hold.png';
+	nextText = new Image();
+	nextText.src = '../img/next.png';
 }
 
 function setImg() {
@@ -266,20 +324,24 @@ function drawText() {
 	ctx.textAlign = "center";
 	var yPos = 350;
 	var diff = 15
+	var multi = 1;
+	if (theTrump) {
+		multi = 1000000
+	}
 	ctx.fillText("Total Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[0], 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[0] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Best Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[1], 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[1] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Current Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[2], 62, yPos); yPos += diff;
+	ctx.fillText(linesArray[2] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Total Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[0], 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[0] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Best Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[1], 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[1] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Current Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[2], 62, yPos); yPos += diff;
+	ctx.fillText(scoreArray[2] * multi, 62, yPos); yPos += diff;
 	ctx.fillText("Times Lost: ", 62, yPos); yPos += diff;
-	ctx.fillText(timesLost, 62, yPos);
+	ctx.fillText(timesLost * multi, 62, yPos);
 	if (players != undefined) {
 		var yPos = 115;
 		ctx.font = "12px Verdana";
