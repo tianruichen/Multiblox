@@ -61,7 +61,7 @@ function setTrump() {
 	gameBackground = new Image();
 	gameBackground.src = '../img/gameBackground.png';
 	title = new Image();
-	title.src = '../img/title.png';
+	title.src = '../img/trump.png';
 	holdText = new Image();
 	holdText.src = '../img/hold.png';
 	nextText = new Image();
