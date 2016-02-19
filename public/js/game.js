@@ -212,12 +212,20 @@ function animate() {
 
 function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	var curpiece = getPiece();
 	drawUI();
 	drawGrid();
+	if (curpiece) {
+		drawGhost(curpiece);
+		drawHighlight(curpiece);
+	}
 	drawHold();	
 	drawConveyor();
-	drawBorder();
 	drawText();
+}
+
+function getPiece() {
+
 }
 
 function clearArea() {
@@ -275,6 +283,43 @@ function drawText() {
 	}
 }
 
+function drawGhost(piece) {
+	ctx.strokeStyle = "grey";
+	ctx.lineWidth = 2;
+	var q = piece.distanceToBottom;
+	for (i = 0; i < 4; i++) {
+		drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + q, 160, 110);
+	}
+}
+
+function drawHighlight(piece) {
+	ctx.strokeStyle = "yellow";
+	ctx.lineWidth = 2;
+	var temp = piece.blockType;
+	for (i = 0; i < 4; i++) {
+		if (piece.blocks[i].row != undefined && piece.blocks[i].col != undefined) {
+			drawImage(piece.blocks[i].col, piece.blocks[i].row, 160, 110, imgArray[temp]);
+			drawOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
+		}
+	}
+}
+
+function getPiece() {
+	var piece;
+	
+	if (players != undefined) {
+		players.forEach(function(p) {
+			if (p.playerId == playerId) {
+				if (p.piece != undefined) {
+					piece = p.piece;
+				}
+			}
+		});
+	}
+	return piece;
+}
+
+
 function drawGrid() {
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
@@ -309,38 +354,6 @@ function drawConveyor() {
 		for (i = 0; i < 5; i++) {
 			drawPiece(array[i], 2, 5 + i * 6, 785, 60);
 		}
-	}
-}
-
-function drawBorder() {
-	var piece;
-	var array = [];
-	ctx.strokeStyle = "yellow";
-	ctx.lineWidth = 2;
-	if (players != undefined) {
-		players.forEach(function(p) {
-			if (p.playerId == playerId) {
-				if (p.piece != undefined) {
-					piece = p.piece;
-				}
-			}
-		});
-	}
-
-	if (piece != undefined) {
-		if (piece.blocks != undefined) {
-			for (i = 0; i < 4; i++) {
-				if (piece.blocks[i].row != undefined && piece.blocks[i].col != undefined) {
-					drawOutline(piece.blocks[i].col, piece.blocks[i].row, 160, 110);
-				}		
-			}
-		}
-		ctx.strokeStyle = "grey";
-		var q = piece.distanceToBottom;
-		for (i = 0; i < 4; i++) {
-			drawRoundedOutline(piece.blocks[i].col, piece.blocks[i].row + q, 160, 110);
-		}
-
 	}
 }
 
