@@ -28,6 +28,7 @@
 						if (checkValidName(text.value)) {
 							document.getElementById("screen").style.display = "none";
 							document.getElementById("gameCanvas").style.display = "block";
+							document.getElementById("music").volume = .15
 							document.getElementById("music").play();
 							init(text.value);
 							animate();
