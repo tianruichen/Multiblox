@@ -398,16 +398,16 @@ function drawPiece(blockType, x, y, marginX, marginY) {
 		drawImage(x - 1, y, marginX, marginY, image);
 	}
 	else if (blockType == 1) {
-		drawImage(x, y + 1, marginX, marginY, image);
-		drawImage(x + 1, y - 1, marginX, marginY, image);
-		drawImage(x + 1, y + 1, marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
+		drawImage(x + 1.5, y, marginX, marginY, image);
+		drawImage(x - 0.5, y, marginX, marginY, image);
+		drawImage(x + 0.5, y, marginX, marginY, image);
+		drawImage(x - 0.5, y - 1, marginX, marginY, image);
 	}
 	else if (blockType == 2) {
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x + 1, y + 1, marginX, marginY, image);
-		drawImage(x + 1, y - 1, marginX, marginY, image);
-		drawImage(x, y - 1, marginX, marginY, image);
+		drawImage(x + 1.5, y, marginX, marginY, image);
+		drawImage(x - 0.5, y, marginX, marginY, image);
+		drawImage(x + 0.5, y, marginX, marginY, image);
+		drawImage(x + 1.5, y - 1, marginX, marginY, image);
 	}
 	else if (blockType == 3) {
 		drawImage(x, y, marginX, marginY, image);
@@ -416,22 +416,22 @@ function drawPiece(blockType, x, y, marginX, marginY) {
 		drawImage(x, y - 1, marginX, marginY, image);
 	}
 	else if (blockType == 4) {
-		drawImage(x, y, marginX, marginY, image);
-		drawImage(x, y - 1 , marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x + 1, y + 1, marginX, marginY, image);
+		drawImage(x + 0.5, y + 0.5, marginX, marginY, image);
+		drawImage(x + 0.5, y - 0.5 , marginX, marginY, image);
+		drawImage(x + 1.5, y - 0.5, marginX, marginY, image);
+		drawImage(x - 0.5, y + 0.5, marginX, marginY, image);
 	}
 	else if (blockType == 5) {
-		drawImage(x, y, marginX, marginY, image);
-		drawImage(x, y - 1, marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x, y + 1, marginX, marginY, image);
+		drawImage(x + 0.5, y, marginX, marginY, image);
+		drawImage(x - 0.5, y, marginX, marginY, image);
+		drawImage(x + 0.5, y - 1, marginX, marginY, image);
+		drawImage(x + 1.5, y, marginX, marginY, image);
 	}
 	else if (blockType == 6) {
-		drawImage(x, y, marginX, marginY, image);
-		drawImage(x, y + 1, marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x + 1, y - 1, marginX, marginY, image);
+		drawImage(x + 0.5, y + 0.5, marginX, marginY, image);
+		drawImage(x + 0.5, y - 0.5 , marginX, marginY, image);
+		drawImage(x + 1.5, y + 0.5, marginX, marginY, image);
+		drawImage(x - 0.5, y - 0.5, marginX, marginY, image);
 	}
 }
 
