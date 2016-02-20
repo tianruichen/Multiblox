@@ -4,8 +4,8 @@ Piece class
 var Block = require("./block");
 
 //How many frames the block can be suspended before moving down
-var defaultDelay = 20;
-var softDropDelay = 0;
+var defaultDelay = 1;
+var softDropDelay = -20;
 var juggleDelay = 20;
 
 var Piece = function(grid, blockType, row, col) {

@@ -54,7 +54,6 @@ function setEventHandlers() {
 			numPlayers ++;
 			var num = getSpawnLocation();
 			var newPlayer = new player("Player " + (players.length + 1) , client.id, 2, num * 4 + 2);
-			console.log(spawns);
 			newPlayer.id = this.id;
 			newPlayer.newPiece(game.grid, conveyor.getPiece());
 			client.emit('getInfo', {id: client.id});
