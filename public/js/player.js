@@ -20,6 +20,12 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.heldKeys = [false, false, false];
 }
 
+//Functions called by the server return:
+//Min row for check clear, Max row for check clear, Score change, T-Spin
+//Returns false for min and max if the piece hasn't been placed yet
+//returns an integer for score change always
+//returns a value based on Piece's function for T-Spin
+
 Player.prototype.update = function(grid, conveyor, hold) {
 	if (this) {
 	if (this.heldKeys[0]) {
@@ -100,6 +106,7 @@ Player.prototype.hardDrop = function(grid, conveyor) {
 	if (result[0]) {
 		return this.lockIn(grid, conveyor, result[1], result[2]);
 	}
+	return [false, false, 0, false];
 }
 
 Player.prototype.lockIn = function(grid, conveyor, score, tSpin) {
