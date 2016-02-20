@@ -438,29 +438,6 @@ function drawConveyor() {
 	}
 }
 
-function distToBot(grid, row, col) {
-	var dist = 0;
-	var r = row + 1;
-	var c = col;
-	while (r < grid.length && (grid[r][c] == -1 || grid[r][c].landed == 0)) {
-		dist += 1;
-		r += 1
-	}
-	return dist;
-}
-
-function minDist(array) {
-	var minDist = 999;
-	//Gets the number of rows until the first piece hits the "ground"
-	for (var i = 0; i < 4; i++) {
-		var temp = array[i];
-		if (temp < minDist) {
-			minDist = temp;
-		}
-	}
-	return minDist;
-}
-
 function drawPieceTrump(blockType, x, y, marginX, marginY) {
 	var image = trumpArray[1];
 	if (blockType == 0) {

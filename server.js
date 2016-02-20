@@ -155,8 +155,8 @@ function onKeyDown(data) {
 		}	
 	});
 	if (currentplayer) {
-	//SHIFT
-	if (data.key == 16) {
+	//SHIFT OR C
+	if (data.key == 16 || data.key == 67) {
 		currentplayer.holdPiece(game.grid, conveyor, holdslot);
 	}
 	//SPACE
