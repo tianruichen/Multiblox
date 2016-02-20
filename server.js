@@ -27,7 +27,8 @@ var express = require('express'),
 	diffMult,
 	tMiniMult,
 	timesLost,
-	numPlayers = 0;
+	numPlayers = 0,
+	trumpMode;
 
 	var convertedGrid = new Array(30);
 	for (var i = 0; i < convertedGrid.length; i++) {
@@ -41,8 +42,8 @@ function init() {
 			.replace(/{{\s*url\s*}}/, req.protocol + "://" +  req.get("host")));
 	});
 	app.use(express.static(__dirname + '/public'));
-	server.listen(8000);
-	console.log('Magic on port 8000');
+	server.listen(3000);
+	console.log('Magic on port 3000');
 	setEventHandlers();
 	setGameVariables();
 	intervalId = setInterval(update, 1000 / fps);
