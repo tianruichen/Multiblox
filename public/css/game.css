@@ -42,8 +42,9 @@ canvas {
 	height: 900px;
 }
 
-body {
+html, body {
 	overflow: hidden;
-	margin: auto;
+	margin: 0;
+	height: 100%;
 }
 
