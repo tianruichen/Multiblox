@@ -176,6 +176,7 @@ function onKeyDown(data) {
 				timesLost += 1;
 				currLines = 0;
 				currScore = 0;
+				holdslot.piece = false;
 			}
 		}
 	}
@@ -253,6 +254,7 @@ function update() {
 					timesLost += 1;
 					currLines = 0;
 					currScore = 0;
+					holdslot.piece = false;
 				}
 			}
 		});
