@@ -36,8 +36,9 @@ Game.prototype.checkClear = function(start, stop, players) {
 	//Checks the necessary rows
 	for (var i = start; i <= stop; i++) {
 		clear = true;
-		for (var j = 0; j <= numCols; j++) {
-			if (this.grid[i][j] == this.empty) {
+		for (var j = 0; j < numCols; j++) {
+			console.log(this.grid[i][j])
+			if (this.grid[i][j] == this.empty || this.grid[i][j].landed == 0) {
 				clear = false;
 				break;
 			}
