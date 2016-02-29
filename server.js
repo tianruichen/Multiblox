@@ -102,10 +102,6 @@ function getAvailableRoom() {
 	return false;
 }*/
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
 function setGameVariables() {
 	game = new gamegrid();
 	conveyor = new queue(5);
