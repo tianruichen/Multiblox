@@ -23,6 +23,7 @@ var canvas,
 	holdText,
 	nextText,
 	theTrump = false,
+	theBern = false,
 	trumpArray;
 
 function init(name) {
@@ -32,10 +33,16 @@ function init(name) {
 	canvas.height = 900;
 	playerName = name;
 	console.log(name)
-	if (name === "Trump") {
+	if (name === "Trump" || name === "Drumpf") {
 		theTrump = true;
 		setTrump();
 	}
+	else if (name === "Bernie") {
+		theTrump = true;
+		theBern = true;
+		setTrump();
+	}
+
 	else {
 		setImg();
 	}
@@ -61,7 +68,12 @@ function setTrump() {
 	gameBackground = new Image();
 	gameBackground.src = '../img/gameBackground.png';
 	title = new Image();
-	title.src = '../img/trump.png';
+	if (theBern) {
+		title.src = '../img/bernie.png';
+	}
+	else {
+		title.src = '../img/trump.png';
+	}
 	holdText = new Image();
 	holdText.src = '../img/hold.png';
 	nextText = new Image();
@@ -286,20 +298,55 @@ function drawText() {
 	if (theTrump) {
 		multi = 1000000
 	}
-	ctx.fillText("Total Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[0] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Best Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[1] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Current Lines:", 62, yPos); yPos += diff;
-	ctx.fillText(linesArray[2] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Total Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[0] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Best Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[1] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Current Score:", 62, yPos); yPos += diff;
-	ctx.fillText(scoreArray[2] * multi, 62, yPos); yPos += diff;
-	ctx.fillText("Times Lost: ", 62, yPos); yPos += diff;
-	ctx.fillText(timesLost * multi, 62, yPos);
+	if (theBern) {
+		multi = 0.01
+		ctx.fillText("Total Tax %:", 62, yPos); yPos += diff;
+		ctx.fillText((linesArray[0] * multi).toFixed(2) + "%", 62, yPos); yPos += diff;
+		ctx.fillText("Best Tax %:", 62, yPos); yPos += diff;
+		ctx.fillText((linesArray[1] * multi).toFixed(2) + "%", 62, yPos); yPos += diff;
+		ctx.fillText("Current Tax %:", 62, yPos); yPos += diff;
+		ctx.fillText((linesArray[2] * multi).toFixed(2) + "%", 62, yPos); yPos += diff;
+		ctx.fillText("Total Taxed:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + (scoreArray[0] * multi).toFixed(2), 62, yPos); yPos += diff;
+		ctx.fillText("Best Taxed:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + (scoreArray[1] * multi).toFixed(2), 62, yPos); yPos += diff;
+		ctx.fillText("Current Taxed:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + (scoreArray[2] * multi).toFixed(2), 62, yPos); yPos += diff;
+		ctx.fillText("Taxes Lost: ", 62, yPos); yPos += diff;
+		ctx.fillText("$" + (timesLost * multi).toFixed(2), 62, yPos);
+	}
+	else if (theTrump) {
+		ctx.fillText("Total Profit:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + linesArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Best Profit:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + linesArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Current Profit:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + linesArray[2] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Total Balance:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + scoreArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Best Balance:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + scoreArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Current Balance:", 62, yPos); yPos += diff;
+		ctx.fillText("$" + scoreArray[2] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Money Lost: ", 62, yPos); yPos += diff;
+		ctx.fillText("$" + timesLost * multi, 62, yPos);
+	}
+	else {
+		ctx.fillText("Total Lines:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Best Lines:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Current Lines:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[2] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Total Score:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Best Score:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Current Score:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[2] * multi, 62, yPos); yPos += diff;
+		ctx.fillText("Times Lost: ", 62, yPos); yPos += diff;
+		ctx.fillText(timesLost * multi, 62, yPos);
+	}
 	if (players != undefined) {
 		var yPos = 115;
 		ctx.font = "12px Verdana";
