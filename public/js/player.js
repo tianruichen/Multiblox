@@ -20,6 +20,7 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.heldKeys = [false, false, false];
 	this.timeSinceLastAction = 0;
 	this.pause = false;
+	this.afk = 0;
 }
 
 //Functions called by the server return:
@@ -29,6 +30,9 @@ var Player = function(username, id, spawnRow, spawnCol) {
 //returns a value based on Piece's function for T-Spin
 
 Player.prototype.update = function(grid, conveyor, hold) {
+	if (!this.pause) {
+		this.afk += 1;
+	}
 	if (this) {
 		if (this.piece != null) {
 			this.timeSinceLastAction += 1;

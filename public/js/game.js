@@ -141,6 +141,7 @@ function setEventHandlers() {
 	socket.on('getgame', updateGameState);
 	socket.on('getInfo', setInfo);
 	socket.on('roomisfull', returnToHome);
+	socket.on('afk', kickToHome);
 };
 
 function onKeydown(e) {
@@ -197,6 +198,14 @@ function returnToHome() {
 	document.getElementById("music").pause();
 	document.getElementById("music").currentTime = 0;
 	document.getElementById("message").innerHTML = "Room is currently full. Try again later";
+}
+
+function kickToHome() {
+	document.getElementById("screen").style.display = "block";
+	document.getElementById("gameCanvas").style.display = "none";
+	document.getElementById("music").pause();
+	document.getElementById("music").currentTime = 0;
+	document.getElementById("message").innerHTML = "You AFKed for too long.";
 }
 
 function updateGameState(data) {

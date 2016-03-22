@@ -4,6 +4,7 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	fs = require("fs"),
 	fps = 40,
+	afk = 30,
 	//rooms = new Array(5),
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
@@ -154,6 +155,7 @@ function onKeyDown(data) {
 	//SHIFT OR C
 	if (data.key == 16 || data.key == 67) {
 		currentplayer.holdPiece(game.grid, conveyor, holdslot);
+		currentplayer.afk = 0;
 	}
 	//SPACE
 	if (data.key == 32) {
@@ -175,28 +177,34 @@ function onKeyDown(data) {
 				holdslot.piece = false;
 			}
 		}
+		currentplayer.afk = 0;
 	}
 	//UP or X
 	if (data.key == 38 || data.key == 88) {
 		currentplayer.rotate(game.grid, 'cw');
+		currentplayer.afk = 0;
 	}
 	//Z
 	if (data.key == 90) {
-		currentplayer.rotate(game.grid, 'ccw')
+		currentplayer.rotate(game.grid, 'ccw');
+		currentplayer.afk = 0;
 	}
 	
 	//HELD DOWN KEYS
 	//LEFT
 	if (data.key == 37) {
 		currentplayer.heldKeys[0] = true;
+		currentplayer.afk = 0;
 	}
 	//RIGHT
 	if (data.key == 39) {
 		currentplayer.heldKeys[1] = true;
+		currentplayer.afk = 0;
 	}
 	//DOWN
 	if (data.key == 40) {
 		currentplayer.heldKeys[2] = true;
+		currentplayer.afk = 0;
 	}
 	//PAUSE
 	if (data.key == 80) {
@@ -261,6 +269,10 @@ function update() {
 					currScore = 0;
 					holdslot.piece = false;
 				}
+			}
+			if (p.afk >= afk * fps) {
+				io.sockets.connected[p.playerId].emit('afk');
+    			io.sockets.connected[p.playerId].disconnect();	
 			}
 		});
 
