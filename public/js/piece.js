@@ -64,7 +64,10 @@ var Piece = function(grid, blockType, row, col) {
 
 	//Places the piece in the grid
 	for (var i = 0; i < 4; i++) {
+		console.log(this.blocks[i].row, this.blocks[i].col);
+		console.log(grid[this.blocks[i].row][this.blocks[i].col]);
 		grid[this.blocks[i].row][this.blocks[i].col] = this.blocks[i];
+		console.log(grid[this.blocks[i].row][this.blocks[i].col]);
 	}
 }
 

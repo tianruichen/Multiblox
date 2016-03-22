@@ -150,7 +150,7 @@ function onKeyDown(data) {
 			currentplayer = p;
 		}	
 	});
-	if (currentplayer) {
+	if (currentplayer && (!currentplayer.pause || data.key == 80)) {
 	//SHIFT OR C
 	if (data.key == 16 || data.key == 67) {
 		currentplayer.holdPiece(game.grid, conveyor, holdslot);
@@ -197,6 +197,15 @@ function onKeyDown(data) {
 	//DOWN
 	if (data.key == 40) {
 		currentplayer.heldKeys[2] = true;
+	}
+	//PAUSE
+	if (data.key == 80) {
+		if (currentplayer.pause) {
+			currentplayer.unpausePlz(game.grid, conveyor);
+		}
+		else {
+			currentplayer.pausePlz();
+		}
 	}
 	}
 }

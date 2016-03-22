@@ -19,6 +19,7 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.longRight = true;
 	this.heldKeys = [false, false, false];
 	this.timeSinceLastAction = 0;
+	this.pause = false;
 }
 
 //Functions called by the server return:
@@ -29,63 +30,78 @@ var Player = function(username, id, spawnRow, spawnCol) {
 
 Player.prototype.update = function(grid, conveyor, hold) {
 	if (this) {
-		this.timeSinceLastAction += 1;
-		if (this.heldKeys[0]) {
-			this.timeSinceLastAction = 0;
-			this.rightDelay = 0;
-			this.longRight = true;
-			if (this.leftDelay <= 0) {
-				this.piece.translate(grid, "left");
-				if (this.longLeft) {
-					this.leftDelay = longDelay;
-					this.longLeft = false;
+		if (this.piece != null) {
+			this.timeSinceLastAction += 1;
+			if (this.heldKeys[0]) {
+				this.timeSinceLastAction = 0;
+				this.rightDelay = 0;
+				this.longRight = true;
+				if (this.leftDelay <= 0) {
+					this.piece.translate(grid, "left");
+					if (this.longLeft) {
+						this.leftDelay = longDelay;
+						this.longLeft = false;
+					}
+					else {
+						this.leftDelay = shortDelay;
+					}
 				}
 				else {
-					this.leftDelay = shortDelay;
+					this.leftDelay -= 1;
+				}
+			}
+			else if (this.heldKeys[1]) {
+				this.timeSinceLastAction = 0;
+				this.leftDelay = 0
+				this.longLeft = true;
+				if (this.rightDelay <= 0) {
+					this.piece.translate(grid, "right");
+					if (this.longRight) {
+						this.rightDelay = longDelay;
+						this.longRight = false;
+					}
+					else {
+						this.rightDelay = shortDelay;
+					}
+				}
+				else {
+					this.rightDelay -= 1;
 				}
 			}
 			else {
-				this.leftDelay -= 1;
+				this.leftDelay = 0;
+				this.rightDelay = 0;
+				this.longLeft = true;
+				this.longRight = true;
 			}
-		}
-		else if (this.heldKeys[1]) {
-			this.timeSinceLastAction = 0;
-			this.leftDelay = 0
-			this.longLeft = true;
-			if (this.rightDelay <= 0) {
-				this.piece.translate(grid, "right");
-				if (this.longRight) {
-					this.rightDelay = longDelay;
-					this.longRight = false;
-				}
-				else {
-					this.rightDelay = shortDelay;
-				}
+			if (this.heldKeys[2]) {
+				this.piece.softDrop(grid);
 			}
-			else {
-				this.rightDelay -= 1;
-			}
-		}
-		else {
-			this.leftDelay = 0;
-			this.rightDelay = 0;
-			this.longLeft = true;
-			this.longRight = true;
-		}
-		if (this.heldKeys[2]) {
-			this.piece.softDrop(grid);
-		}
 
-		var result;
-		result = this.piece.update(grid);
-		if (result[0]) {
-			return this.lockIn(grid, conveyor, result[1], result[2]);
-		}
-		if (this.heldKeys[2]) {
-			this.timeSinceLastAction = 0;
-			return [false, false, result[1], false];
+			var result;
+			result = this.piece.update(grid);
+			if (result[0]) {
+				return this.lockIn(grid, conveyor, result[1], result[2]);
+			}
+			if (this.heldKeys[2]) {
+				this.timeSinceLastAction = 0;
+				return [false, false, result[1], false];
+			}
 		}
 	return [false, false, 0, false];
+	}
+}
+
+Player.prototype.pausePlz = function() {
+	this.pause = true;
+	this.username = this.username + " (AFK)";
+}
+
+Player.prototype.unpausePlz = function(grid, conveyor) {
+	this.pause = false;
+	this.username = this.username.substring(0, this.username.length - 6);
+	if (this.piece == null) {
+		this.newPiece(grid, conveyor.getPiece());
 	}
 }
 
@@ -130,9 +146,12 @@ Player.prototype.lockIn = function(grid, conveyor, score, tSpin) {
 			max = squares[i][0];
 		}
 	}
-
-	this.newPiece(grid, conveyor.getPiece());
-
+	if (this.pause) {
+		this.piece = null;
+	}
+	else {
+		this.newPiece(grid, conveyor.getPiece());
+	}
 	return [min, max, score, tSpin];
 }
 
@@ -145,14 +164,16 @@ Player.prototype.getSquares = function() {
 }
 
 Player.prototype.removePiece = function(grid) {
-	var squares = this.piece.getSquares();
-	var r, c;
-	for (var i = 0; i < 4; i++) {
-		r = squares[i][0];
-		c = squares[i][1];
-		grid[r][c] = -1;
+	if (this.piece) {
+		var squares = this.piece.getSquares();
+		var r, c;
+		for (var i = 0; i < 4; i++) {
+			r = squares[i][0];
+			c = squares[i][1];
+			grid[r][c] = -1;
+		}
+		this.piece = null;
 	}
-	this.piece = null;
 }
 
 Player.prototype.setSpawn = function(newRow, newCol) {
