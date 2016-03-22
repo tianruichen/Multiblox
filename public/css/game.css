@@ -3,19 +3,20 @@
 }
 
 #center {
-	height: 2000px;
+	height: 100vh;
 	display: block;
 	overflow: auto;
 	margin: auto;
 	box-shadow: -2px 0px 2px 2px #808080, 2px 0px 2px 2px #808080;
 	position: relative;
 	z-index: 10;
+	background-color: white;
 }
 
 #left {
 	float: left;
-	width: 100px;
-	height: 2000px;
+	width: 10vh;
+	height: 100vh;
 	background-image: url("../img/background.png");
 	background-repeat: repeat-y;
 	margin: 0px;
@@ -24,8 +25,8 @@
 
 #right {
 	float: right;
-	width: 100px;
-	height: 2000px;
+	width: 10vh;
+	height: 100vh;
 	background-image: url("../img/background.png");
 	background-repeat: repeat-y;
 	margin: 0px;
@@ -46,5 +47,7 @@ html, body {
 	overflow: hidden;
 	margin: 0;
 	height: 100%;
+	background-image: url("../img/background.png");
+	background-repeat: repeat;
 }
 

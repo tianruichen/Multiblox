@@ -27,14 +27,20 @@ var canvas,
 	trumpArray,
 	outlineColors = ["", "#FF3030", "#0066FF", "#FFFF00", 
 					"#00F100", "#FF8C00", "#00FFFF", "#F050F0"];
+	left,
+	right, 
+	center;
 
 function init(name) {
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
 	canvas.width = 900;
 	canvas.height = 900;
+	//left = document.getElementById("left");
+	//right = document.getElementById("right");
+	//center = document.getElementById("center");
+	//onResize();
 	playerName = name;
-	console.log(name)
 	if (name === "Trump" || name === "Drumpf") {
 		theTrump = true;
 		setTrump();
@@ -167,13 +173,18 @@ function onKeyup(e) {
 }
 
 function onResize() {
-	if (window.innerWidth / gameWidth * gameHeight > window.innerHeight) {
-		var hratio = window.innerHeight / gameHeight;
-		ctx.scale(hratio, hratio);
+	console.log("helpplz");
+	if (window.innerWidth > window.innerHeight) {
+		canvas.setAttribute("style","height:" + window.innerHeight + "px");
+		canvas.setAttribute("style","width:" + window.innerHeight + "px");
+		center.setAttribute("style","width:" + (window.innerHeight + 100) + "px");
+		center.setAttribute("style","height:" + (window.innerHeight + 100) + "px");
 	}
 	else {
-		var wratio = window.innerWidth / gameWidth;
-		ctx.scale(wratio, wratio);
+		canvas.setAttribute("style","height:" + window.innerWidth + "px");
+		canvas.setAttribute("style","width:" + window.innerWidth + "px");
+		center.setAttribute("style","width:" + (window.innerWidth + 100) + "px");
+		center.setAttribute("style","width:" + (window.innerHeight + 100) + "px");
 	}
 };
 
@@ -249,6 +260,7 @@ function animate() {
 }
 
 function draw() {
+	//ctx.resize();
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var curpiece = getPiece();
 	drawUI();
@@ -295,7 +307,7 @@ function drawText() {
 	ctx.fillStyle = "white";
 	ctx.textAlign = "center";
 	var yPos = 350;
-	var diff = 15
+	var diff = 15;
 	var multi = 1;
 	if (theTrump) {
 		multi = 1000000
@@ -353,8 +365,13 @@ function drawText() {
 		var yPos = 115;
 		ctx.font = "12px Verdana";
 		players.forEach(function(p) {
+<<<<<<< HEAD
 			ctx.fillStyle = outlineColors[p.playerNumber];
 			ctx.fillText(p.username, 160 + 20 * p.spawnCol, yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
+=======
+			//yPos += 15;
+			ctx.fillText(p.username, (160 + 20 * p.spawnCol), yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
+>>>>>>> 4d9a5af0a7a42d2174181ca7ede66cee1ec5ed43
 		});
 	}
 	ctx.drawImage(title, 150, 10);

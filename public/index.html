@@ -12,12 +12,6 @@
 	</head>
 	<body>
 		<div id="container">
-			<div id="left"></div>
-			<div id="left"></div>
-			
-			<div id="right"></div>
-			<div id="right"></div>
-
 			<div id="center">
 				<canvas id="gameCanvas" style="display: none">
 				</canvas>
@@ -33,6 +27,7 @@
 							document.getElementById("music").play();
 							init(text.value);
 							animate();
+							initialResize();
 						} 
 						else {
 							document.getElementById("message").innerHTML = "Enter a username with at least one number or letter.";
@@ -51,6 +46,40 @@
 							return checkValidName(string.slice(1, string.length));
 						}		
 					}
+
+					function initialResize() {
+						var hidden = false;
+						var center = document.getElementById("center");
+						var canvas = document.getElementById("gameCanvas");
+							//right.setAttribute("style","width:" + dif + "px");
+						if (canvas.style.display == "none") {
+							hidden = true;
+						}
+						//left.setAttribute("style","width:" + dif + "px");
+						//right.setAttribute("style","width:" + dif + "px");
+						if (window.innerWidth > window.innerHeight) {
+							//canvas.setAttribute("style","height:" + window.innerHeight + "px");
+							//canvas.setAttribute("style","width:" + window.innerHeight + "px");
+							canvas.style.height = (window.innerHeight + 72) + "px";
+							canvas.style.width = (window.innerHeight + 72) + "px";
+							center.style.height = (window.innerHeight) + "px";
+							center.style.width = (window.innerHeight + 100) + "px";
+						}
+						else {
+							//canvas.setAttribute("style","height:" + window.innerWidth + "px");
+							//canvas.setAttribute("style","width:" + window.innerWidth + "px");
+							canvas.style.height = (window.innerWidth + 72) + "px";
+							canvas.style.width = (window.innerWidth + 72) + "px";
+							center.style.height = (window.innerHeight) + "px";
+							center.style.width = (window.innerWidth + 100) + "px";
+						}
+						if (hidden) {
+							canvas.setAttribute("style","display:none");
+						}
+						
+					}
+					initialResize();
+					window.addEventListener("resize", initialResize, false);
 				</script>
 				<div id="screen">
 					<div class="start">
