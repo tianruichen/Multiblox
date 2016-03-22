@@ -24,7 +24,9 @@ var canvas,
 	nextText,
 	theTrump = false,
 	theBern = false,
-	trumpArray;
+	trumpArray,
+	outlineColors = ["", "#FF3030", "#0066FF", "#FFFF00", 
+					"#00F100", "#FF8C00", "#00FFFF", "#F050F0"];
 
 function init(name) {
 	canvas = document.getElementById("gameCanvas");
@@ -258,20 +260,11 @@ function draw() {
 	}
 	if (curpiece) {
 		drawGhost(curpiece);
-		if (theTrump) {
-			drawHighlightTrump(curpiece);
-		}
-		else {
-			drawHighlight(curpiece);
-		}
 	}
+	drawPlayerOutlines();
 	drawHold();	
 	drawConveyor();
 	drawText();
-}
-
-function getPiece() {
-
 }
 
 function clearArea() {
@@ -360,7 +353,7 @@ function drawText() {
 		var yPos = 115;
 		ctx.font = "12px Verdana";
 		players.forEach(function(p) {
-			//yPos += 15;
+			ctx.fillStyle = outlineColors[p.playerNumber];
 			ctx.fillText(p.username, 160 + 20 * p.spawnCol, yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
 		});
 	}
@@ -377,7 +370,7 @@ function drawGhost(piece) {
 	}
 }
 
-function drawHighlight(piece) {
+/*function drawHighlight(piece) {
 	ctx.strokeStyle = "yellow";
 	ctx.lineWidth = 2;
 	var temp = piece.blockType;
@@ -397,7 +390,7 @@ function drawHighlightTrump(piece) {
 		drawImage(c, r, 160, 110, trumpArray[getTrumpColor(r, c)]);
 		drawOutline(c, r, 160, 110);
 	}
-}
+}*/
 
 function getPiece() {
 	var piece;
@@ -414,13 +407,26 @@ function getPiece() {
 	return piece;
 }
 
+function drawPlayerOutlines() {
+	ctx.lineWidth = 2;
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++) {
+			var temp = gameGrid[i][j];
+			if (temp >= 100) {
+				ctx.strokeStyle = outlineColors[Math.floor(temp / 100)];
+				drawOutline(j, i, 160, 110);
+			}
+		}
+	}
+}
 
 function drawGrid() {
+	ctx.lineWidth = 2;
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++) {
 			var temp = gameGrid[i][j];
 			if (temp !== false && temp != -1) {
-				drawImage(j, i, 160, 110, imgArray[temp]);
+				drawImage(j, i, 160, 110, imgArray[temp % 100]);
 			}
 			else {
 				if (i < 4) {
@@ -435,6 +441,7 @@ function drawGrid() {
 }
 
 function drawGridTrump() {
+	ctx.lineWidth = 2;
 	for (i = 0; i < width; i++) {
 		for ( j = 0; j < height; j++) {
 			var temp = gameGrid[i][j];
@@ -471,10 +478,10 @@ function drawHold() {
 		var piece = hold.piece;
 		if (piece || piece === 0) {
 			if (theTrump) {
-				drawPieceTrump(piece, 2, 3, 10, 160);
+				drawPieceTrump(piece, trumpArray[1], 2, 3, 10, 160);
 			}
 			else {
-				drawPiece(piece, 2, 3, 10, 160);
+				drawPiece(piece, imgArray[piece], 2, 3, 10, 160);
 			}
 		}
 	}
@@ -485,63 +492,16 @@ function drawConveyor() {
 		var array = conveyor.pieces;
 		for (i = 0; i < 5; i++) {
 			if (theTrump) {
-				drawPieceTrump(array[i], 2, 5 + i * 6, 785, 60);
+				drawPiece(array[i], trumpArray[1], 2, 5 + i * 6, 785, 60);
 			}
 			else {
-				drawPiece(array[i], 2, 5 + i * 6, 785, 60);
+				drawPiece(array[i], imgArray[array[i]], 2, 5 + i * 6, 785, 60);
 			}
 		}
 	}
 }
 
-function drawPieceTrump(blockType, x, y, marginX, marginY) {
-	var image = trumpArray[1];
-	if (blockType == 0) {
-		drawImage(x, y, marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x + 2, y, marginX, marginY, image);
-		drawImage(x - 1, y, marginX, marginY, image);
-	}
-	else if (blockType == 1) {
-		drawImage(x + 1.5, y, marginX, marginY, image);
-		drawImage(x - 0.5, y, marginX, marginY, image);
-		drawImage(x + 0.5, y, marginX, marginY, image);
-		drawImage(x - 0.5, y - 1, marginX, marginY, image);
-	}
-	else if (blockType == 2) {
-		drawImage(x + 1.5, y, marginX, marginY, image);
-		drawImage(x - 0.5, y, marginX, marginY, image);
-		drawImage(x + 0.5, y, marginX, marginY, image);
-		drawImage(x + 1.5, y - 1, marginX, marginY, image);
-	}
-	else if (blockType == 3) {
-		drawImage(x, y, marginX, marginY, image);
-		drawImage(x + 1, y, marginX, marginY, image);
-		drawImage(x + 1, y - 1, marginX, marginY, image);
-		drawImage(x, y - 1, marginX, marginY, image);
-	}
-	else if (blockType == 4) {
-		drawImage(x + 0.5, y + 0.5, marginX, marginY, image);
-		drawImage(x + 0.5, y - 0.5 , marginX, marginY, image);
-		drawImage(x + 1.5, y - 0.5, marginX, marginY, image);
-		drawImage(x - 0.5, y + 0.5, marginX, marginY, image);
-	}
-	else if (blockType == 5) {
-		drawImage(x + 0.5, y, marginX, marginY, image);
-		drawImage(x - 0.5, y, marginX, marginY, image);
-		drawImage(x + 0.5, y - 1, marginX, marginY, image);
-		drawImage(x + 1.5, y, marginX, marginY, image);
-	}
-	else if (blockType == 6) {
-		drawImage(x + 0.5, y + 0.5, marginX, marginY, image);
-		drawImage(x + 0.5, y - 0.5 , marginX, marginY, image);
-		drawImage(x + 1.5, y + 0.5, marginX, marginY, image);
-		drawImage(x - 0.5, y - 0.5, marginX, marginY, image);
-	}
-}
-
-function drawPiece(blockType, x, y, marginX, marginY) {
-	var image = imgArray[blockType];
+function drawPiece(blockType, image, x, y, marginX, marginY) {
 	if (blockType == 0) {
 		drawImage(x, y, marginX, marginY, image);
 		drawImage(x + 1, y, marginX, marginY, image);

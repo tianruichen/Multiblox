@@ -6,13 +6,17 @@ var Piece = require("./piece");
 var longDelay = 7;
 var shortDelay = 1;
 
-var Player = function(username, id, spawnRow, spawnCol) {
+var Player = function(username, id, num) {
 	this.username = username;
 	this.playerId = id;
 	this.piece = null;
 	this.canHold = true;
-	this.spawnRow = spawnRow;
-	this.spawnCol = spawnCol;
+
+	this.spawnRow = 2;
+	this.spawnCol = 2 + 4 * num;
+	this.playerNumber = num + 1;
+
+
 	this.leftDelay = 0;
 	this.rightDelay = 0;
 	this.longLeft = true;
@@ -20,7 +24,7 @@ var Player = function(username, id, spawnRow, spawnCol) {
 	this.heldKeys = [false, false, false];
 	this.timeSinceLastAction = 0;
 	this.pause = false;
-	this.afk = 0;
+	//this.afk = 0;
 }
 
 //Functions called by the server return:
@@ -31,11 +35,10 @@ var Player = function(username, id, spawnRow, spawnCol) {
 
 Player.prototype.update = function(grid, conveyor, hold) {
 	if (!this.pause) {
-		this.afk += 1;
+		this.timeSinceLastAction += 1;
 	}
 	if (this) {
 		if (this.piece != null) {
-			this.timeSinceLastAction += 1;
 			if (this.heldKeys[0]) {
 				this.timeSinceLastAction = 0;
 				this.rightDelay = 0;
@@ -97,11 +100,13 @@ Player.prototype.update = function(grid, conveyor, hold) {
 }
 
 Player.prototype.pausePlz = function() {
+	this.timeSinceLastAction = 0;
 	this.pause = true;
 	this.username = this.username + " (AFK)";
 }
 
 Player.prototype.unpausePlz = function(grid, conveyor) {
+	this.timeSinceLastAction = 0;
 	this.pause = false;
 	this.username = this.username.substring(0, this.username.length - 6);
 	if (this.piece == null) {
