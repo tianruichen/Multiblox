@@ -5,7 +5,7 @@
 #center {
 	height: 100vh;
 	display: block;
-	overflow: auto;
+	overflow: hidden;
 	margin: auto;
 	box-shadow: -2px 0px 2px 2px #808080, 2px 0px 2px 2px #808080;
 	position: relative;

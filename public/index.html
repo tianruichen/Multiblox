@@ -60,18 +60,20 @@
 						if (window.innerWidth > window.innerHeight) {
 							//canvas.setAttribute("style","height:" + window.innerHeight + "px");
 							//canvas.setAttribute("style","width:" + window.innerHeight + "px");
-							canvas.style.height = (window.innerHeight + 72) + "px";
-							canvas.style.width = (window.innerHeight + 72) + "px";
+							canvas.style.height = (window.innerHeight) + "px";
+							canvas.style.width = (window.innerHeight) + "px";
 							center.style.height = (window.innerHeight) + "px";
-							center.style.width = (window.innerHeight + 100) + "px";
+							if (window.innerHeight + 100 < window.innerWidth) {
+								center.style.width = (window.innerHeight + 100) + "px";
+							}
 						}
 						else {
 							//canvas.setAttribute("style","height:" + window.innerWidth + "px");
 							//canvas.setAttribute("style","width:" + window.innerWidth + "px");
-							canvas.style.height = (window.innerWidth + 72) + "px";
-							canvas.style.width = (window.innerWidth + 72) + "px";
+							canvas.style.height = (window.innerWidth) + "px";
+							canvas.style.width = (window.innerWidth) + "px";
 							center.style.height = (window.innerHeight) + "px";
-							center.style.width = (window.innerWidth + 100) + "px";
+							center.style.width = (window.innerWidth) + "px";
 						}
 						if (hidden) {
 							canvas.setAttribute("style","display:none");
