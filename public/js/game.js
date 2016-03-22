@@ -26,7 +26,7 @@ var canvas,
 	theBern = false,
 	trumpArray,
 	outlineColors = ["", "#FF3030", "#0066FF", "#FFFF00", 
-					"#00F100", "#FF8C00", "#00FFFF", "#F050F0"];
+					"#00F100", "#FF8C00", "#00FFFF", "#F050F0"],
 	left,
 	right, 
 	center;
@@ -365,13 +365,8 @@ function drawText() {
 		var yPos = 115;
 		ctx.font = "12px Verdana";
 		players.forEach(function(p) {
-<<<<<<< HEAD
 			ctx.fillStyle = outlineColors[p.playerNumber];
 			ctx.fillText(p.username, 160 + 20 * p.spawnCol, yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
-=======
-			//yPos += 15;
-			ctx.fillText(p.username, (160 + 20 * p.spawnCol), yPos + (((p.spawnCol - 2) / 4) % 2) * 20);
->>>>>>> 4d9a5af0a7a42d2174181ca7ede66cee1ec5ed43
 		});
 	}
 	ctx.drawImage(title, 150, 10);
