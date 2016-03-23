@@ -57,7 +57,9 @@ Game.prototype.checkClear = function(start, stop, players) {
 
 		//Temporarily remove every piece in play from the grid
 		for (var i = 0; i < pieces.length; i++) {
-			pieces[i].removeFromGrid(this.grid);
+			if (pieces[i]) {
+				pieces[i].removeFromGrid(this.grid);
+			}
 		}
 
 		//Counter to keep track of how many rows have been cleared

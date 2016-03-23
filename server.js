@@ -4,7 +4,7 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	fs = require("fs"),
 	fps = 40,
-	afk = 300,
+	afk = 30,
 	//rooms = new Array(5),
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
@@ -301,9 +301,11 @@ function convertGrid() {
 
 	players.forEach(function(p) {
 		var squares = p.getSquares();
-		squares.forEach(function(s) {
-			convertedGrid[s[0]][s[1]] += 100 * p.playerNumber;
-		});
+		if (squares) {
+			squares.forEach(function(s) {
+				convertedGrid[s[0]][s[1]] += 100 * p.playerNumber;
+			});
+		}
 	});
 }
 

@@ -169,7 +169,9 @@ Player.prototype.newPiece = function(grid, num) {
 }
 
 Player.prototype.getSquares = function() {
-	return this.piece.getSquares();
+	if (this.piece) {
+		return this.piece.getSquares();
+	}
 }
 
 Player.prototype.removePiece = function(grid) {
