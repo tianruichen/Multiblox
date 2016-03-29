@@ -52,14 +52,14 @@ Game.prototype.checkClear = function(start, stop, players) {
 
 		var pieces = []; //Stores all the pieces currently in play
 		for (var i = 0; i < players.length; i++) {
-			pieces.push(players[i].piece);
+			if (players[i].piece) {
+				pieces.push(players[i].piece);
+			}
 		}
 
 		//Temporarily remove every piece in play from the grid
 		for (var i = 0; i < pieces.length; i++) {
-			if (pieces[i]) {
-				pieces[i].removeFromGrid(this.grid);
-			}
+			pieces[i].removeFromGrid(this.grid);
 		}
 
 		//Counter to keep track of how many rows have been cleared
@@ -121,10 +121,9 @@ Game.prototype.checkClear = function(start, stop, players) {
 						cont = true;
 						j = 4;
 					}
-					else {
-						i += 1;
-					}
 				}
+
+				i += 1;
 				//1 end
 			}
 			var jump = 0;
