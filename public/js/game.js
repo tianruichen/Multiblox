@@ -490,7 +490,7 @@ function drawHold() {
 		var piece = hold.piece;
 		if (piece || piece === 0) {
 			if (theTrump) {
-				drawPieceTrump(piece, trumpArray[1], 2, 3, 10, 160);
+				drawPiece(piece, trumpArray[1], 2, 3, 10, 160);
 			}
 			else {
 				drawPiece(piece, imgArray[piece], 2, 3, 10, 160);
