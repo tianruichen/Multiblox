@@ -172,7 +172,7 @@ function onKeyup(e) {
 	socket.emit('keyup', {id: playerId, key: e.keyCode});
 }
 
-function onResize() {
+/*function onResize() {
 	console.log("helpplz");
 	if (window.innerWidth > window.innerHeight) {
 		canvas.setAttribute("style","height:" + window.innerHeight + "px");
@@ -186,7 +186,7 @@ function onResize() {
 		center.setAttribute("style","width:" + (window.innerWidth + 100) + "px");
 		center.setAttribute("style","width:" + (window.innerHeight + 100) + "px");
 	}
-};
+};*/
 
 function setInfo(data) {
 	playerId = data.id;
@@ -490,7 +490,7 @@ function drawHold() {
 		var piece = hold.piece;
 		if (piece || piece === 0) {
 			if (theTrump) {
-				drawPieceTrump(piece, trumpArray[1], 2, 3, 10, 160);
+				drawPiece(piece, trumpArray[1], 2, 3, 10, 160);
 			}
 			else {
 				drawPiece(piece, imgArray[piece], 2, 3, 10, 160);
