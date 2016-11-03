@@ -24,12 +24,47 @@ var canvas,
 	nextText,
 	theTrump = false,
 	theBern = false,
+	cubs = false,
 	trumpArray,
 	outlineColors = ["", "#FF3030", "#0066FF", "#FFFF00", 
 					"#00F100", "#FF8C00", "#00FFFF", "#F050F0"],
 	left,
 	right, 
 	center;
+
+var cubsColors = [
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+]
+
 
 function init(name) {
 	canvas = document.getElementById("gameCanvas");
@@ -41,13 +76,17 @@ function init(name) {
 	//center = document.getElementById("center");
 	//onResize();
 	playerName = name;
-	if (name === "Trump" || name === "Drumpf") {
+	if (name.toLowerCase() === "trump" || name.toLowerCase() === "drumpf") {
 		theTrump = true;
 		setTrump();
 	}
-	else if (name === "Bernie") {
+	else if (name.toLowerCase() === "bernie") {
 		theTrump = true;
 		theBern = true;
+		setTrump();
+	} else if (name.toLowerCase() === "cubs") {
+		theTrump = true;
+		cubs = true;
 		setTrump();
 	}
 
@@ -78,8 +117,9 @@ function setTrump() {
 	title = new Image();
 	if (theBern) {
 		title.src = '../img/bernie.png';
-	}
-	else {
+	} else if (cubs) {
+		title.src = '../img/cubs2.png';
+	} else {
 		title.src = '../img/trump.png';
 	}
 	holdText = new Image();
@@ -264,10 +304,11 @@ function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var curpiece = getPiece();
 	drawUI();
-	if (theTrump) {
+	if (cubs) {
+		drawGridCubs();
+	} else if (theTrump) {
 		drawGridTrump();
-	}
-	else {
+	} else {
 		drawGrid();
 	}
 	if (curpiece) {
@@ -326,8 +367,23 @@ function drawText() {
 		ctx.fillText("$" + (scoreArray[1] * multi).toFixed(2), 62, yPos); yPos += diff;
 		ctx.fillText("Current Taxed:", 62, yPos); yPos += diff;
 		ctx.fillText("$" + (scoreArray[2] * multi).toFixed(2), 62, yPos); yPos += diff;
-		ctx.fillText("Taxes Lost: ", 62, yPos); yPos += diff;
+		ctx.fillText("Taxes Lost:", 62, yPos); yPos += diff;
 		ctx.fillText("$" + (timesLost * multi).toFixed(2), 62, yPos);
+	} else if (cubs) {
+		ctx.fillText("Total Wins:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[0], 62, yPos); yPos += diff;
+		ctx.fillText("Most Wins:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[1], 62, yPos); yPos += diff;
+		ctx.fillText("Season Wins:", 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[2], 62, yPos); yPos += diff;
+		ctx.fillText("Total Runs:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[0], 62, yPos); yPos += diff;
+		ctx.fillText("Most Runs:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[1], 62, yPos); yPos += diff;
+		ctx.fillText("Season Runs:", 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[2], 62, yPos); yPos += diff;
+		ctx.fillText("Season:", 62, yPos); yPos += diff;
+		ctx.fillText(timesLost + 1, 62, yPos);
 	}
 	else if (theTrump) {
 		ctx.fillText("Total Profit:", 62, yPos); yPos += diff;
@@ -342,24 +398,24 @@ function drawText() {
 		ctx.fillText("$" + scoreArray[1] * multi, 62, yPos); yPos += diff;
 		ctx.fillText("Current Balance:", 62, yPos); yPos += diff;
 		ctx.fillText("$" + scoreArray[2] * multi, 62, yPos); yPos += diff;
-		ctx.fillText("Money Lost: ", 62, yPos); yPos += diff;
+		ctx.fillText("Money Lost:", 62, yPos); yPos += diff;
 		ctx.fillText("$" + timesLost * multi, 62, yPos);
 	}
 	else {
 		ctx.fillText("Total Lines:", 62, yPos); yPos += diff;
-		ctx.fillText(linesArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[0], 62, yPos); yPos += diff;
 		ctx.fillText("Best Lines:", 62, yPos); yPos += diff;
-		ctx.fillText(linesArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[1], 62, yPos); yPos += diff;
 		ctx.fillText("Current Lines:", 62, yPos); yPos += diff;
-		ctx.fillText(linesArray[2] * multi, 62, yPos); yPos += diff;
+		ctx.fillText(linesArray[2], 62, yPos); yPos += diff;
 		ctx.fillText("Total Score:", 62, yPos); yPos += diff;
-		ctx.fillText(scoreArray[0] * multi, 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[0], 62, yPos); yPos += diff;
 		ctx.fillText("Best Score:", 62, yPos); yPos += diff;
-		ctx.fillText(scoreArray[1] * multi, 62, yPos); yPos += diff;
+		ctx.fillText(scoreArray[1], 62, yPos); yPos += diff;
 		ctx.fillText("Current Score:", 62, yPos); yPos += diff;
-		ctx.fillText(scoreArray[2] * multi, 62, yPos); yPos += diff;
-		ctx.fillText("Times Lost: ", 62, yPos); yPos += diff;
-		ctx.fillText(timesLost * multi, 62, yPos);
+		ctx.fillText(scoreArray[2], 62, yPos); yPos += diff;
+		ctx.fillText("Times Lost:", 62, yPos); yPos += diff;
+		ctx.fillText(timesLost, 62, yPos);
 	}
 	if (players != undefined) {
 		var yPos = 115;
@@ -452,6 +508,26 @@ function drawGrid() {
 	}
 }
 
+function drawGridCubs() {
+	ctx.lineWidth = 2;
+	for (i = 0; i < width; i++) {
+		for ( j = 0; j < height; j++) {
+			var temp = gameGrid[i][j];
+			if (temp !== false && temp != -1) {
+				drawImage(j, i, 160, 110, trumpArray[getCubsColor(i, j)]);
+			}
+			else {
+				if (i < 4) {
+					drawImage(j, i, 160, 110, trumpArray[4]);
+				}
+				else {
+					drawImage(j, i, 160, 110, trumpArray[3]);
+				}
+			}
+		}
+	}
+}
+
 function drawGridTrump() {
 	ctx.lineWidth = 2;
 	for (i = 0; i < width; i++) {
@@ -483,6 +559,10 @@ function getTrumpColor(row, col) {
 		return 2;
 	}
 	return Math.floor(row/2) % 2
+}
+
+function getCubsColor(row, col) {
+	return cubsColors[row][col];
 }
 
 function drawHold() {
