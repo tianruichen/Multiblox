@@ -5,6 +5,7 @@ var express = require('express'),
 	fs = require("fs"),
 	fps = 40,
 	afk = 30,
+    port = 80,
 	//rooms = new Array(5),
 	intervalId,
 	gamegrid = require("./public/js/gamegrid"),
@@ -43,7 +44,7 @@ function init() {
 			.replace(/{{\s*url\s*}}/, req.protocol + "://" +  req.get("host")));
 	});
 	app.use(express.static(__dirname + '/public'));
-	server.listen(3000);
+	server.listen(port);
 	console.log('Magic on port 3000');
 	setEventHandlers();
 	setGameVariables();
