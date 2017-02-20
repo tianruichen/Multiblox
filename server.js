@@ -1,6 +1,6 @@
 var express = require('express'),
 	app = express(),
-	server = require('https').createServer(app),
+	server = require('http').createServer(app),
 	io = require('socket.io')(server),
 	fs = require("fs"),
 	fps = 40,
